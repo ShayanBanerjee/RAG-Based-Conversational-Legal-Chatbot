@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
-    <title>Nyay Rakshak – Indian Law AI Assistant</title>
+    <title>Nyay Rakshak – Indian Legal Defence Assistant</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Tiny blank favicon to avoid 404 -->
-    <link rel="icon" href="data:;base64,=" />
-
-    <!-- Google Font -->
+    <!-- Favicon: miniature Nyay Rakshak logo -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iI2ZiYmYyNCIvPjxwYXRoIGQ9Ik04IDEyaDE2IiBzdHJva2U9IiMxMTE4MjciIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTE2IDEydjEwIiBzdHJva2U9IiMxMTE4MjciIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGNpcmNsZSBjeD0iMTEiIGN5PSIxOCIgcj0iMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTExODI3IiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjIxIiBjeT0iMTgiIHI9IjMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzExMTgyNyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSIxNiIgeT0iMjMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iOSIgc2ZpbGw9IiMxMTE4MjciPk5SPC90ZXh0Pjwvc3ZnPg=="
+    />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap"
       rel="stylesheet"
     />
 
@@ -25,686 +29,1194 @@
     />
 
     <style>
-        :root {
-          --ny-bg: #050816;
-          --ny-card: rgba(15, 23, 42, 0.97);
-          --ny-border: rgba(148, 163, 184, 0.45);
-          --ny-border-soft: rgba(148, 163, 184, 0.2);
-          --ny-text-main: #e5e7eb;
-          --ny-text-muted: #9ca3af;
-          --ny-accent: #facc15;
-          --ny-accent-soft: rgba(250, 204, 21, 0.25);
-          --ny-user-bubble: #2563eb;
-          --ny-bot-bubble: #020617;
-          --ny-metal: linear-gradient(135deg, #f3f4f6, #9ca3af, #facc15);
-        }
+      /* =========================================
+         THEME TOKENS
+         ========================================= */
+      :root {
+        --ny-bg: #0b0b12;
+        --ny-surface: rgba(18, 14, 28, 0.98);
+        --ny-surface-soft: rgba(24, 19, 30, 0.97);
+        --ny-border: rgba(148, 132, 96, 0.72);
+        --ny-border-soft: rgba(148, 132, 96, 0.3);
+        --ny-text-main: #f9fafb;
+        --ny-text-subtle: #d1d5db;
+        --ny-accent: #f5b342;
+        --ny-accent-soft: rgba(245, 179, 66, 0.2);
+        --ny-user-bubble: #145c8b;
+        --ny-bot-bubble: #15111f;
+      }
 
-        * {
-          box-sizing: border-box;
-        }
+      * {
+        box-sizing: border-box;
+      }
 
-        html, body {
-          margin: 0;
-          padding: 0;
-          height: 100%;
-        }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
 
-        body {
-          min-height: 100vh;
-          font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
-            "Segoe UI", sans-serif;
-          background:
-            radial-gradient(circle at 0 0, rgba(250, 204, 21, 0.22), transparent 55%),
-            radial-gradient(circle at 100% 100%, rgba(79, 70, 229, 0.35), transparent 55%),
-            var(--ny-bg);
-          color: var(--ny-text-main);
-          display: flex;
-          flex-direction: column;
-        }
+      body {
+        min-height: 100%;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at 0 0, rgba(245, 179, 66, 0.18), transparent 60%),
+          radial-gradient(
+            circle at 100% 100%,
+            rgba(56, 189, 248, 0.3),
+            transparent 60%
+          ),
+          var(--ny-bg);
+        color: var(--ny-text-main);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden; /* single-page feel on larger screens */
+      }
 
-        /* NAVBAR */
-        .ny-navbar {
-          background:
-            radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.06), transparent 65%),
-            rgba(15, 23, 42, 0.98);
-          border-bottom: 1px solid var(--ny-border-soft);
-          backdrop-filter: blur(16px);
-        }
+      .text-muted {
+        color: var(--ny-text-subtle) !important;
+      }
 
+      /* =========================================
+         NAVBAR
+         ========================================= */
+      .ny-navbar {
+        background:
+          radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.04), transparent 70%),
+          rgba(17, 19, 31, 0.97);
+        border-bottom: 1px solid var(--ny-border-soft);
+        backdrop-filter: blur(18px);
+        flex-shrink: 0;
+      }
+
+      .ny-nav-inner {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 0.55rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      @media (max-width: 576px) {
         .ny-nav-inner {
-          max-width: 1240px;
-          margin: 0 auto;
-          padding: 0.6rem 1rem;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-
-        .ny-brand {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-        }
-
-        .ny-logo-circle {
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          background-image: var(--ny-metal);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #020617;
-          box-shadow:
-            0 6px 14px rgba(15, 23, 42, 0.8),
-            inset 0 0 0 1px rgba(148, 163, 184, 0.8);
-          font-size: 1.2rem;
-        }
-
-        .ny-brand-text {
-          display: flex;
           flex-direction: column;
+          align-items: flex-start;
         }
+      }
 
-        .ny-brand-title {
-          font-size: 1rem;
-          font-weight: 600;
+      .ny-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .ny-logo-wrap {
+        width: 40px;
+        height: 40px;
+        border-radius: 35%;
+        background:
+          radial-gradient(circle at 25% 0%, #facc6b, #c0841a),
+          radial-gradient(circle at 80% 120%, #1f2933, #020617);
+        box-shadow:
+          0 10px 20px rgba(15, 23, 42, 0.8),
+          inset 0 0 0 1px rgba(214, 189, 130, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .ny-logo-scales {
+        position: relative;
+        width: 22px;
+        height: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .ny-logo-scales::before,
+      .ny-logo-scales::after {
+        content: "";
+        position: absolute;
+        bottom: 3px;
+        width: 7px;
+        height: 3.5px;
+        border-radius: 999px 999px 2px 2px;
+        border: 1px solid rgba(15, 23, 42, 0.85);
+        background: rgba(248, 250, 252, 0.9);
+      }
+
+      .ny-logo-scales::before {
+        left: 0;
+      }
+
+      .ny-logo-scales::after {
+        right: 0;
+      }
+
+      .ny-logo-bar {
+        position: absolute;
+        top: 7px;
+        left: 5px;
+        right: 5px;
+        height: 2px;
+        background: rgba(15, 23, 42, 0.92);
+        border-radius: 999px;
+      }
+
+      .ny-logo-pillar {
+        position: absolute;
+        bottom: 3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 2.5px;
+        height: 11px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.9);
+      }
+
+      .ny-logo-balance {
+        font-size: 11px;
+        position: relative;
+        z-index: 1;
+        color: #111827;
+        font-weight: 600;
+      }
+
+      .ny-brand-text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+      }
+
+      .ny-brand-title {
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+      }
+
+      .ny-brand-subtitle {
+        font-size: 0.8rem;
+        color: var(--ny-text-subtle);
+      }
+
+      .ny-nav-right {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .ny-online-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        border-radius: 999px;
+        padding: 0.22rem 0.7rem;
+        background: rgba(22, 163, 74, 0.96);
+        color: #e5fbe4;
+        font-size: 0.72rem;
+        border: 1px solid rgba(21, 128, 61, 0.9);
+      }
+
+      .ny-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background-color: #bbf7d0;
+        box-shadow: 0 0 6px rgba(34, 197, 94, 0.9);
+      }
+
+      .ny-badge-soft {
+        font-size: 0.72rem;
+        border-radius: 999px;
+        padding: 0.2rem 0.6rem;
+        border: 1px solid var(--ny-border-soft);
+        color: var(--ny-text-subtle);
+        background: rgba(18, 20, 32, 0.98);
+      }
+
+      .ny-theme-toggle {
+        border-radius: 999px;
+        border: 1px solid var(--ny-border-soft);
+        padding: 0.25rem 0.6rem;
+        background: rgba(18, 20, 32, 0.98);
+        color: var(--ny-text-main);
+        font-size: 0.8rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        cursor: pointer;
+      }
+
+      .ny-theme-toggle i {
+        font-size: 0.9rem;
+      }
+
+      /* =========================================
+         MAIN LAYOUT
+         ========================================= */
+      .ny-main {
+        flex: 1 1 auto;
+        display: flex;
+        padding: 0.75rem 0.85rem 0.85rem;
+        overflow: hidden;
+      }
+
+      .ny-main-inner {
+        max-width: 1240px;
+        margin: 0 auto;
+        width: 100%;
+        display: flex;
+      }
+
+      .ny-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 2.1fr);
+        gap: 1rem;
+        width: 100%;
+        height: 100%;
+      }
+
+      @media (max-width: 992px) {
+        body {
+          overflow: auto;
         }
-
-        .ny-brand-subtitle {
-          font-size: 0.8rem;
-          color: var(--ny-text-muted);
-        }
-
-        .ny-status {
-          display: flex;
-          align-items: center;
-        }
-
-        .ny-online-pill {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.35rem;
-          border-radius: 999px;
-          padding: 0.2rem 0.6rem;
-          background: rgba(22, 163, 74, 0.96);
-          color: #ecfdf5;
-          font-size: 0.7rem;
-          border: 1px solid rgba(21, 128, 61, 0.9);
-        }
-
-        .ny-dot {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background-color: #bbf7d0;
-          box-shadow: 0 0 6px rgba(34, 197, 94, 0.9);
-        }
-
-        /* MAIN LAYOUT */
         .ny-main {
-          flex: 1;
-          display: flex;
-          padding: 1rem 0.75rem 1rem;
+          overflow: visible;
+          height: auto;
         }
-
         .ny-main-inner {
-          max-width: 1240px;
-          margin: 0 auto;
-          width: 100%;
+          display: block;
         }
-
-        .ny-layout-grid {
-          display: grid;
-          grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
-          gap: 1rem;
+        .ny-grid {
+          grid-template-columns: minmax(0, 1fr);
+          height: auto;
         }
+      }
 
-        @media (max-width: 992px) {
-          .ny-layout-grid {
-            grid-template-columns: minmax(0, 1fr);
-          }
-        }
+      /* =========================================
+         LEFT PANEL: INFO
+         ========================================= */
+      .ny-info-card {
+        border-radius: 18px;
+        border: 1px solid var(--ny-border);
+        background:
+          radial-gradient(circle at 0 0, rgba(249, 250, 251, 0.04), transparent 65%),
+          var(--ny-surface-soft);
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        height: 100%;
+        overflow-y: auto;
+        scrollbar-width: thin;
+      }
 
-        /* INFO CARD */
-        .ny-info-card {
-          border-radius: 18px;
-          border: 1px solid var(--ny-border);
-          background:
-            radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.05), transparent 60%),
-            rgba(15, 23, 42, 0.97);
-          padding: 1rem;
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+      .ny-info-card::-webkit-scrollbar {
+        width: 6px;
+      }
 
-        .ny-info-header {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          margin-bottom: 0.5rem;
-        }
+      .ny-info-card::-webkit-scrollbar-thumb {
+        background-color: rgba(148, 132, 96, 0.7);
+        border-radius: 999px;
+      }
 
-        .ny-info-avatar {
-          width: 42px;
-          height: 42px;
-          border-radius: 14px;
-          background: radial-gradient(circle at 30% 0, #facc15, #4b5563);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.3rem;
-          color: #111827;
-        }
+      .ny-info-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
 
-        .ny-info-session-label {
-          font-size: 0.7rem;
-          text-transform: uppercase;
-          letter-spacing: 0.06em;
-          color: var(--ny-text-muted);
-        }
+      .ny-info-main {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
 
-        .ny-info-session-title {
-          font-size: 0.9rem;
-          font-weight: 500;
-        }
+      .ny-info-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 16px;
+        background:
+          radial-gradient(circle at 30% 0, #facc6b, #c0841a),
+          radial-gradient(circle at 120% 140%, #111827, #020617);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: #111827;
+        box-shadow:
+          0 10px 20px rgba(15, 23, 42, 0.85),
+          inset 0 0 0 1px rgba(214, 189, 130, 0.9);
+      }
 
-        .ny-info-session-subtitle {
-          font-size: 0.8rem;
-          color: var(--ny-text-muted);
-        }
+      .ny-info-titles {
+        display: flex;
+        flex-direction: column;
+      }
 
-        .ny-info-block {
-          margin-top: 0.35rem;
-        }
+      .ny-info-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--ny-text-subtle);
+      }
 
-        .ny-section-title {
-          font-size: 0.78rem;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          color: var(--ny-text-muted);
-          font-weight: 600;
-          margin-bottom: 0.3rem;
-        }
+      .ny-info-title {
+        font-size: 0.95rem;
+        font-weight: 500;
+      }
 
-        .ny-pill-row {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.4rem;
-        }
+      .ny-info-subtitle {
+        font-size: 0.82rem;
+        color: var(--ny-text-subtle);
+      }
 
-        .ny-pill {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.3rem;
-          padding: 0.25rem 0.7rem;
-          border-radius: 999px;
-          border: 1px solid var(--ny-border);
-          background: rgba(15, 23, 42, 0.96);
-          font-size: 0.75rem;
-          color: var(--ny-text-main);
-        }
+      .ny-info-chip {
+        font-size: 0.7rem;
+        border-radius: 999px;
+        padding: 0.18rem 0.55rem;
+        border: 1px solid var(--ny-border);
+        color: var(--ny-text-subtle);
+        background: rgba(18, 20, 32, 0.96);
+      }
 
-        .ny-pill i {
-          font-size: 0.85rem;
-        }
+      .ny-section-title {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: var(--ny-text-subtle);
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+      }
 
-        .ny-muted-list {
-          margin: 0;
-          padding-left: 1.1rem;
-          font-size: 0.82rem;
-          color: var(--ny-text-muted);
-        }
+      .ny-pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
 
-        .ny-muted-list li + li {
-          margin-top: 0.1rem;
-        }
+      .ny-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.28rem 0.75rem;
+        border-radius: 999px;
+        border: 1px solid var(--ny-border-soft);
+        background: rgba(18, 20, 32, 0.98);
+        font-size: 0.78rem;
+        color: var(--ny-text-main);
+      }
 
-        .ny-text-muted {
-          font-size: 0.8rem;
-          color: var(--ny-text-muted);
-        }
+      .ny-pill i {
+        font-size: 0.9rem;
+      }
 
-        .ny-text-warning {
-          font-size: 0.8rem;
-          color: var(--ny-accent);
-        }
+      .ny-muted-list {
+        margin: 0;
+        padding-left: 1.05rem;
+        font-size: 0.84rem;
+        color: var(--ny-text-subtle);
+      }
 
-        /* CHAT CARD */
-        .ny-chat-card {
-          border-radius: 18px;
-          border: 1px solid var(--ny-border);
-          background:
-            radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.04), transparent 60%),
-            var(--ny-card);
-          padding: 0.9rem;
-          display: flex;
-          flex-direction: column;
-          min-height: 480px;
-        }
+      .ny-muted-list li + li {
+        margin-top: 0.12rem;
+      }
 
-        /* CHAT HEADER */
+      .ny-note {
+        font-size: 0.78rem;
+        color: var(--ny-text-subtle);
+      }
+
+      .ny-warning {
+        font-size: 0.78rem;
+        color: var(--ny-accent);
+      }
+
+      .ny-quick-questions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin-top: 0.25rem;
+      }
+
+      .ny-chip-btn {
+        border-radius: 999px;
+        border: 1px solid var(--ny-border-soft);
+        background: rgba(18, 20, 32, 0.98);
+        color: var(--ny-text-main);
+        font-size: 0.8rem;
+        padding: 0.3rem 0.8rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+
+      .ny-chip-btn:hover {
+        border-color: var(--ny-accent);
+        color: var(--ny-accent);
+      }
+
+      .ny-case-card {
+        border-radius: 14px;
+        border: 1px dashed var(--ny-border-soft);
+        background: rgba(17, 19, 31, 0.97);
+        padding: 0.75rem;
+        font-size: 0.8rem;
+      }
+
+      .ny-case-card strong {
+        display: block;
+        margin-top: 0.1rem;
+        margin-bottom: 0.2rem;
+      }
+
+      /* =========================================
+         RIGHT PANEL: CHAT
+         ========================================= */
+      .ny-chat-card {
+        border-radius: 18px;
+        border: 1px solid var(--ny-border);
+        background:
+          radial-gradient(circle at 0 0, rgba(249, 250, 251, 0.04), transparent 60%),
+          var(--ny-surface);
+        padding: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+      }
+
+      .ny-chat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding-bottom: 0.55rem;
+        border-bottom: 1px solid var(--ny-border-soft);
+        transition: opacity 0.2s ease, max-height 0.2s ease, padding-bottom 0.2s ease,
+          margin-bottom 0.2s ease;
+      }
+
+      .ny-chat-header-collapsed {
+        opacity: 0;
+        max-height: 0;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        overflow: hidden;
+        border-bottom: none;
+      }
+
+      .ny-chat-header-left {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.7rem;
+      }
+
+      .ny-chat-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 999px;
+        background:
+          radial-gradient(circle at 35% 0, #7c2d12, #b45309),
+          radial-gradient(circle at 130% 130%, #020617, #020617);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fef3c7;
+        font-size: 1.2rem;
+        box-shadow:
+          0 12px 22px rgba(15, 23, 42, 0.92),
+          inset 0 0 0 1px rgba(250, 204, 21, 0.7);
+      }
+
+      .ny-chat-heading {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+      }
+
+      .ny-chat-title {
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .ny-chat-subtitle {
+        font-size: 0.85rem;
+        color: var(--ny-text-subtle);
+        max-width: 540px;
+        line-height: 1.6;
+      }
+
+      .ny-chat-header-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.18rem;
+      }
+
+      .ny-chat-meta {
+        font-size: 0.72rem;
+        color: var(--ny-text-subtle);
+      }
+
+      @media (max-width: 768px) {
         .ny-chat-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: 0.75rem;
-          padding-bottom: 0.6rem;
-          border-bottom: 1px solid var(--ny-border-soft);
+          flex-direction: column;
         }
-
-        .ny-chat-header-left {
-          display: flex;
-          align-items: flex-start;
-          gap: 0.75rem;
-        }
-
-        .ny-bot-avatar {
-          width: 42px;
-          height: 42px;
-          border-radius: 999px;
-          background: radial-gradient(circle at 30% 0, #4f46e5, #020617);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #e5e7eb;
-          font-size: 1.2rem;
-          box-shadow:
-            0 10px 20px rgba(37, 99, 235, 0.75),
-            inset 0 0 0 1px rgba(191, 219, 254, 0.5);
-        }
-
-        .ny-chat-title {
-          font-size: 0.95rem;
-          font-weight: 600;
-        }
-
-        .ny-chat-subtitle {
-          font-size: 0.8rem;
-          color: var(--ny-text-muted);
-          max-width: 420px;
-        }
-
         .ny-chat-header-right {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-          gap: 0.15rem;
+          align-items: flex-start;
         }
+      }
 
-        .ny-chat-meta {
-          font-size: 0.7rem;
-          color: var(--ny-text-muted);
+      .ny-chat-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        margin-top: 0.4rem;
+      }
+
+      .ny-chat-window {
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 0.3rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(148, 132, 96, 0.8) transparent;
+      }
+
+      .ny-chat-window::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .ny-chat-window::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .ny-chat-window::-webkit-scrollbar-thumb {
+        background-color: rgba(148, 132, 96, 0.9);
+        border-radius: 999px;
+      }
+
+      .ny-chat-message {
+        display: flex;
+        flex-direction: column;
+        max-width: 82%;
+      }
+
+      .ny-chat-bot {
+        align-items: flex-start;
+      }
+
+      .ny-chat-user {
+        margin-left: auto;
+        align-items: flex-end;
+      }
+
+      .ny-bubble {
+        padding: 0.7rem 0.95rem;
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+
+      .ny-bubble-bot {
+        background:
+          radial-gradient(circle at 0 0, rgba(148, 132, 96, 0.3), transparent 70%),
+          var(--ny-bot-bubble);
+        border-radius: 14px;
+        border-bottom-left-radius: 6px;
+        border: 1px solid rgba(148, 132, 96, 0.8);
+        font-family: "Merriweather", "Georgia", "Times New Roman", serif;
+        box-shadow:
+          0 10px 18px rgba(15, 23, 42, 0.95),
+          inset 0 0 0 1px rgba(24, 24, 27, 0.9);
+      }
+
+      .ny-bubble-user {
+        background:
+          radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.5), transparent 70%),
+          var(--ny-user-bubble);
+        border-radius: 18px;
+        border-bottom-right-radius: 6px;
+        color: #eaf4ff;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        box-shadow:
+          0 10px 18px rgba(15, 118, 178, 0.85),
+          inset 0 0 0 1px rgba(15, 23, 42, 0.9);
+      }
+
+      .ny-timestamp {
+        margin-top: 0.15rem;
+        font-size: 0.72rem;
+        color: var(--ny-text-subtle);
+      }
+
+      .ny-suggest-row {
+        margin-top: 0.1rem;
+      }
+
+      .ny-bubble-suggest-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-top: 0.25rem;
+      }
+
+      .ny-bubble-suggest {
+        border-radius: 999px;
+        border: 1px solid var(--ny-border-soft);
+        background: rgba(18, 20, 32, 0.98);
+        color: var(--ny-text-main);
+        font-size: 0.82rem;
+        padding: 0.32rem 0.8rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        cursor: pointer;
+      }
+
+      .ny-bubble-suggest i {
+        font-size: 0.9rem;
+      }
+
+      .ny-bubble-suggest:hover {
+        border-color: var(--ny-accent);
+        color: var(--ny-accent);
+      }
+
+      /* Typing indicator */
+      .ny-typing-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .ny-typing-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background-color: #e5e7eb;
+        opacity: 0.4;
+        animation: ny-bounce 1s infinite;
+      }
+
+      .ny-typing-dot:nth-child(2) {
+        animation-delay: 0.15s;
+      }
+
+      .ny-typing-dot:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      @keyframes ny-bounce {
+        0%,
+        80%,
+        100% {
+          transform: translateY(0);
+          opacity: 0.3;
         }
-
-        @media (max-width: 768px) {
-          .ny-chat-header {
-            flex-direction: column;
-          }
-          .ny-chat-header-right {
-            align-items: flex-start;
-          }
+        40% {
+          transform: translateY(-3px);
+          opacity: 0.9;
         }
+      }
 
-        /* CHAT BODY */
-        .ny-chat-body {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-          margin-top: 0.45rem;
+      /* =========================================
+         INPUT AREA
+         ========================================= */
+      .ny-chat-input {
+        border-top: 1px solid var(--ny-border-soft);
+        padding-top: 0.55rem;
+        margin-top: 0.4rem;
+        flex-shrink: 0;
+      }
+
+      .ny-input-label {
+        font-size: 0.8rem;
+        color: var(--ny-text-subtle);
+        margin-bottom: 0.3rem;
+      }
+
+      .ny-input-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .ny-input-wrapper {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        border-radius: 999px;
+        padding: 0.1rem 0.4rem 0.1rem 0.1rem;
+        border: 1px solid var(--ny-border-soft);
+        background: rgba(18, 20, 32, 0.98);
+      }
+
+      .ny-input-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.35rem 0.65rem;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--ny-text-subtle);
+      }
+
+      .ny-input-control {
+        flex: 1;
+        border: none;
+        background: transparent;
+        color: var(--ny-text-main);
+        font-size: 0.95rem;
+        padding: 0.4rem 0.2rem;
+        resize: none;
+        max-height: 120px;
+        outline: none;
+        line-height: 1.4;
+      }
+
+      .ny-input-control::placeholder {
+        color: var(--ny-text-subtle);
+        font-size: 0.88rem;
+      }
+
+      .ny-input-wrapper:focus-within {
+        border-color: var(--ny-accent);
+        box-shadow:
+          0 0 0 1px var(--ny-accent-soft),
+          0 0 0 1px rgba(15, 23, 42, 0.9);
+      }
+
+      .ny-send-btn {
+        border-radius: 999px;
+        border: 0;
+        padding: 0.55rem 1.15rem;
+        background-image: linear-gradient(135deg, #f5b342, #7c2d12);
+        color: #111827;
+        font-weight: 600;
+        font-size: 0.86rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        box-shadow:
+          0 12px 22px rgba(15, 23, 42, 0.92),
+          inset 0 0 0 1px rgba(248, 250, 252, 0.2);
+      }
+
+      .ny-send-btn:disabled {
+        opacity: 0.7;
+        cursor: wait;
+      }
+
+      .ny-input-footer {
+        margin-top: 0.35rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.76rem;
+      }
+
+      kbd {
+        border-radius: 4px;
+        padding: 0.1rem 0.35rem;
+        font-size: 0.7rem;
+        background: rgba(23, 23, 33, 0.98);
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        color: var(--ny-text-main);
+      }
+
+      @media (max-width: 576px) {
+        .ny-chat-card {
+          min-height: calc(100vh - 140px);
         }
-
-        .ny-chat-window {
-          flex: 1;
-          overflow-y: auto;
-          padding-right: 0.25rem;
-          display: flex;
-          flex-direction: column;
-          gap: 0.45rem;
-          scrollbar-width: thin;
-          scrollbar-color: rgba(148, 163, 184, 0.7) transparent;
-        }
-
-        .ny-chat-window::-webkit-scrollbar {
-          width: 6px;
-        }
-
-        .ny-chat-window::-webkit-scrollbar-track {
-          background: transparent;
-        }
-
-        .ny-chat-window::-webkit-scrollbar-thumb {
-          background-color: rgba(148, 163, 184, 0.85);
-          border-radius: 999px;
-        }
-
-        /* CHAT MESSAGES */
         .ny-chat-message {
-          display: flex;
-          flex-direction: column;
-          max-width: 80%;
+          max-width: 90%;
         }
-
-        .ny-chat-bot {
-          align-items: flex-start;
-        }
-
-        .ny-chat-user {
-          margin-left: auto;
-          align-items: flex-end;
-        }
-
-        .ny-bubble {
-          padding: 0.6rem 0.8rem;
-          font-size: 0.9rem;
-          line-height: 1.5;
-        }
-
-        .ny-bubble-bot {
-          background:
-            radial-gradient(circle at 0 0, rgba(148, 163, 184, 0.28), transparent 70%),
-            var(--ny-bot-bubble);
-          border-radius: 14px;
-          border-bottom-left-radius: 6px;
-          border: 1px solid rgba(148, 163, 184, 0.7);
-          box-shadow:
-            0 10px 18px rgba(15, 23, 42, 0.85),
-            inset 0 0 0 1px rgba(15, 23, 42, 0.9);
-        }
-
-        .ny-bubble-user {
-          background:
-            radial-gradient(circle at 0 0, rgba(59, 130, 246, 0.45), transparent 70%),
-            var(--ny-user-bubble);
-          border-radius: 14px;
-          border-bottom-right-radius: 6px;
-          color: #eff6ff;
-          box-shadow:
-            0 10px 18px rgba(37, 99, 235, 0.75),
-            inset 0 0 0 1px rgba(30, 64, 175, 0.85);
-        }
-
-        .ny-timestamp {
-          margin-top: 0.15rem;
-          font-size: 0.7rem;
-          color: var(--ny-text-muted);
-        }
-
-        /* TYPING INDICATOR */
-        .ny-typing-indicator {
-          display: inline-flex;
-          align-items: center;
-          gap: 4px;
-        }
-
-        .ny-typing-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 999px;
-          background-color: #e5e7eb;
-          opacity: 0.4;
-          animation: ny-bounce 1s infinite;
-        }
-
-        .ny-typing-dot:nth-child(2) {
-          animation-delay: 0.15s;
-        }
-        .ny-typing-dot:nth-child(3) {
-          animation-delay: 0.3s;
-        }
-
-        @keyframes ny-bounce {
-          0%,
-          80%,
-          100% {
-            transform: translateY(0);
-            opacity: 0.3;
-          }
-          40% {
-            transform: translateY(-3px);
-            opacity: 0.9;
-          }
-        }
-
-        /* INPUT AREA */
-        .ny-chat-input {
-          border-top: 1px solid var(--ny-border-soft);
-          padding-top: 0.5rem;
-          margin-top: 0.4rem;
-        }
-
-        .ny-input-label {
-          font-size: 0.78rem;
-          color: var(--ny-text-muted);
-          margin-bottom: 0.3rem;
-        }
-
-        .ny-input-row {
-          display: flex;
-          align-items: flex-end;
-          gap: 0.5rem;
-        }
-
-        .ny-input-wrapper {
-          flex: 1;
-          display: flex;
-          align-items: flex-start;
-          gap: 0.4rem;
-        }
-
-        .ny-input-icon {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0.45rem 0.7rem;
-          border-radius: 999px;
-          border: 1px solid var(--ny-border);
-          border-right: 0;
-          background: rgba(15, 23, 42, 0.98);
-          color: var(--ny-text-muted);
-        }
-
-        .ny-input-control {
-          flex: 1;
-          border-radius: 999px;
-          border: 1px solid var(--ny-border);
-          background: rgba(15, 23, 42, 0.98);
-          color: var(--ny-text-main);
-          font-size: 0.9rem;
-          padding: 0.5rem 0.8rem;
-          resize: none;
-          max-height: 120px;
-          outline: none;
-        }
-
-        .ny-input-control::placeholder {
-          color: var(--ny-text-muted);
-          font-size: 0.85rem;
-        }
-
-        .ny-input-control:focus {
-          border-color: var(--ny-accent);
-          box-shadow:
-            0 0 0 1px var(--ny-accent-soft),
-            0 0 0 1px rgba(15, 23, 42, 0.9);
-          background: rgba(15, 23, 42, 0.99);
-        }
-
-        .ny-send-btn {
-          border-radius: 999px;
-          border: 0;
-          padding: 0.5rem 1.1rem;
-          background-image: linear-gradient(135deg, #facc15, #4f46e5);
-          color: #111827;
-          font-weight: 600;
-          font-size: 0.85rem;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.35rem;
-          box-shadow:
-            0 10px 18px rgba(15, 23, 42, 0.9),
-            inset 0 0 0 1px rgba(148, 163, 184, 0.7);
-        }
-
-        .ny-send-btn:disabled {
-          opacity: 0.7;
-          cursor: wait;
-        }
-
         .ny-input-footer {
-          margin-top: 0.35rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
+          flex-direction: column;
+          align-items: flex-start;
         }
+      }
 
-        kbd {
-          border-radius: 4px;
-          padding: 0.1rem 0.35rem;
-          font-size: 0.7rem;
-          background: rgba(15, 23, 42, 0.9);
-          border: 1px solid rgba(148, 163, 184, 0.7);
-          color: var(--ny-text-main);
-        }
+      /* =========================================
+         LIGHT THEME OVERRIDES
+         ========================================= */
+      body.ny-light {
+        --ny-bg: #f5f2ea;
+        --ny-surface: #ffffff;
+        --ny-surface-soft: #fdfaf4;
+        --ny-border: rgba(148, 132, 96, 0.8);
+        --ny-border-soft: rgba(209, 194, 158, 0.6);
+        --ny-text-main: #1f2933;
+        --ny-text-subtle: #4b5563;
+        --ny-accent: #c0841a;
+        --ny-accent-soft: rgba(192, 132, 26, 0.18);
+        --ny-user-bubble: #145c8b;
+        --ny-bot-bubble: #ffffff;
+      }
 
-        @media (max-width: 576px) {
-          .ny-input-footer {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.25rem;
-          }
+      body.ny-light {
+        background:
+          radial-gradient(circle at 0 0, rgba(250, 250, 249, 0.9), transparent 60%),
+          radial-gradient(circle at 100% 100%, rgba(229, 231, 235, 0.9), transparent 60%),
+          var(--ny-bg);
+      }
 
-          .ny-chat-card {
-            min-height: calc(100vh - 120px);
-          }
+      body.ny-light .ny-navbar {
+        background:
+          radial-gradient(circle at 0 0, rgba(229, 231, 235, 0.7), transparent 70%),
+          #f9fafb;
+        border-bottom-color: rgba(209, 213, 219, 1);
+      }
 
-          .ny-chat-message {
-            max-width: 90%;
-          }
-        }
+      body.ny-light .ny-theme-toggle {
+        background: #f9fafb;
+        color: #1f2933;
+        border-color: #d1d5db;
+      }
+
+      body.ny-light .ny-badge-soft {
+        background: #ffffff;
+        color: #374151;
+        border-color: #e5e7eb;
+      }
+
+      body.ny-light .ny-info-card {
+        background: #fdfaf4;
+      }
+
+      body.ny-light .ny-info-chip {
+        background: #ffffff;
+        color: #374151;
+        border-color: #e5e7eb;
+      }
+
+      body.ny-light .ny-pill,
+      body.ny-light .ny-chip-btn,
+      body.ny-light .ny-bubble-suggest {
+        background: #f9fafb;
+        color: #111827;
+        border-color: #e5e7eb;
+      }
+
+      body.ny-light .ny-chat-card {
+        background: #ffffff;
+      }
+
+      body.ny-light .ny-case-card {
+        background: #ffffff;
+      }
+
+      body.ny-light .ny-input-wrapper {
+        background: #f9fafb;
+        border-color: #e5e7eb;
+      }
+
+      body.ny-light .ny-input-icon {
+        color: #6b7280;
+      }
+
+      body.ny-light .ny-input-control {
+        color: #111827;
+      }
+
+      body.ny-light kbd {
+        background: #f3f4f6;
+        border-color: #d1d5db;
+        color: #111827;
+      }
+
+      body.ny-light .ny-bubble-bot {
+        box-shadow:
+          0 8px 16px rgba(148, 132, 96, 0.35),
+          inset 0 0 0 1px rgba(229, 231, 235, 0.8);
+      }
+
+      body.ny-light .ny-bubble-user {
+        box-shadow:
+          0 8px 16px rgba(37, 99, 235, 0.35),
+          inset 0 0 0 1px rgba(59, 130, 246, 0.7);
+      }
     </style>
-</head>
-<body>
-    <!-- NAVBAR -->
+  </head>
+
+  <body>
+    <!-- =========================================
+         NAVBAR
+         ========================================= -->
     <nav class="ny-navbar">
       <div class="ny-nav-inner">
         <div class="ny-brand">
-          <div class="ny-logo-circle">
-            <i class="bi bi-scale"></i>
+          <div class="ny-logo-wrap">
+            <div class="ny-logo-scales">
+              <div class="ny-logo-bar"></div>
+              <div class="ny-logo-pillar"></div>
+              <span class="ny-logo-balance">NR</span>
+            </div>
           </div>
           <div class="ny-brand-text">
             <div class="ny-brand-title">Nyay Rakshak</div>
             <div class="ny-brand-subtitle">
-              Indian Law AI Assistant · RAG-powered
+              Indian Legal Defence Assistant · RAG-powered
             </div>
           </div>
         </div>
-        <div class="ny-status">
+        <div class="ny-nav-right">
           <span class="ny-online-pill">
-            <span class="ny-dot"></span> Online
+            <span class="ny-dot"></span> Live session
           </span>
+          <span class="ny-badge-soft">
+            <i class="bi bi-shield-lock me-1"></i>
+            Educational · Not a substitute for a lawyer
+          </span>
+          <button id="themeToggle" type="button" class="ny-theme-toggle">
+            <i class="bi bi-moon-stars"></i>
+            <span class="d-none d-sm-inline">Dark</span>
+          </button>
         </div>
       </div>
     </nav>
 
-    <!-- MAIN -->
+    <!-- =========================================
+         MAIN
+         ========================================= -->
     <main class="ny-main">
       <div class="ny-main-inner">
-        <div class="ny-layout-grid">
+        <div class="ny-grid">
           <!-- LEFT PANEL -->
           <section class="ny-info-card">
             <div class="ny-info-header">
-              <div class="ny-info-avatar">
-                <i class="bi bi-book"></i>
-              </div>
-              <div>
-                <div class="ny-info-session-label">Session</div>
-                <div class="ny-info-session-title">Guest User</div>
-                <div class="ny-info-session-subtitle">
-                  Ask about any Indian law domain
+              <div class="ny-info-main">
+                <div class="ny-info-avatar">
+                  <i class="bi bi-balance-scale"></i>
+                </div>
+                <div class="ny-info-titles">
+                  <span class="ny-info-label">Client profile</span>
+                  <span class="ny-info-title">Guest user</span>
+                  <span class="ny-info-subtitle">
+                    Designed for individuals, professionals and families who want to
+                    understand where they stand legally before speaking with counsel.
+                  </span>
                 </div>
               </div>
+              <span class="ny-info-chip">
+                <i class="bi bi-shield-check me-1"></i> Defence-focused view
+              </span>
             </div>
 
-            <div class="ny-info-block">
-              <div class="ny-section-title">Domains Covered</div>
+            <div>
+              <div class="ny-section-title">Key practice domains</div>
               <div class="ny-pill-row">
                 <span class="ny-pill">
-                  <i class="bi bi-shield-exclamation"></i>
-                  Criminal law (IPC, CrPC)
+                  <i class="bi bi-gavel"></i>
+                  Criminal law (IPC / BNS, CrPC / BNSS)
                 </span>
                 <span class="ny-pill">
-                  <i class="bi bi-people-fill"></i>
-                  Family &amp; Matrimonial law
+                  <i class="bi bi-heartbreak"></i>
+                  Matrimonial, DV, maintenance
                 </span>
                 <span class="ny-pill">
                   <i class="bi bi-file-earmark-text"></i>
-                  Civil &amp; Contract disputes
+                  Civil, contracts &amp; property disputes
                 </span>
                 <span class="ny-pill">
                   <i class="bi bi-bank2"></i>
-                  Constitutional &amp; public law
+                  Corporate / white-collar liability
                 </span>
                 <span class="ny-pill">
-                  <i class="bi bi-shield-lock"></i>
-                  Cyber &amp; security laws
+                  <i class="bi bi-globe2"></i>
+                  NRI &amp; cross-border issues
+                </span>
+                <span class="ny-pill">
+                  <i class="bi bi-currency-rupee"></i>
+                  Cheque bounce &amp; financial claims
                 </span>
               </div>
             </div>
 
-            <div class="ny-info-block">
-              <div class="ny-section-title">How to Ask</div>
+            <div>
+              <div class="ny-section-title">Before you ask</div>
               <ul class="ny-muted-list">
-                <li>Describe your facts in simple, chronological language.</li>
+                <li>Write in simple English; chronological facts work best.</li>
                 <li>
-                  Mention sections (e.g., 420 IPC, 125 CrPC, Art. 14) if you know them.
+                  Mention sections if you know them (498A, 406, 138 NI Act, 125 CrPC,
+                  DV Act, PMLA, IT Act etc.).
                 </li>
                 <li>
-                  Ask follow-ups on ingredients, legal tests, and procedure.
+                  State the current stage: notice only, FIR, investigation, charge
+                  sheet, trial, appeal, or execution.
+                </li>
+                <li>
+                  Ask about ingredients of the offence, likely legal issues, and
+                  defence-side patterns explored in practice.
                 </li>
               </ul>
             </div>
 
-            <div class="ny-info-block">
-              <div class="ny-section-title">Important Note</div>
-              <p class="ny-text-muted">
-                Nyay Rakshak explains legal concepts and likely reasoning patterns
-                based on curated material and retrieved documents.
+            <div>
+              <div class="ny-section-title">High-stakes situations</div>
+              <div class="ny-case-card">
+                <strong>Matrimonial / 498A / DV</strong>
+                <ul class="ny-muted-list">
+                  <li>Date of marriage, brief timeline of disputes.</li>
+                  <li>
+                    Existing cases: 498A / 406, DV Act, 125 CrPC, divorce, or
+                    maintenance.
+                  </li>
+                  <li>Any written communication, bank records, or neutral witnesses.</li>
+                </ul>
+
+                <strong>Business / corporate disputes</strong>
+                <ul class="ny-muted-list">
+                  <li>
+                    Nature of entity: proprietorship, partnership, LLP, private
+                    limited.
+                  </li>
+                  <li>Key documents: agreements, board resolutions, emails.</li>
+                  <li>
+                    Whether there are notices from police, SFIO, ED, SEBI or other
+                    regulators.
+                  </li>
+                </ul>
+
+                <strong>Cheque bounce / financial default</strong>
+                <ul class="ny-muted-list">
+                  <li>Basic transaction background (loan / investment / business).</li>
+                  <li>Number, value and dates of cheques involved.</li>
+                  <li>
+                    Whether legal notice was sent and whether any payment was made
+                    later.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="ny-section-title">Important note</div>
+              <p class="ny-note mb-1">
+                Nyay Rakshak explains law, typical judicial reasoning and broad
+                defence strategies based on available legal material.
               </p>
-              <p class="ny-text-warning">
-                It does <strong>not</strong> give personalised legal advice and
-                does not replace a licensed advocate or court proceedings.
+              <p class="ny-warning mb-0">
+                It does <strong>not</strong> replace personalised advice from a
+                practising advocate and does <strong>not</strong> guarantee any
+                specific outcome.
               </p>
+            </div>
+
+            <div>
+              <div class="ny-section-title">Quick prompts</div>
+              <div class="ny-quick-questions">
+                <button
+                  type="button"
+                  class="ny-chip-btn ny-quick"
+                  data-question="Please summarise the Indian Evidence Act in clear, numbered points for a non-lawyer reader."
+                >
+                  <i class="bi bi-lightbulb"></i>
+                  Evidence Act overview
+                </button>
+                <button
+                  type="button"
+                  class="ny-chip-btn ny-quick"
+                  data-question="There is an FIR under Sections 498A and 406 IPC from my wife and in-laws. In general terms, what ingredients must be proved and what possible defence patterns do lawyers sometimes examine?"
+                >
+                  <i class="bi bi-heartbreak"></i>
+                  498A + 406 patterns
+                </button>
+                <button
+                  type="button"
+                  class="ny-chip-btn ny-quick"
+                  data-question="Explain in simple language how Indian courts usually think about anticipatory bail, and what factors they commonly consider (not specific advice for my case)."
+                >
+                  <i class="bi bi-shield-exclamation"></i>
+                  Anticipatory bail basics
+                </button>
+                <button
+                  type="button"
+                  class="ny-chip-btn ny-quick"
+                  data-question="My employer has not paid salary for three months. In general, what kind of legal options and broad patterns under Indian law are discussed (labour complaint, civil suit, etc.)?"
+                >
+                  <i class="bi bi-briefcase"></i>
+                  Unpaid salary options
+                </button>
+                <button
+                  type="button"
+                  class="ny-chip-btn ny-quick"
+                  data-question="There is a boundary dispute with my neighbour about a small piece of land. In general, how do Indian courts look at property/boundary disputes and what typical documents are important?"
+                >
+                  <i class="bi bi-house-door"></i>
+                  Property boundary dispute
+                </button>
+                <button
+                  type="button"
+                  class="ny-chip-btn ny-quick"
+                  data-question="There is an allegation of online cheating and cyber fraud. In general, what legal issues and broad defence patterns do lawyers often look at?"
+                >
+                  <i class="bi bi-globe2"></i>
+                  Cyber fraud patterns
+                </button>
+                <button
+                  type="button"
+                  class="ny-chip-btn ny-quick"
+                  data-question="In general terms, how do Indian courts approach petitions for quashing of FIR or proceedings under Section 482 CrPC?"
+                >
+                  <i class="bi bi-x-octagon"></i>
+                  Quashing under 482 CrPC
+                </button>
+                <button
+                  type="button"
+                  class="ny-chip-btn ny-quick"
+                  data-question="I am an NRI and there is a dispute over property in India. In broad terms, what legal aspects and documents usually become important?"
+                >
+                  <i class="bi bi-airplane"></i>
+                  NRI property dispute
+                </button>
+              </div>
             </div>
           </section>
 
-          <!-- RIGHT PANEL – CHAT -->
+          <!-- RIGHT PANEL: CHAT -->
           <section class="ny-chat-card">
-            <!-- Header -->
-            <div class="ny-chat-header">
+            <!-- Header (auto-collapses after first user question) -->
+            <div class="ny-chat-header" id="ny-chat-header">
               <div class="ny-chat-header-left">
-                <div class="ny-bot-avatar">
+                <div class="ny-chat-avatar">
                   <i class="bi bi-chat-square-text"></i>
                 </div>
-                <div>
-                  <div class="ny-chat-title">Nyay Rakshak</div>
-                  <div class="ny-chat-subtitle">
-                    Ask about Indian criminal, civil, family, constitutional, cyber
-                    and national security laws in plain language.
-                  </div>
+                <div class="ny-chat-heading">
+                  <span class="ny-chat-title">Nyay Rakshak</span>
+                  <span class="ny-chat-subtitle">
+                    A warm, defence-oriented Indian legal assistant. It helps you
+                    understand how law usually works, where accusations may be strong
+                    or weak in principle, and what to discuss with your lawyer in a
+                    focused way.
+                  </span>
                 </div>
               </div>
               <div class="ny-chat-header-right">
                 <span class="ny-chat-meta">
                   <i class="bi bi-journal-text me-1"></i>
-                  RAG over legal sources
+                  RAG over curated legal sources
                 </span>
                 <span class="ny-chat-meta">
-                  <i class="bi bi-lock me-1"></i>
-                  Informational only
+                  <i class="bi bi-exclamation-triangle me-1"></i>
+                  For education · Not legal advice
                 </span>
               </div>
             </div>
@@ -716,19 +1228,65 @@
                 <!-- Initial bot message -->
                 <div class="ny-chat-message ny-chat-bot">
                   <div class="ny-bubble ny-bubble-bot">
-                    <strong>Namaste. I am Nyay Rakshak, your AI assistant for Indian laws.</strong><br /><br />
-                    I can help you understand:
-                    <ul class="mb-1">
-                      <li>Criminal law (IPC, CrPC, Evidence)</li>
-                      <li>Family law – marriage, divorce, maintenance, custody</li>
-                      <li>Constitutional rights and public law</li>
-                      <li>Cyber, financial and national security laws</li>
-                    </ul>
-                    <span class="small text-muted">
-                      Example: “Explain in simple language the basic ingredients of cheating under Section 420 IPC.”
-                    </span>
+                    Namaste. I am Nyay Rakshak, a defence-oriented Indian legal
+                    assistant.
+
+                    <br /><br />
+                    I can help you:
+                    <br />
+                    • understand what an offence legally requires,<br />
+                    • see where allegations may be strong or weak in principle,<br />
+                    • understand typical court reasoning on bail, quashing, discharge,<br />
+                    • prepare better questions and points to discuss with your advocate.
+
+                    <br /><br />
+                    I do not give personalised legal advice or guarantees of outcome.
+                    I explain the law, usual judicial reasoning, and defence-side
+                    patterns in general terms based on the material available.
                   </div>
                   <div class="ny-timestamp">now</div>
+                </div>
+
+                <!-- Bubble prompt suggestions inside chat -->
+                <div class="ny-chat-message ny-chat-bot ny-suggest-row">
+                  <div class="ny-bubble ny-bubble-bot">
+                    You can tap a prompt to get started:
+                    <div class="ny-bubble-suggest-wrap mt-2">
+                      <button
+                        type="button"
+                        class="ny-bubble-suggest ny-quick"
+                        data-question="Please summarise the Indian Evidence Act in clear, numbered points for a non-lawyer reader."
+                      >
+                        <i class="bi bi-lightbulb"></i>
+                        Summarise Evidence Act
+                      </button>
+                      <button
+                        type="button"
+                        class="ny-bubble-suggest ny-quick"
+                        data-question="My wife has filed an FIR under Section 498A IPC and 406 IPC. In general terms, what ingredients must be proved and what defence angles do lawyers sometimes explore?"
+                      >
+                        <i class="bi bi-heartbreak"></i>
+                        498A defence angles
+                      </button>
+                      <button
+                        type="button"
+                        class="ny-bubble-suggest ny-quick"
+                        data-question="Explain the usual approach of Indian courts to anticipatory bail, including typical factors they consider and broad patterns (not case-specific advice)."
+                      >
+                        <i class="bi bi-shield-exclamation"></i>
+                        Anticipatory bail flow
+                      </button>
+                      <button
+                        type="button"
+                        class="ny-bubble-suggest ny-quick"
+                        data-question="There is an allegation of online cheating / cyber fraud. In general, what legal issues and broad defence patterns do lawyers often look at?"
+                      >
+                        <i class="bi bi-globe2"></i>
+                        Cyber fraud patterns
+                      </button>
+                    </div>
+                  </div>
+                  <div class="ny-timestamp"></div>
                 </div>
               </div>
 
@@ -746,14 +1304,14 @@
                       id="ny-input"
                       class="ny-input-control"
                       rows="1"
-                      placeholder="E.g. “What are the basic ingredients of cruelty under Section 498A IPC?”"
+                      placeholder="Describe your legal question in simple words. Example: “There is an FIR under 498A and 406 IPC; what should I understand about the ingredients and general defence patterns?”"
+                      autocomplete="off"
+                      autocorrect="off"
+                      autocapitalize="sentences"
+                      spellcheck="false"
                     ></textarea>
                   </div>
-                  <button
-                    id="sendBtn"
-                    type="button"
-                    class="ny-send-btn"
-                  >
+                  <button id="sendBtn" type="button" class="ny-send-btn">
                     <span class="d-none d-md-inline">
                       <i class="bi bi-send-fill me-1"></i>
                       Ask
@@ -765,11 +1323,12 @@
                 </div>
                 <div class="ny-input-footer">
                   <small class="text-muted">
-                    Press <kbd>Enter</kbd> to send • <kbd>Shift + Enter</kbd> for new line
+                    Press <kbd>Enter</kbd> to send • <kbd>Shift + Enter</kbd> for a new
+                    line
                   </small>
                   <small class="text-muted d-none d-sm-inline">
-                    <i class="bi bi-shield-lock me-1"></i>
-                    Does not replace professional legal advice
+                    For important decisions, always speak to a trusted practising
+                    advocate.
                   </small>
                 </div>
               </div>
@@ -782,11 +1341,14 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Chat script (vanilla JS, safe-wrapped) -->
+    <!-- Chat + Theme Script -->
     <script>
       (function () {
         function safeReady(fn) {
-          if (document.readyState === "complete" || document.readyState === "interactive") {
+          if (
+            document.readyState === "complete" ||
+            document.readyState === "interactive"
+          ) {
             setTimeout(fn, 1);
           } else {
             document.addEventListener("DOMContentLoaded", fn);
@@ -797,13 +1359,48 @@
           const chatWindow = document.getElementById("chatWindow");
           const userInput = document.getElementById("ny-input");
           const sendBtn = document.getElementById("sendBtn");
+          const quickButtons = document.querySelectorAll(".ny-quick");
+          const themeToggle = document.getElementById("themeToggle");
+          const chatHeader = document.getElementById("ny-chat-header");
 
           if (!chatWindow || !userInput || !sendBtn) {
-            console.warn("Chat UI elements not found on page load.");
+            console.warn("Nyay Rakshak chat UI elements not found.");
             return;
           }
 
+          /* THEME HANDLING */
+          function applyTheme(theme) {
+            const body = document.body;
+            if (theme === "light") {
+              body.classList.add("ny-light");
+              if (themeToggle) {
+                themeToggle.innerHTML =
+                  '<i class="bi bi-sun-fill"></i><span class="d-none d-sm-inline">Light</span>';
+              }
+            } else {
+              body.classList.remove("ny-light");
+              if (themeToggle) {
+                themeToggle.innerHTML =
+                  '<i class="bi bi-moon-stars"></i><span class="d-none d-sm-inline">Dark</span>';
+              }
+            }
+          }
+
+          const storedTheme = localStorage.getItem("ny-theme");
+          applyTheme(storedTheme === "light" ? "light" : "dark");
+
+          if (themeToggle) {
+            themeToggle.addEventListener("click", function () {
+              const isLight = document.body.classList.contains("ny-light");
+              const newTheme = isLight ? "dark" : "light";
+              applyTheme(newTheme);
+              localStorage.setItem("ny-theme", newTheme);
+            });
+          }
+
+          /* CHAT LOGIC */
           let isWaiting = false;
+          let hasUserInteracted = false;
 
           function scrollToBottom() {
             chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -812,6 +1409,15 @@
           function autoResizeTextarea() {
             userInput.style.height = "auto";
             userInput.style.height = userInput.scrollHeight + "px";
+          }
+
+          function collapseHeaderOnce() {
+            if (!hasUserInteracted) {
+              hasUserInteracted = true;
+              if (chatHeader) {
+                chatHeader.classList.add("ny-chat-header-collapsed");
+              }
+            }
           }
 
           function addMessage(text, sender, typing) {
@@ -833,12 +1439,12 @@
                 <span class="ny-typing-dot"></span>
               `;
             } else {
-              // support multi-line
-              text.split("\\n").forEach(function (line, idx, arr) {
+              const lines = String(text || "").split("\n");
+              lines.forEach(function (line, idx) {
                 const span = document.createElement("span");
                 span.textContent = line;
                 bubble.appendChild(span);
-                if (idx < arr.length - 1) {
+                if (idx < lines.length - 1) {
                   bubble.appendChild(document.createElement("br"));
                 }
               });
@@ -865,20 +1471,25 @@
             return msg;
           }
 
-          async function sendMessage() {
-            const text = (userInput.value || "").trim();
+          async function sendMessage(customText) {
+            const raw = customText != null ? customText : userInput.value;
+            const text = (raw || "").trim();
             if (!text || isWaiting) return;
 
-            // user bubble
+            // Collapse header on first real interaction for more chat space
+            collapseHeaderOnce();
+
+            // User bubble
             addMessage(text, "user", false);
-            userInput.value = "";
-            autoResizeTextarea();
+            if (!customText) {
+              userInput.value = "";
+              autoResizeTextarea();
+            }
 
             isWaiting = true;
             userInput.disabled = true;
             sendBtn.disabled = true;
 
-            // typing indicator from bot
             const typingMsg = addMessage("", "bot", true);
 
             try {
@@ -897,19 +1508,16 @@
 
               const reply =
                 (data && data.response) ||
-                "I could not generate a response right now. Please try again later or consult a practising lawyer.";
+                "I could not generate a response right now. Please try again later or consult a practising advocate.";
 
               addMessage(reply, "bot", false);
             } catch (err) {
               console.error("Backend error:", err);
-              try {
-                if (typingMsg && chatWindow.contains(typingMsg)) {
-                  chatWindow.removeChild(typingMsg);
-                }
-              } catch (e) {}
-
+              if (typingMsg && chatWindow.contains(typingMsg)) {
+                chatWindow.removeChild(typingMsg);
+              }
               addMessage(
-                "There was an issue reaching Nyay Rakshak. Please retry in a moment. For urgent matters, speak to a practising lawyer.",
+                "There was a technical issue reaching Nyay Rakshak. Please try again in a moment. For urgent matters, speak to a practising lawyer.",
                 "bot",
                 false
               );
@@ -921,8 +1529,10 @@
             }
           }
 
-          // Events
-          sendBtn.addEventListener("click", sendMessage);
+          /* EVENTS */
+          sendBtn.addEventListener("click", function () {
+            sendMessage();
+          });
 
           userInput.addEventListener("keydown", function (e) {
             if (e.key === "Enter" && !e.shiftKey) {
@@ -934,8 +1544,17 @@
           userInput.addEventListener("input", autoResizeTextarea);
           autoResizeTextarea();
           userInput.focus();
+
+          quickButtons.forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              const q = btn.getAttribute("data-question") || "";
+              if (q) {
+                sendMessage(q);
+              }
+            });
+          });
         });
       })();
     </script>
-</body>
+  </body>
 </html>

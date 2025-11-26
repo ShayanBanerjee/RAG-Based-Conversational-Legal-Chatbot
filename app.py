@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from src.helper import download_embeddings_model
 from src.prompt import system_prompt
 from langchain_pinecone import PineconeVectorStore
