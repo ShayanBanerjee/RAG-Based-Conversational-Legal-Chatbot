@@ -66,7 +66,6 @@ rag_chain = create_retrieval_chain(retriever, question_answer_chain)
 def index():
     return render_template("index.html")
 
-
 @app.route("/get", methods=["GET"])
 def get_response():
     user_input = (request.args.get("msg") or "").strip()

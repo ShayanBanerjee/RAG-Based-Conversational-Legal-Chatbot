@@ -2,367 +2,941 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>LexisAI – Matrimonial & Security Law Assistant</title>
+    <title>Nyay Rakshak – Indian Law AI Assistant</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Tiny blank favicon to avoid 404 -->
+    <link rel="icon" href="data:;base64,=" />
 
     <!-- Google Font -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
-        rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
     />
 
-    <!-- Bootstrap 5 -->
+    <!-- Bootstrap & Icons -->
     <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
     />
-
-    <!-- Bootstrap Icons -->
     <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     />
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <style>
+        :root {
+          --ny-bg: #050816;
+          --ny-card: rgba(15, 23, 42, 0.97);
+          --ny-border: rgba(148, 163, 184, 0.45);
+          --ny-border-soft: rgba(148, 163, 184, 0.2);
+          --ny-text-main: #e5e7eb;
+          --ny-text-muted: #9ca3af;
+          --ny-accent: #facc15;
+          --ny-accent-soft: rgba(250, 204, 21, 0.25);
+          --ny-user-bubble: #2563eb;
+          --ny-bot-bubble: #020617;
+          --ny-metal: linear-gradient(135deg, #f3f4f6, #9ca3af, #facc15);
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+
+        html, body {
+          margin: 0;
+          padding: 0;
+          height: 100%;
+        }
+
+        body {
+          min-height: 100vh;
+          font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+            "Segoe UI", sans-serif;
+          background:
+            radial-gradient(circle at 0 0, rgba(250, 204, 21, 0.22), transparent 55%),
+            radial-gradient(circle at 100% 100%, rgba(79, 70, 229, 0.35), transparent 55%),
+            var(--ny-bg);
+          color: var(--ny-text-main);
+          display: flex;
+          flex-direction: column;
+        }
+
+        /* NAVBAR */
+        .ny-navbar {
+          background:
+            radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.06), transparent 65%),
+            rgba(15, 23, 42, 0.98);
+          border-bottom: 1px solid var(--ny-border-soft);
+          backdrop-filter: blur(16px);
+        }
+
+        .ny-nav-inner {
+          max-width: 1240px;
+          margin: 0 auto;
+          padding: 0.6rem 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .ny-brand {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+
+        .ny-logo-circle {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background-image: var(--ny-metal);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #020617;
+          box-shadow:
+            0 6px 14px rgba(15, 23, 42, 0.8),
+            inset 0 0 0 1px rgba(148, 163, 184, 0.8);
+          font-size: 1.2rem;
+        }
+
+        .ny-brand-text {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .ny-brand-title {
+          font-size: 1rem;
+          font-weight: 600;
+        }
+
+        .ny-brand-subtitle {
+          font-size: 0.8rem;
+          color: var(--ny-text-muted);
+        }
+
+        .ny-status {
+          display: flex;
+          align-items: center;
+        }
+
+        .ny-online-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          border-radius: 999px;
+          padding: 0.2rem 0.6rem;
+          background: rgba(22, 163, 74, 0.96);
+          color: #ecfdf5;
+          font-size: 0.7rem;
+          border: 1px solid rgba(21, 128, 61, 0.9);
+        }
+
+        .ny-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background-color: #bbf7d0;
+          box-shadow: 0 0 6px rgba(34, 197, 94, 0.9);
+        }
+
+        /* MAIN LAYOUT */
+        .ny-main {
+          flex: 1;
+          display: flex;
+          padding: 1rem 0.75rem 1rem;
+        }
+
+        .ny-main-inner {
+          max-width: 1240px;
+          margin: 0 auto;
+          width: 100%;
+        }
+
+        .ny-layout-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
+          gap: 1rem;
+        }
+
+        @media (max-width: 992px) {
+          .ny-layout-grid {
+            grid-template-columns: minmax(0, 1fr);
+          }
+        }
+
+        /* INFO CARD */
+        .ny-info-card {
+          border-radius: 18px;
+          border: 1px solid var(--ny-border);
+          background:
+            radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.05), transparent 60%),
+            rgba(15, 23, 42, 0.97);
+          padding: 1rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .ny-info-header {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .ny-info-avatar {
+          width: 42px;
+          height: 42px;
+          border-radius: 14px;
+          background: radial-gradient(circle at 30% 0, #facc15, #4b5563);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.3rem;
+          color: #111827;
+        }
+
+        .ny-info-session-label {
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: var(--ny-text-muted);
+        }
+
+        .ny-info-session-title {
+          font-size: 0.9rem;
+          font-weight: 500;
+        }
+
+        .ny-info-session-subtitle {
+          font-size: 0.8rem;
+          color: var(--ny-text-muted);
+        }
+
+        .ny-info-block {
+          margin-top: 0.35rem;
+        }
+
+        .ny-section-title {
+          font-size: 0.78rem;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: var(--ny-text-muted);
+          font-weight: 600;
+          margin-bottom: 0.3rem;
+        }
+
+        .ny-pill-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.4rem;
+        }
+
+        .ny-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.3rem;
+          padding: 0.25rem 0.7rem;
+          border-radius: 999px;
+          border: 1px solid var(--ny-border);
+          background: rgba(15, 23, 42, 0.96);
+          font-size: 0.75rem;
+          color: var(--ny-text-main);
+        }
+
+        .ny-pill i {
+          font-size: 0.85rem;
+        }
+
+        .ny-muted-list {
+          margin: 0;
+          padding-left: 1.1rem;
+          font-size: 0.82rem;
+          color: var(--ny-text-muted);
+        }
+
+        .ny-muted-list li + li {
+          margin-top: 0.1rem;
+        }
+
+        .ny-text-muted {
+          font-size: 0.8rem;
+          color: var(--ny-text-muted);
+        }
+
+        .ny-text-warning {
+          font-size: 0.8rem;
+          color: var(--ny-accent);
+        }
+
+        /* CHAT CARD */
+        .ny-chat-card {
+          border-radius: 18px;
+          border: 1px solid var(--ny-border);
+          background:
+            radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.04), transparent 60%),
+            var(--ny-card);
+          padding: 0.9rem;
+          display: flex;
+          flex-direction: column;
+          min-height: 480px;
+        }
+
+        /* CHAT HEADER */
+        .ny-chat-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 0.75rem;
+          padding-bottom: 0.6rem;
+          border-bottom: 1px solid var(--ny-border-soft);
+        }
+
+        .ny-chat-header-left {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.75rem;
+        }
+
+        .ny-bot-avatar {
+          width: 42px;
+          height: 42px;
+          border-radius: 999px;
+          background: radial-gradient(circle at 30% 0, #4f46e5, #020617);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #e5e7eb;
+          font-size: 1.2rem;
+          box-shadow:
+            0 10px 20px rgba(37, 99, 235, 0.75),
+            inset 0 0 0 1px rgba(191, 219, 254, 0.5);
+        }
+
+        .ny-chat-title {
+          font-size: 0.95rem;
+          font-weight: 600;
+        }
+
+        .ny-chat-subtitle {
+          font-size: 0.8rem;
+          color: var(--ny-text-muted);
+          max-width: 420px;
+        }
+
+        .ny-chat-header-right {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 0.15rem;
+        }
+
+        .ny-chat-meta {
+          font-size: 0.7rem;
+          color: var(--ny-text-muted);
+        }
+
+        @media (max-width: 768px) {
+          .ny-chat-header {
+            flex-direction: column;
+          }
+          .ny-chat-header-right {
+            align-items: flex-start;
+          }
+        }
+
+        /* CHAT BODY */
+        .ny-chat-body {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          margin-top: 0.45rem;
+        }
+
+        .ny-chat-window {
+          flex: 1;
+          overflow-y: auto;
+          padding-right: 0.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.45rem;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(148, 163, 184, 0.7) transparent;
+        }
+
+        .ny-chat-window::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        .ny-chat-window::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        .ny-chat-window::-webkit-scrollbar-thumb {
+          background-color: rgba(148, 163, 184, 0.85);
+          border-radius: 999px;
+        }
+
+        /* CHAT MESSAGES */
+        .ny-chat-message {
+          display: flex;
+          flex-direction: column;
+          max-width: 80%;
+        }
+
+        .ny-chat-bot {
+          align-items: flex-start;
+        }
+
+        .ny-chat-user {
+          margin-left: auto;
+          align-items: flex-end;
+        }
+
+        .ny-bubble {
+          padding: 0.6rem 0.8rem;
+          font-size: 0.9rem;
+          line-height: 1.5;
+        }
+
+        .ny-bubble-bot {
+          background:
+            radial-gradient(circle at 0 0, rgba(148, 163, 184, 0.28), transparent 70%),
+            var(--ny-bot-bubble);
+          border-radius: 14px;
+          border-bottom-left-radius: 6px;
+          border: 1px solid rgba(148, 163, 184, 0.7);
+          box-shadow:
+            0 10px 18px rgba(15, 23, 42, 0.85),
+            inset 0 0 0 1px rgba(15, 23, 42, 0.9);
+        }
+
+        .ny-bubble-user {
+          background:
+            radial-gradient(circle at 0 0, rgba(59, 130, 246, 0.45), transparent 70%),
+            var(--ny-user-bubble);
+          border-radius: 14px;
+          border-bottom-right-radius: 6px;
+          color: #eff6ff;
+          box-shadow:
+            0 10px 18px rgba(37, 99, 235, 0.75),
+            inset 0 0 0 1px rgba(30, 64, 175, 0.85);
+        }
+
+        .ny-timestamp {
+          margin-top: 0.15rem;
+          font-size: 0.7rem;
+          color: var(--ny-text-muted);
+        }
+
+        /* TYPING INDICATOR */
+        .ny-typing-indicator {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .ny-typing-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 999px;
+          background-color: #e5e7eb;
+          opacity: 0.4;
+          animation: ny-bounce 1s infinite;
+        }
+
+        .ny-typing-dot:nth-child(2) {
+          animation-delay: 0.15s;
+        }
+        .ny-typing-dot:nth-child(3) {
+          animation-delay: 0.3s;
+        }
+
+        @keyframes ny-bounce {
+          0%,
+          80%,
+          100% {
+            transform: translateY(0);
+            opacity: 0.3;
+          }
+          40% {
+            transform: translateY(-3px);
+            opacity: 0.9;
+          }
+        }
+
+        /* INPUT AREA */
+        .ny-chat-input {
+          border-top: 1px solid var(--ny-border-soft);
+          padding-top: 0.5rem;
+          margin-top: 0.4rem;
+        }
+
+        .ny-input-label {
+          font-size: 0.78rem;
+          color: var(--ny-text-muted);
+          margin-bottom: 0.3rem;
+        }
+
+        .ny-input-row {
+          display: flex;
+          align-items: flex-end;
+          gap: 0.5rem;
+        }
+
+        .ny-input-wrapper {
+          flex: 1;
+          display: flex;
+          align-items: flex-start;
+          gap: 0.4rem;
+        }
+
+        .ny-input-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.45rem 0.7rem;
+          border-radius: 999px;
+          border: 1px solid var(--ny-border);
+          border-right: 0;
+          background: rgba(15, 23, 42, 0.98);
+          color: var(--ny-text-muted);
+        }
+
+        .ny-input-control {
+          flex: 1;
+          border-radius: 999px;
+          border: 1px solid var(--ny-border);
+          background: rgba(15, 23, 42, 0.98);
+          color: var(--ny-text-main);
+          font-size: 0.9rem;
+          padding: 0.5rem 0.8rem;
+          resize: none;
+          max-height: 120px;
+          outline: none;
+        }
+
+        .ny-input-control::placeholder {
+          color: var(--ny-text-muted);
+          font-size: 0.85rem;
+        }
+
+        .ny-input-control:focus {
+          border-color: var(--ny-accent);
+          box-shadow:
+            0 0 0 1px var(--ny-accent-soft),
+            0 0 0 1px rgba(15, 23, 42, 0.9);
+          background: rgba(15, 23, 42, 0.99);
+        }
+
+        .ny-send-btn {
+          border-radius: 999px;
+          border: 0;
+          padding: 0.5rem 1.1rem;
+          background-image: linear-gradient(135deg, #facc15, #4f46e5);
+          color: #111827;
+          font-weight: 600;
+          font-size: 0.85rem;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.35rem;
+          box-shadow:
+            0 10px 18px rgba(15, 23, 42, 0.9),
+            inset 0 0 0 1px rgba(148, 163, 184, 0.7);
+        }
+
+        .ny-send-btn:disabled {
+          opacity: 0.7;
+          cursor: wait;
+        }
+
+        .ny-input-footer {
+          margin-top: 0.35rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        kbd {
+          border-radius: 4px;
+          padding: 0.1rem 0.35rem;
+          font-size: 0.7rem;
+          background: rgba(15, 23, 42, 0.9);
+          border: 1px solid rgba(148, 163, 184, 0.7);
+          color: var(--ny-text-main);
+        }
+
+        @media (max-width: 576px) {
+          .ny-input-footer {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.25rem;
+          }
+
+          .ny-chat-card {
+            min-height: calc(100vh - 120px);
+          }
+
+          .ny-chat-message {
+            max-width: 90%;
+          }
+        }
+    </style>
 </head>
-<body class="lex-body">
-    <div class="lex-bg-layer"></div>
-
-    <!-- Top navigation / SPA shell -->
-    <nav class="navbar navbar-expand-lg lex-navbar">
-        <div class="container-fluid px-3 px-md-4">
-            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-                <div class="lex-logo-circle d-flex align-items-center justify-content-center">
-                    <i class="bi bi-scale"></i>
-                </div>
-                <div class="d-flex flex-column">
-                    <span class="lex-brand-title">LexisAI</span>
-                    <span class="lex-brand-subtitle">
-                        Matrimonial & Security Law Assistant
-                    </span>
-                </div>
-            </a>
-
-            <button
-                class="navbar-toggler lex-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#lexNavbar"
-            >
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse justify-content-end" id="lexNavbar">
-                <ul class="navbar-nav align-items-lg-center gap-lg-2">
-                    <li class="nav-item">
-                        <span class="nav-link lex-nav-link active" data-section="chat-section">
-                            <i class="bi bi-chat-square-text me-1"></i> Assistant
-                        </span>
-                    </li>
-                    <li class="nav-item d-none d-md-block">
-                        <span class="nav-link lex-nav-link" data-section="about-section">
-                            <i class="bi bi-journal-text me-1"></i> About
-                        </span>
-                    </li>
-                    <li class="nav-item d-none d-md-block">
-                        <span class="nav-link lex-nav-link" data-section="disclaimer-section">
-                            <i class="bi bi-shield-lock me-1"></i> Disclaimer
-                        </span>
-                    </li>
-                </ul>
-                <div class="d-none d-lg-flex align-items-center ms-3">
-                    <span class="badge rounded-pill lex-online-pill me-2">
-                        <span class="lex-dot me-1"></span> Online
-                    </span>
-                </div>
+<body>
+    <!-- NAVBAR -->
+    <nav class="ny-navbar">
+      <div class="ny-nav-inner">
+        <div class="ny-brand">
+          <div class="ny-logo-circle">
+            <i class="bi bi-scale"></i>
+          </div>
+          <div class="ny-brand-text">
+            <div class="ny-brand-title">Nyay Rakshak</div>
+            <div class="ny-brand-subtitle">
+              Indian Law AI Assistant · RAG-powered
             </div>
+          </div>
         </div>
+        <div class="ny-status">
+          <span class="ny-online-pill">
+            <span class="ny-dot"></span> Online
+          </span>
+        </div>
+      </div>
     </nav>
 
-    <!-- SPA main area -->
-    <main class="lex-main container-fluid px-3 px-md-4 py-3 py-md-4">
-        <div class="row g-3 g-lg-4">
-
-            <!-- LEFT PANEL -->
-            <aside class="col-12 col-lg-4 order-2 order-lg-1">
-                <section class="lex-side-card mb-3" id="profile-section">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="lex-user-avatar">
-                                <i class="bi bi-person-badge"></i>
-                            </div>
-                            <div>
-                                <div class="lex-chip-label">Current Session</div>
-                                <div class="lex-chip-value">Guest user</div>
-                                <div class="lex-chip-subvalue">
-                                    Focus: Marriage, family & security laws
-                                </div>
-                            </div>
-                        </div>
-                        <span class="badge lex-session-badge">
-                            <i class="bi bi-shield-check me-1"></i> Confidential
-                        </span>
-                    </div>
-
-                    <div class="lex-section mb-3">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="lex-section-title">Primary domains</span>
-                        </div>
-                        <div class="d-flex flex-wrap gap-2">
-                            <span class="badge lex-tag-pill">
-                                <i class="bi bi-heartbreak me-1"></i> Matrimonial disputes
-                            </span>
-                            <span class="badge lex-tag-pill">
-                                <i class="bi bi-people-fill me-1"></i> Divorce & custody
-                            </span>
-                            <span class="badge lex-tag-pill">
-                                <i class="bi bi-shield-exclamation me-1"></i> Domestic violence
-                            </span>
-                            <span class="badge lex-tag-pill">
-                                <i class="bi bi-card-checklist me-1"></i> Maintenance & alimony
-                            </span>
-                            <span class="badge lex-tag-pill">
-                                <i class="bi bi-flag me-1"></i> National security laws
-                            </span>
-                            <span class="badge lex-tag-pill">
-                                <i class="bi bi-bank me-1"></i> Constitutional issues
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="lex-section mb-3">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="lex-section-title">Quick legal topics</span>
-                            <span class="lex-mini-label">Tap to ask</span>
-                        </div>
-                        <div class="d-flex flex-wrap gap-2">
-                            <!-- Matrimonial quick prompts -->
-                            <button
-                                type="button"
-                                class="btn btn-sm lex-chip-btn quick-question"
-                                data-question="Explain the basic legal grounds for divorce under Indian law in simple terms."
-                            >
-                                <i class="bi bi-heartbreak me-1"></i>
-                                Grounds for divorce (India)
-                            </button>
-                            <button
-                                type="button"
-                                class="btn btn-sm lex-chip-btn quick-question"
-                                data-question="What is Section 498A IPC and how is it generally applied in cases of cruelty by husband or his relatives?"
-                            >
-                                <i class="bi bi-exclamation-triangle me-1"></i>
-                                Section 498A IPC – cruelty
-                            </button>
-                            <button
-                                type="button"
-                                class="btn btn-sm lex-chip-btn quick-question"
-                                data-question="How does Section 125 CrPC work for maintenance and who can claim it?"
-                            >
-                                <i class="bi bi-cash-stack me-1"></i>
-                                Section 125 CrPC – maintenance
-                            </button>
-                            <button
-                                type="button"
-                                class="btn btn-sm lex-chip-btn quick-question"
-                                data-question="What are basic principles courts consider in child custody disputes in India?"
-                            >
-                                <i class="bi bi-people me-1"></i>
-                                Child custody principles
-                            </button>
-
-                            <!-- Security law prompts -->
-                            <button
-                                type="button"
-                                class="btn btn-sm lex-chip-btn quick-question"
-                                data-question="Explain the key idea behind national security laws such as UAPA and how they differ from ordinary criminal law."
-                            >
-                                <i class="bi bi-shield-lock me-1"></i>
-                                Idea of UAPA / security laws
-                            </button>
-                            <button
-                                type="button"
-                                class="btn btn-sm lex-chip-btn quick-question"
-                                data-question="What are the general legal principles around bail in cases involving national security or terrorism-related offences?"
-                            >
-                                <i class="bi bi-unlock me-1"></i>
-                                Bail & security offences
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="lex-section">
-                        <div class="lex-section-title mb-1">Important disclaimer</div>
-                        <p class="lex-text-muted small mb-1">
-                            This assistant explains legal concepts based on curated matrimonial and
-                            national security law material. It is for information and learning.
-                        </p>
-                        <p class="lex-text-warning small mb-0">
-                            It does <strong>not</strong> create an attorney–client relationship or
-                            replace advice from a licensed advocate. For real disputes, always
-                            consult a qualified lawyer.
-                        </p>
-                    </div>
-                </section>
-
-                <!-- About / Disclaimer panels as part of SPA -->
-                <section class="lex-side-card mb-3 d-none d-lg-block" id="about-section">
-                    <div class="lex-section mb-2">
-                        <div class="lex-section-title mb-1">About LexisAI</div>
-                        <p class="small lex-text-muted mb-1">
-                            LexisAI is designed as a focused assistant for:
-                        </p>
-                        <ul class="small mb-1 lex-text-muted">
-                            <li>Matrimonial disputes – cruelty, maintenance, custody.</li>
-                            <li>Domestic violence and related protective laws.</li>
-                            <li>Broad concepts in national security & public order laws.</li>
-                        </ul>
-                        <p class="small lex-text-muted mb-0">
-                            It leverages your internal RAG-based legal knowledge to answer in plain,
-                            structured language.
-                        </p>
-                    </div>
-                    <div class="lex-section">
-                        <div class="lex-section-title mb-1">How to use</div>
-                        <ul class="small lex-text-muted mb-0">
-                            <li>Briefly describe your situation or query.</li>
-                            <li>Mention specific sections or Acts if you know them.</li>
-                            <li>Use follow-up questions to explore nuances.</li>
-                        </ul>
-                    </div>
-                </section>
-
-                <section class="lex-side-card d-none" id="disclaimer-section">
-                    <div class="lex-section">
-                        <div class="lex-section-title mb-1">Legal & ethical notice</div>
-                        <p class="small lex-text-muted mb-1">
-                            This assistant may analyze laws and cases but does not replace a human
-                            practitioner. It may occasionally be incomplete or outdated.
-                        </p>
-                        <p class="small lex-text-warning mb-1">
-                            For legal strategy, litigation, or decisions affecting your rights,
-                            always seek independent advice from a qualified advocate.
-                        </p>
-                        <p class="small lex-text-muted mb-0">
-                            By using this tool, you agree that it is for informational and
-                            educational purposes only.
-                        </p>
-                    </div>
-                </section>
-            </aside>
-
-            <!-- RIGHT PANEL – chat SPA core -->
-            <section
-                class="col-12 col-lg-8 order-1 order-lg-2"
-                id="chat-section"
-            >
-                <div class="lex-chat-card shadow-lg">
-
-                    <!-- Chat header -->
-                    <div class="lex-chat-header d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="lex-bot-avatar">
-                                <i class="bi bi-chat-square-text"></i>
-                            </div>
-                            <div>
-                                <div class="lex-chat-title">Matrimonial & Security Law Assistant</div>
-                                <div class="lex-chat-subtitle">
-                                    Ask about Indian matrimonial disputes, family laws and national security
-                                    frameworks in clear language.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-none d-md-flex flex-column align-items-end">
-                            <span class="lex-chat-meta">
-                                <i class="bi bi-journal-text me-1"></i>
-                                RAG-based legal knowledge
-                            </span>
-                            <span class="lex-chat-meta">
-                                <i class="bi bi-lock me-1"></i>
-                                Session not stored as client advice
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Chat window -->
-                    <div id="chatWindow" class="lex-chat-window">
-                        <!-- Initial welcome message -->
-                        <div class="chat-message bot">
-                            <div class="bubble">
-                                <div class="bubble-title">
-                                    <i class="bi bi-bullseye me-1"></i> Welcome to LexisAI
-                                </div>
-                                <p class="mb-2">
-                                    I can help you understand <strong>matrimonial disputes</strong>,
-                                    <strong>domestic violence protections</strong>, <strong>maintenance &
-                                    custody</strong>, and broad ideas in <strong>national security and
-                                    public order laws</strong>.
-                                </p>
-                                <ul class="small mb-2">
-                                    <li>
-                                        “My spouse has filed a 498A case; what does that section broadly cover?”
-                                    </li>
-                                    <li>
-                                        “What does Section 125 CrPC allow in terms of maintenance?”
-                                    </li>
-                                    <li>
-                                        “How do national security laws differ from ordinary offences?”
-                                    </li>
-                                </ul>
-                                <p class="small text-warning mb-0">
-                                    I explain concepts based on the provided legal context. I do not give
-                                    personalized legal advice or replace a lawyer.
-                                </p>
-                            </div>
-                            <div class="timestamp">now</div>
-                        </div>
-                    </div>
-
-                    <!-- Input area -->
-                    <form id="chatForm" class="lex-chat-input">
-                        <label for="userInput" class="form-label lex-input-label mb-1">
-                            Describe your situation or ask a legal question
-                        </label>
-                        <div class="input-group">
-                            <span class="input-group-text lex-input-icon d-none d-sm-flex">
-                                <i class="bi bi-pencil-square"></i>
-                            </span>
-                            <textarea
-                                id="userInput"
-                                class="form-control lex-input-control"
-                                rows="1"
-                                placeholder="Example: My spouse has filed a case under Section 498A IPC and I want to understand what it generally means and how courts view such allegations."
-                                required
-                            ></textarea>
-                            <button class="btn lex-send-btn" type="submit">
-                                <span class="d-none d-md-inline">
-                                    <i class="bi bi-send-fill me-1"></i> Ask
-                                </span>
-                                <span class="d-inline d-md-none">
-                                    <i class="bi bi-send-fill"></i>
-                                </span>
-                            </button>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mt-2">
-                            <small class="text-muted">
-                                Press <kbd>Enter</kbd> to send • <kbd>Shift + Enter</kbd> for new line
-                            </small>
-                            <small class="text-muted d-none d-sm-inline">
-                                <i class="bi bi-shield-lock me-1"></i>
-                                Informational – not attorney–client advice.
-                            </small>
-                        </div>
-                    </form>
+    <!-- MAIN -->
+    <main class="ny-main">
+      <div class="ny-main-inner">
+        <div class="ny-layout-grid">
+          <!-- LEFT PANEL -->
+          <section class="ny-info-card">
+            <div class="ny-info-header">
+              <div class="ny-info-avatar">
+                <i class="bi bi-book"></i>
+              </div>
+              <div>
+                <div class="ny-info-session-label">Session</div>
+                <div class="ny-info-session-title">Guest User</div>
+                <div class="ny-info-session-subtitle">
+                  Ask about any Indian law domain
                 </div>
-            </section>
+              </div>
+            </div>
 
+            <div class="ny-info-block">
+              <div class="ny-section-title">Domains Covered</div>
+              <div class="ny-pill-row">
+                <span class="ny-pill">
+                  <i class="bi bi-shield-exclamation"></i>
+                  Criminal law (IPC, CrPC)
+                </span>
+                <span class="ny-pill">
+                  <i class="bi bi-people-fill"></i>
+                  Family &amp; Matrimonial law
+                </span>
+                <span class="ny-pill">
+                  <i class="bi bi-file-earmark-text"></i>
+                  Civil &amp; Contract disputes
+                </span>
+                <span class="ny-pill">
+                  <i class="bi bi-bank2"></i>
+                  Constitutional &amp; public law
+                </span>
+                <span class="ny-pill">
+                  <i class="bi bi-shield-lock"></i>
+                  Cyber &amp; security laws
+                </span>
+              </div>
+            </div>
+
+            <div class="ny-info-block">
+              <div class="ny-section-title">How to Ask</div>
+              <ul class="ny-muted-list">
+                <li>Describe your facts in simple, chronological language.</li>
+                <li>
+                  Mention sections (e.g., 420 IPC, 125 CrPC, Art. 14) if you know them.
+                </li>
+                <li>
+                  Ask follow-ups on ingredients, legal tests, and procedure.
+                </li>
+              </ul>
+            </div>
+
+            <div class="ny-info-block">
+              <div class="ny-section-title">Important Note</div>
+              <p class="ny-text-muted">
+                Nyay Rakshak explains legal concepts and likely reasoning patterns
+                based on curated material and retrieved documents.
+              </p>
+              <p class="ny-text-warning">
+                It does <strong>not</strong> give personalised legal advice and
+                does not replace a licensed advocate or court proceedings.
+              </p>
+            </div>
+          </section>
+
+          <!-- RIGHT PANEL – CHAT -->
+          <section class="ny-chat-card">
+            <!-- Header -->
+            <div class="ny-chat-header">
+              <div class="ny-chat-header-left">
+                <div class="ny-bot-avatar">
+                  <i class="bi bi-chat-square-text"></i>
+                </div>
+                <div>
+                  <div class="ny-chat-title">Nyay Rakshak</div>
+                  <div class="ny-chat-subtitle">
+                    Ask about Indian criminal, civil, family, constitutional, cyber
+                    and national security laws in plain language.
+                  </div>
+                </div>
+              </div>
+              <div class="ny-chat-header-right">
+                <span class="ny-chat-meta">
+                  <i class="bi bi-journal-text me-1"></i>
+                  RAG over legal sources
+                </span>
+                <span class="ny-chat-meta">
+                  <i class="bi bi-lock me-1"></i>
+                  Informational only
+                </span>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="ny-chat-body">
+              <!-- Messages -->
+              <div id="chatWindow" class="ny-chat-window">
+                <!-- Initial bot message -->
+                <div class="ny-chat-message ny-chat-bot">
+                  <div class="ny-bubble ny-bubble-bot">
+                    <strong>Namaste. I am Nyay Rakshak, your AI assistant for Indian laws.</strong><br /><br />
+                    I can help you understand:
+                    <ul class="mb-1">
+                      <li>Criminal law (IPC, CrPC, Evidence)</li>
+                      <li>Civil disputes, contracts, property matters</li>
+                      <li>Family law – marriage, divorce, maintenance, custody</li>
+                      <li>Constitutional rights and public law</li>
+                      <li>Cyber, financial and national security laws</li>
+                    </ul>
+                    <span class="small text-muted">
+                      Example: “Explain in simple language the basic ingredients of cheating under Section 420 IPC.”
+                    </span>
+                  </div>
+                  <div class="ny-timestamp">now</div>
+                </div>
+              </div>
+
+              <!-- Input -->
+              <div class="ny-chat-input">
+                <label class="ny-input-label" for="ny-input">
+                  Type your question (Enter to send, Shift+Enter for new line)
+                </label>
+                <div class="ny-input-row">
+                  <div class="ny-input-wrapper">
+                    <span class="ny-input-icon d-none d-sm-inline-flex">
+                      <i class="bi bi-pencil-square"></i>
+                    </span>
+                    <textarea
+                      id="ny-input"
+                      class="ny-input-control"
+                      rows="1"
+                      placeholder="E.g. “What are the basic ingredients of cruelty under Section 498A IPC?”"
+                    ></textarea>
+                  </div>
+                  <button
+                    id="sendBtn"
+                    type="button"
+                    class="ny-send-btn"
+                  >
+                    <span class="d-none d-md-inline">
+                      <i class="bi bi-send-fill me-1"></i>
+                      Ask
+                    </span>
+                    <span class="d-inline d-md-none">
+                      <i class="bi bi-send-fill"></i>
+                    </span>
+                  </button>
+                </div>
+                <div class="ny-input-footer">
+                  <small class="text-muted">
+                    Press <kbd>Enter</kbd> to send • <kbd>Shift + Enter</kbd> for new line
+                  </small>
+                  <small class="text-muted d-none d-sm-inline">
+                    <i class="bi bi-shield-lock me-1"></i>
+                    Does not replace professional legal advice
+                  </small>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
+      </div>
     </main>
 
-    <!-- Bootstrap JS bundle -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom JS -->
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <!-- Chat script (vanilla JS, safe-wrapped) -->
+    <script>
+      (function () {
+        function safeReady(fn) {
+          if (document.readyState === "complete" || document.readyState === "interactive") {
+            setTimeout(fn, 1);
+          } else {
+            document.addEventListener("DOMContentLoaded", fn);
+          }
+        }
+
+        safeReady(function () {
+          const chatWindow = document.getElementById("chatWindow");
+          const userInput = document.getElementById("ny-input");
+          const sendBtn = document.getElementById("sendBtn");
+
+          if (!chatWindow || !userInput || !sendBtn) {
+            console.warn("Chat UI elements not found on page load.");
+            return;
+          }
+
+          let isWaiting = false;
+
+          function scrollToBottom() {
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+          }
+
+          function autoResizeTextarea() {
+            userInput.style.height = "auto";
+            userInput.style.height = userInput.scrollHeight + "px";
+          }
+
+          function addMessage(text, sender, typing) {
+            const msg = document.createElement("div");
+            msg.classList.add("ny-chat-message");
+            msg.classList.add(sender === "user" ? "ny-chat-user" : "ny-chat-bot");
+
+            const bubble = document.createElement("div");
+            bubble.classList.add("ny-bubble");
+            bubble.classList.add(
+              sender === "user" ? "ny-bubble-user" : "ny-bubble-bot"
+            );
+
+            if (typing) {
+              bubble.classList.add("ny-typing-indicator");
+              bubble.innerHTML = `
+                <span class="ny-typing-dot"></span>
+                <span class="ny-typing-dot"></span>
+                <span class="ny-typing-dot"></span>
+              `;
+            } else {
+              // support multi-line
+              text.split("\\n").forEach(function (line, idx, arr) {
+                const span = document.createElement("span");
+                span.textContent = line;
+                bubble.appendChild(span);
+                if (idx < arr.length - 1) {
+                  bubble.appendChild(document.createElement("br"));
+                }
+              });
+            }
+
+            const ts = document.createElement("div");
+            ts.classList.add("ny-timestamp");
+            if (!typing) {
+              const now = new Date();
+              try {
+                ts.textContent = now.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                });
+              } catch (e) {
+                ts.textContent = "";
+              }
+            }
+
+            msg.appendChild(bubble);
+            msg.appendChild(ts);
+            chatWindow.appendChild(msg);
+            scrollToBottom();
+            return msg;
+          }
+
+          async function sendMessage() {
+            const text = (userInput.value || "").trim();
+            if (!text || isWaiting) return;
+
+            // user bubble
+            addMessage(text, "user", false);
+            userInput.value = "";
+            autoResizeTextarea();
+
+            isWaiting = true;
+            userInput.disabled = true;
+            sendBtn.disabled = true;
+
+            // typing indicator from bot
+            const typingMsg = addMessage("", "bot", true);
+
+            try {
+              const res = await fetch("/get?msg=" + encodeURIComponent(text));
+              let data;
+              try {
+                data = await res.json();
+              } catch (parseErr) {
+                console.error("JSON parse error:", parseErr);
+                data = { response: "The server returned an invalid response." };
+              }
+
+              if (typingMsg && chatWindow.contains(typingMsg)) {
+                chatWindow.removeChild(typingMsg);
+              }
+
+              const reply =
+                (data && data.response) ||
+                "I could not generate a response right now. Please try again later or consult a practising lawyer.";
+
+              addMessage(reply, "bot", false);
+            } catch (err) {
+              console.error("Backend error:", err);
+              try {
+                if (typingMsg && chatWindow.contains(typingMsg)) {
+                  chatWindow.removeChild(typingMsg);
+                }
+              } catch (e) {}
+
+              addMessage(
+                "There was an issue reaching Nyay Rakshak. Please retry in a moment. For urgent matters, speak to a practising lawyer.",
+                "bot",
+                false
+              );
+            } finally {
+              isWaiting = false;
+              userInput.disabled = false;
+              sendBtn.disabled = false;
+              userInput.focus();
+            }
+          }
+
+          // Events
+          sendBtn.addEventListener("click", sendMessage);
+
+          userInput.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              sendMessage();
+            }
+          });
+
+          userInput.addEventListener("input", autoResizeTextarea);
+          autoResizeTextarea();
+          userInput.focus();
+        });
+      })();
+    </script>
 </body>
 </html>

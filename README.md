@@ -42,6 +42,13 @@ PINECONE_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 OPENAI_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
+##### Fronted build
+```python
+cd frontend
+npm install
+npm start
+```
+
 ##### run the following command to store embeddings to pinecone
 ```bash
 python store_index.py

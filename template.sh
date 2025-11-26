@@ -2,16 +2,11 @@
 mkdir -p src
 mkdir -p research
 mkdir -p data
-mkdir -p templates
-mkdir -p static
 
 # Creating files
 touch src/__init__.py
 touch src/helper.py
 touch src/prompt.py
-touch templates/index.html
-touch static/style.css
-touch static/script.js
 touch .env
 touch setup.py
 touch app.py
