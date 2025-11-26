@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="rag_medical_chatbot",
+    name="rag_legal_chatbot",
     version="0.1.0",
     author="Shayan Banerjee",
     author_email="shayanbanerjee96@gmail.com",
