@@ -101,7 +101,7 @@ open up localhost:
 
 	
 ## 3. Create ECR repo to store/save docker image
-*Save the URI:* 680528876031.dkr.ecr.eu-north-1.amazonaws.com/medicalbot
+*Save the URI:* 680528876031.dkr.ecr.eu-north-1.amazonaws.com/legalchatbot
 
 	
 ## 4. Create EC2 machine (Ubuntu) 
@@ -153,7 +153,7 @@ $ tar xzf ./actions-runner-linux-x64-2.329.0.tar.gz
 
 #### Create the runner and start the configuration experience
 ```bash
-./config.sh --url https://github.com/ShayanBanerjee/RAG-Based-Conversational-Medical-Chatbot --token AFBBXU6NDVVZGTNGPDPDC63JEZGGM
+./config.sh --url https://github.com/ShayanBanerjee/RAG-Based-Conversational-Legal-Chatbot --token AFBBXU42OKTMHRDO6PYCRIDJE4KQY
 ```
 *Enter the name of runner: [press Enter for ip-172-31-32-105]* __self-hosted__
 
@@ -165,11 +165,11 @@ Keep others default
 
 To add port 8080 as our app is running on it in ec2
 ```bash
-i-0a163ceb57747fcdb (medical-machine) -> Security -> Security groups (sg-0629661eff54cc5ca - launch-wizard-1) -> Edit inbound rules -> Add rule -> In Custom TCP change port to 8080 and 0.0.0.0/0 -> Save rules
+i-0aaf1984be384003c (legal-machine) -> Security -> Security groups (sg-0d5d6e1da423e8ec8 - launch-wizard-2) -> Edit inbound rules -> Add rule -> In Custom TCP change port to 8080 and 0.0.0.0/0 -> Save rules
 ```
 
 Public IPv4 address of the instance with port:
-http://51.21.152.95:8080/ 
+http://16.171.38.149:8080/
 
 # 7. Setup github secrets:
 
