@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from src.helper import download_embeddings_model
-from src.prompt import *
+from src.prompt import system_prompt
 from langchain_pinecone import PineconeVectorStore
 from langchain.chains import create_retrieval_chain
 from langchain_openai import ChatOpenAI
@@ -41,15 +41,18 @@ retriever = existing_vector_store.as_retriever(
 )
 
 # -------------------- LLM + RAG CHAIN --------------------
+# Use your chosen cheap model
 llm = ChatOpenAI(model_name="gpt-5-nano", temperature=0)
 
-# IMPORTANT:
-# create_retrieval_chain passes "input" (user query) + "context" (docs)
-# so the prompt MUST use these variable names.
-prompt = ChatPromptTemplate(
-    messages=system_prompt,
-    input_variables=["context", "input"],  # not "question"
+# system_prompt["content"] already contains {context}
+# We add a human message with {input}
+prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", system_prompt["content"]),
+        ("human", "User prompt:\n{input}")
+    ]
 )
+# Now the prompt has input variables: ["context", "input"]
 
 question_answer_chain = create_stuff_documents_chain(
     llm=llm,
@@ -72,23 +75,28 @@ def get_response():
         return jsonify({"response": "Please type a question so I can help you."})
 
     try:
+        # create_retrieval_chain expects "input"
         response = rag_chain.invoke({"input": user_input})
 
+        # Inspect common keys
         answer = (
             response.get("answer")
             or response.get("Answer")
             or response.get("output_text")
-            or "I could not generate a response."
+            or str(response)
         )
+
+        print(f"\n--- RAG CALL ---\nUser: {user_input}\n\nFull response: {response}\n")
         return jsonify({"response": answer})
 
     except Exception as e:
         print("❌ ERROR:", e)
         return jsonify({
-            "response": "I am currently unable to generate an answer due to API limits. "
-                        "Please try again later or check your OpenAI billing/quota."
+            "response": (
+                "I am currently unable to generate an answer due to an internal error. "
+                "Please try again later or consult a qualified lawyer."
+            )
         })
-
 
 
 if __name__ == "__main__":
