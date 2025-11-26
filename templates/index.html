@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>LexisAI – Legal Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet"
+    />
+
+    <!-- Bootstrap 5 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body class="lex-body">
+    <div class="lex-bg-layer"></div>
+
+    <div class="container py-3 py-md-4">
+        <!-- Top header -->
+        <header class="lex-header d-flex justify-content-between align-items-center mb-3 mb-md-4">
+            <div class="d-flex align-items-center gap-2">
+                <div class="lex-logo-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-scale"></i>
+                </div>
+                <div>
+                    <div class="lex-title">LexisAI Legal Assistant</div>
+                    <div class="lex-subtitle">
+                        Ask legal questions, understand documents & explore your options
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column align-items-end">
+                <span class="badge rounded-pill lex-online-pill">
+                    <span class="lex-dot me-1"></span> Online
+                </span>
+                <small class="text-muted mt-1 d-none d-md-inline">
+                    Informational only – not a substitute for a licensed lawyer.
+                </small>
+            </div>
+        </header>
+
+        <!-- Main content -->
+        <div class="row g-3 g-lg-4">
+            <!-- Left panel: quick prompts / info -->
+            <div class="col-12 col-lg-4">
+                <div class="lex-side-card">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="lex-user-avatar">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                            <div>
+                                <div class="lex-chip-label">Session profile</div>
+                                <div class="lex-chip-value">Guest client</div>
+                            </div>
+                        </div>
+                        <span class="badge lex-session-badge">
+                            <i class="bi bi-shield-check me-1"></i> Confidential
+                        </span>
+                    </div>
+
+                    <div class="lex-section mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="lex-section-title">Areas I can help with</span>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge lex-tag-pill">
+                                <i class="bi bi-house-door me-1"></i> Property & tenancy
+                            </span>
+                            <span class="badge lex-tag-pill">
+                                <i class="bi bi-file-earmark-text me-1"></i> Contracts & agreements
+                            </span>
+                            <span class="badge lex-tag-pill">
+                                <i class="bi bi-people me-1"></i> Employment & workplace
+                            </span>
+                            <span class="badge lex-tag-pill">
+                                <i class="bi bi-heart-pulse me-1"></i> Family & relationships
+                            </span>
+                            <span class="badge lex-tag-pill">
+                                <i class="bi bi-exclamation-triangle me-1"></i> Disputes & notices
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="lex-section mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="lex-section-title">Quick questions</span>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button type="button" class="btn btn-sm lex-chip-btn quick-question">
+                                <i class="bi bi-file-earmark-text me-1"></i>
+                                Review a rental agreement
+                            </button>
+                            <button type="button" class="btn btn-sm lex-chip-btn quick-question">
+                                <i class="bi bi-briefcase me-1"></i>
+                                Wrongful termination doubt
+                            </button>
+                            <button type="button" class="btn btn-sm lex-chip-btn quick-question">
+                                <i class="bi bi-envelope-exclamation me-1"></i>
+                                Reply to legal notice
+                            </button>
+                            <button type="button" class="btn btn-sm lex-chip-btn quick-question">
+                                <i class="bi bi-people-fill me-1"></i>
+                                Divorce & custody basics
+                            </button>
+                            <button type="button" class="btn btn-sm lex-chip-btn quick-question">
+                                <i class="bi bi-card-checklist me-1"></i>
+                                Steps to draft a contract
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="lex-section">
+                        <div class="lex-section-title mb-1">Important disclaimer</div>
+                        <p class="lex-text-muted small mb-1">
+                            This assistant provides general legal information based on your questions and the curated
+                            knowledge base. It does <strong>not</strong> create an attorney–client relationship.
+                        </p>
+                        <p class="lex-text-warning small mb-0">
+                            For personalized legal advice, representation, or urgent matters, please consult a licensed
+                            lawyer in your jurisdiction.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right panel: chat -->
+            <div class="col-12 col-lg-8">
+                <div class="lex-chat-card">
+                    <!-- Chat header -->
+                    <div class="lex-chat-header d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="lex-bot-avatar">
+                                <i class="bi bi-chat-square-text"></i>
+                            </div>
+                            <div>
+                                <div class="lex-chat-title">Legal Knowledge Assistant</div>
+                                <div class="lex-chat-subtitle">
+                                    Ask about laws, rights, procedures & documents in clear language.
+                                </div>
+                            </div>
+                        </div>
+                        <span class="lex-chat-meta d-none d-md-inline">
+                            <i class="bi bi-journal-text me-1"></i>
+                            Powered by your legal document knowledge base
+                        </span>
+                    </div>
+
+                    <!-- Chat window -->
+                    <div id="chatWindow" class="lex-chat-window">
+                        <!-- Initial welcome message -->
+                        <div class="chat-message bot">
+                            <div class="bubble">
+                                <div class="bubble-title">
+                                    <i class="bi bi-bullseye me-1"></i> Welcome to LexisAI
+                                </div>
+                                <p class="mb-2">
+                                    I can help you understand legal concepts, summarize documents, and explore your
+                                    options in everyday language.
+                                </p>
+                                <ul class="small mb-2">
+                                    <li>“My landlord wants to increase rent suddenly, what are my rights?”</li>
+                                    <li>“Explain this non-compete clause in simple terms.”</li>
+                                    <li>“How do I respond to a legal notice?”</li>
+                                </ul>
+                                <p class="small text-warning mb-0">
+                                    I do not replace a human lawyer. For decisions that could affect your rights or
+                                    obligations, please consult a qualified legal professional.
+                                </p>
+                            </div>
+                            <div class="timestamp">now</div>
+                        </div>
+                    </div>
+
+                    <!-- Input area -->
+                    <form id="chatForm" class="lex-chat-input">
+                        <label for="userInput" class="form-label lex-input-label mb-1">
+                            Describe your situation or ask a legal question
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text lex-input-icon d-none d-sm-flex">
+                                <i class="bi bi-pencil-square"></i>
+                            </span>
+                            <textarea
+                                id="userInput"
+                                class="form-control lex-input-control"
+                                rows="1"
+                                placeholder="Example: I signed a 1-year rental agreement, but my landlord is asking me to move out in 2 months. What can I do?"
+                                required
+                            ></textarea>
+                            <button class="btn lex-send-btn" type="submit">
+                                <span class="d-none d-md-inline">
+                                    <i class="bi bi-send-fill me-1"></i> Ask
+                                </span>
+                                <span class="d-inline d-md-none">
+                                    <i class="bi bi-send-fill"></i>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <small class="text-muted">
+                                Press <kbd>Enter</kbd> to send • <kbd>Shift + Enter</kbd> for new line
+                            </small>
+                            <small class="text-muted d-none d-sm-inline">
+                                <i class="bi bi-shield-lock me-1"></i>
+                                Conversations may be used to improve quality, anonymously.
+                            </small>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
