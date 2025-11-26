@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>LexisAI – Legal Assistant</title>
+    <title>LexisAI – Matrimonial & Security Law Assistant</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Google Font -->
@@ -29,43 +29,75 @@
 <body class="lex-body">
     <div class="lex-bg-layer"></div>
 
-    <div class="container py-3 py-md-4">
-        <!-- Top header -->
-        <header class="lex-header d-flex justify-content-between align-items-center mb-3 mb-md-4">
-            <div class="d-flex align-items-center gap-2">
+    <!-- Top navigation / SPA shell -->
+    <nav class="navbar navbar-expand-lg lex-navbar">
+        <div class="container-fluid px-3 px-md-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
                 <div class="lex-logo-circle d-flex align-items-center justify-content-center">
                     <i class="bi bi-scale"></i>
                 </div>
-                <div>
-                    <div class="lex-title">LexisAI Legal Assistant</div>
-                    <div class="lex-subtitle">
-                        Ask legal questions, understand documents & explore your options
-                    </div>
+                <div class="d-flex flex-column">
+                    <span class="lex-brand-title">LexisAI</span>
+                    <span class="lex-brand-subtitle">
+                        Matrimonial & Security Law Assistant
+                    </span>
+                </div>
+            </a>
+
+            <button
+                class="navbar-toggler lex-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#lexNavbar"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="lexNavbar">
+                <ul class="navbar-nav align-items-lg-center gap-lg-2">
+                    <li class="nav-item">
+                        <span class="nav-link lex-nav-link active" data-section="chat-section">
+                            <i class="bi bi-chat-square-text me-1"></i> Assistant
+                        </span>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <span class="nav-link lex-nav-link" data-section="about-section">
+                            <i class="bi bi-journal-text me-1"></i> About
+                        </span>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <span class="nav-link lex-nav-link" data-section="disclaimer-section">
+                            <i class="bi bi-shield-lock me-1"></i> Disclaimer
+                        </span>
+                    </li>
+                </ul>
+                <div class="d-none d-lg-flex align-items-center ms-3">
+                    <span class="badge rounded-pill lex-online-pill me-2">
+                        <span class="lex-dot me-1"></span> Online
+                    </span>
                 </div>
             </div>
-            <div class="d-flex flex-column align-items-end">
-                <span class="badge rounded-pill lex-online-pill">
-                    <span class="lex-dot me-1"></span> Online
-                </span>
-                <small class="text-muted mt-1 d-none d-md-inline">
-                    Informational only – not a substitute for a licensed lawyer.
-                </small>
-            </div>
-        </header>
+        </div>
+    </nav>
 
-        <!-- Main content -->
+    <!-- SPA main area -->
+    <main class="lex-main container-fluid px-3 px-md-4 py-3 py-md-4">
         <div class="row g-3 g-lg-4">
-            <!-- Left panel: quick prompts / info -->
-            <div class="col-12 col-lg-4">
-                <div class="lex-side-card">
+
+            <!-- LEFT PANEL -->
+            <aside class="col-12 col-lg-4 order-2 order-lg-1">
+                <section class="lex-side-card mb-3" id="profile-section">
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div class="d-flex align-items-center gap-3">
                             <div class="lex-user-avatar">
                                 <i class="bi bi-person-badge"></i>
                             </div>
                             <div>
-                                <div class="lex-chip-label">Session profile</div>
-                                <div class="lex-chip-value">Guest client</div>
+                                <div class="lex-chip-label">Current Session</div>
+                                <div class="lex-chip-value">Guest user</div>
+                                <div class="lex-chip-subvalue">
+                                    Focus: Marriage, family & security laws
+                                </div>
                             </div>
                         </div>
                         <span class="badge lex-session-badge">
@@ -75,51 +107,86 @@
 
                     <div class="lex-section mb-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="lex-section-title">Areas I can help with</span>
+                            <span class="lex-section-title">Primary domains</span>
                         </div>
                         <div class="d-flex flex-wrap gap-2">
                             <span class="badge lex-tag-pill">
-                                <i class="bi bi-house-door me-1"></i> Property & tenancy
+                                <i class="bi bi-heartbreak me-1"></i> Matrimonial disputes
                             </span>
                             <span class="badge lex-tag-pill">
-                                <i class="bi bi-file-earmark-text me-1"></i> Contracts & agreements
+                                <i class="bi bi-people-fill me-1"></i> Divorce & custody
                             </span>
                             <span class="badge lex-tag-pill">
-                                <i class="bi bi-people me-1"></i> Employment & workplace
+                                <i class="bi bi-shield-exclamation me-1"></i> Domestic violence
                             </span>
                             <span class="badge lex-tag-pill">
-                                <i class="bi bi-heart-pulse me-1"></i> Family & relationships
+                                <i class="bi bi-card-checklist me-1"></i> Maintenance & alimony
                             </span>
                             <span class="badge lex-tag-pill">
-                                <i class="bi bi-exclamation-triangle me-1"></i> Disputes & notices
+                                <i class="bi bi-flag me-1"></i> National security laws
+                            </span>
+                            <span class="badge lex-tag-pill">
+                                <i class="bi bi-bank me-1"></i> Constitutional issues
                             </span>
                         </div>
                     </div>
 
                     <div class="lex-section mb-3">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="lex-section-title">Quick questions</span>
+                            <span class="lex-section-title">Quick legal topics</span>
+                            <span class="lex-mini-label">Tap to ask</span>
                         </div>
                         <div class="d-flex flex-wrap gap-2">
-                            <button type="button" class="btn btn-sm lex-chip-btn quick-question">
-                                <i class="bi bi-file-earmark-text me-1"></i>
-                                Review a rental agreement
+                            <!-- Matrimonial quick prompts -->
+                            <button
+                                type="button"
+                                class="btn btn-sm lex-chip-btn quick-question"
+                                data-question="Explain the basic legal grounds for divorce under Indian law in simple terms."
+                            >
+                                <i class="bi bi-heartbreak me-1"></i>
+                                Grounds for divorce (India)
                             </button>
-                            <button type="button" class="btn btn-sm lex-chip-btn quick-question">
-                                <i class="bi bi-briefcase me-1"></i>
-                                Wrongful termination doubt
+                            <button
+                                type="button"
+                                class="btn btn-sm lex-chip-btn quick-question"
+                                data-question="What is Section 498A IPC and how is it generally applied in cases of cruelty by husband or his relatives?"
+                            >
+                                <i class="bi bi-exclamation-triangle me-1"></i>
+                                Section 498A IPC – cruelty
                             </button>
-                            <button type="button" class="btn btn-sm lex-chip-btn quick-question">
-                                <i class="bi bi-envelope-exclamation me-1"></i>
-                                Reply to legal notice
+                            <button
+                                type="button"
+                                class="btn btn-sm lex-chip-btn quick-question"
+                                data-question="How does Section 125 CrPC work for maintenance and who can claim it?"
+                            >
+                                <i class="bi bi-cash-stack me-1"></i>
+                                Section 125 CrPC – maintenance
                             </button>
-                            <button type="button" class="btn btn-sm lex-chip-btn quick-question">
-                                <i class="bi bi-people-fill me-1"></i>
-                                Divorce & custody basics
+                            <button
+                                type="button"
+                                class="btn btn-sm lex-chip-btn quick-question"
+                                data-question="What are basic principles courts consider in child custody disputes in India?"
+                            >
+                                <i class="bi bi-people me-1"></i>
+                                Child custody principles
                             </button>
-                            <button type="button" class="btn btn-sm lex-chip-btn quick-question">
-                                <i class="bi bi-card-checklist me-1"></i>
-                                Steps to draft a contract
+
+                            <!-- Security law prompts -->
+                            <button
+                                type="button"
+                                class="btn btn-sm lex-chip-btn quick-question"
+                                data-question="Explain the key idea behind national security laws such as UAPA and how they differ from ordinary criminal law."
+                            >
+                                <i class="bi bi-shield-lock me-1"></i>
+                                Idea of UAPA / security laws
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-sm lex-chip-btn quick-question"
+                                data-question="What are the general legal principles around bail in cases involving national security or terrorism-related offences?"
+                            >
+                                <i class="bi bi-unlock me-1"></i>
+                                Bail & security offences
                             </button>
                         </div>
                     </div>
@@ -127,20 +194,70 @@
                     <div class="lex-section">
                         <div class="lex-section-title mb-1">Important disclaimer</div>
                         <p class="lex-text-muted small mb-1">
-                            This assistant provides general legal information based on your questions and the curated
-                            knowledge base. It does <strong>not</strong> create an attorney–client relationship.
+                            This assistant explains legal concepts based on curated matrimonial and
+                            national security law material. It is for information and learning.
                         </p>
                         <p class="lex-text-warning small mb-0">
-                            For personalized legal advice, representation, or urgent matters, please consult a licensed
-                            lawyer in your jurisdiction.
+                            It does <strong>not</strong> create an attorney–client relationship or
+                            replace advice from a licensed advocate. For real disputes, always
+                            consult a qualified lawyer.
                         </p>
                     </div>
-                </div>
-            </div>
+                </section>
 
-            <!-- Right panel: chat -->
-            <div class="col-12 col-lg-8">
-                <div class="lex-chat-card">
+                <!-- About / Disclaimer panels as part of SPA -->
+                <section class="lex-side-card mb-3 d-none d-lg-block" id="about-section">
+                    <div class="lex-section mb-2">
+                        <div class="lex-section-title mb-1">About LexisAI</div>
+                        <p class="small lex-text-muted mb-1">
+                            LexisAI is designed as a focused assistant for:
+                        </p>
+                        <ul class="small mb-1 lex-text-muted">
+                            <li>Matrimonial disputes – cruelty, maintenance, custody.</li>
+                            <li>Domestic violence and related protective laws.</li>
+                            <li>Broad concepts in national security & public order laws.</li>
+                        </ul>
+                        <p class="small lex-text-muted mb-0">
+                            It leverages your internal RAG-based legal knowledge to answer in plain,
+                            structured language.
+                        </p>
+                    </div>
+                    <div class="lex-section">
+                        <div class="lex-section-title mb-1">How to use</div>
+                        <ul class="small lex-text-muted mb-0">
+                            <li>Briefly describe your situation or query.</li>
+                            <li>Mention specific sections or Acts if you know them.</li>
+                            <li>Use follow-up questions to explore nuances.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="lex-side-card d-none" id="disclaimer-section">
+                    <div class="lex-section">
+                        <div class="lex-section-title mb-1">Legal & ethical notice</div>
+                        <p class="small lex-text-muted mb-1">
+                            This assistant may analyze laws and cases but does not replace a human
+                            practitioner. It may occasionally be incomplete or outdated.
+                        </p>
+                        <p class="small lex-text-warning mb-1">
+                            For legal strategy, litigation, or decisions affecting your rights,
+                            always seek independent advice from a qualified advocate.
+                        </p>
+                        <p class="small lex-text-muted mb-0">
+                            By using this tool, you agree that it is for informational and
+                            educational purposes only.
+                        </p>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- RIGHT PANEL – chat SPA core -->
+            <section
+                class="col-12 col-lg-8 order-1 order-lg-2"
+                id="chat-section"
+            >
+                <div class="lex-chat-card shadow-lg">
+
                     <!-- Chat header -->
                     <div class="lex-chat-header d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center gap-3">
@@ -148,16 +265,23 @@
                                 <i class="bi bi-chat-square-text"></i>
                             </div>
                             <div>
-                                <div class="lex-chat-title">Legal Knowledge Assistant</div>
+                                <div class="lex-chat-title">Matrimonial & Security Law Assistant</div>
                                 <div class="lex-chat-subtitle">
-                                    Ask about laws, rights, procedures & documents in clear language.
+                                    Ask about Indian matrimonial disputes, family laws and national security
+                                    frameworks in clear language.
                                 </div>
                             </div>
                         </div>
-                        <span class="lex-chat-meta d-none d-md-inline">
-                            <i class="bi bi-journal-text me-1"></i>
-                            Powered by your legal document knowledge base
-                        </span>
+                        <div class="d-none d-md-flex flex-column align-items-end">
+                            <span class="lex-chat-meta">
+                                <i class="bi bi-journal-text me-1"></i>
+                                RAG-based legal knowledge
+                            </span>
+                            <span class="lex-chat-meta">
+                                <i class="bi bi-lock me-1"></i>
+                                Session not stored as client advice
+                            </span>
+                        </div>
                     </div>
 
                     <!-- Chat window -->
@@ -169,17 +293,25 @@
                                     <i class="bi bi-bullseye me-1"></i> Welcome to LexisAI
                                 </div>
                                 <p class="mb-2">
-                                    I can help you understand legal concepts, summarize documents, and explore your
-                                    options in everyday language.
+                                    I can help you understand <strong>matrimonial disputes</strong>,
+                                    <strong>domestic violence protections</strong>, <strong>maintenance &
+                                    custody</strong>, and broad ideas in <strong>national security and
+                                    public order laws</strong>.
                                 </p>
                                 <ul class="small mb-2">
-                                    <li>“My landlord wants to increase rent suddenly, what are my rights?”</li>
-                                    <li>“Explain this non-compete clause in simple terms.”</li>
-                                    <li>“How do I respond to a legal notice?”</li>
+                                    <li>
+                                        “My spouse has filed a 498A case; what does that section broadly cover?”
+                                    </li>
+                                    <li>
+                                        “What does Section 125 CrPC allow in terms of maintenance?”
+                                    </li>
+                                    <li>
+                                        “How do national security laws differ from ordinary offences?”
+                                    </li>
                                 </ul>
                                 <p class="small text-warning mb-0">
-                                    I do not replace a human lawyer. For decisions that could affect your rights or
-                                    obligations, please consult a qualified legal professional.
+                                    I explain concepts based on the provided legal context. I do not give
+                                    personalized legal advice or replace a lawyer.
                                 </p>
                             </div>
                             <div class="timestamp">now</div>
@@ -199,7 +331,7 @@
                                 id="userInput"
                                 class="form-control lex-input-control"
                                 rows="1"
-                                placeholder="Example: I signed a 1-year rental agreement, but my landlord is asking me to move out in 2 months. What can I do?"
+                                placeholder="Example: My spouse has filed a case under Section 498A IPC and I want to understand what it generally means and how courts view such allegations."
                                 required
                             ></textarea>
                             <button class="btn lex-send-btn" type="submit">
@@ -217,14 +349,15 @@
                             </small>
                             <small class="text-muted d-none d-sm-inline">
                                 <i class="bi bi-shield-lock me-1"></i>
-                                Conversations may be used to improve quality, anonymously.
+                                Informational – not attorney–client advice.
                             </small>
                         </div>
                     </form>
                 </div>
-            </div>
+            </section>
+
         </div>
-    </div>
+    </main>
 
     <!-- Bootstrap JS bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

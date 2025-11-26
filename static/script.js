@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatForm = document.getElementById("chatForm");
     const userInput = document.getElementById("userInput");
     const quickButtons = document.querySelectorAll(".quick-question");
+    const navLinks = document.querySelectorAll(".lex-nav-link");
 
     let isWaitingForReply = false;
 
@@ -76,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const reply =
                 data.response ||
-                "I couldn't generate a response. Please try again or consult a qualified lawyer for detailed advice.";
+                "I couldn't generate a response. Please try again or consult a qualified advocate for detailed advice.";
 
             addMessage(reply, "bot");
         } catch (error) {
@@ -87,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 /* ignore */
             }
             addMessage(
-                "Something went wrong while contacting the legal assistant. Please try again. For urgent legal matters, contact a licensed lawyer immediately.",
+                "Something went wrong while contacting the legal assistant. Please try again. For urgent matters, contact a lawyer immediately.",
                 "bot"
             );
         } finally {
@@ -128,9 +129,34 @@ document.addEventListener("DOMContentLoaded", () => {
     // Quick question chips
     quickButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
-            const question = btn.textContent.trim();
+            const question = btn.getAttribute("data-question") || btn.textContent.trim();
             if (!question) return;
             sendMessage(question);
+        });
+    });
+
+    // Simple SPA-like navigation between sections
+    navLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+            navLinks.forEach((l) => l.classList.remove("active"));
+            link.classList.add("active");
+
+            const section = link.getAttribute("data-section");
+            if (!section) return;
+
+            const aboutSection = document.getElementById("about-section");
+            const disclaimerSection = document.getElementById("disclaimer-section");
+            const chatSection = document.getElementById("chat-section");
+
+            if (aboutSection) aboutSection.classList.add("d-none");
+            if (disclaimerSection) disclaimerSection.classList.add("d-none");
+            if (chatSection) chatSection.classList.remove("d-none");
+
+            if (section === "about-section" && aboutSection) {
+                aboutSection.classList.remove("d-none");
+            } else if (section === "disclaimer-section" && disclaimerSection) {
+                disclaimerSection.classList.remove("d-none");
+            }
         });
     });
 
