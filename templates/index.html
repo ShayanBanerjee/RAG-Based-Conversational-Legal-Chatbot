@@ -2,19 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Nyay Rakshak – Indian Legal Defence Assistant</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Favicon: miniature Nyay Rakshak logo -->
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iI2ZiYmYyNCIvPjxwYXRoIGQ9Ik04IDEyaDE2IiBzdHJva2U9IiMxMTE4MjciIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTE2IDEydjEwIiBzdHJva2U9IiMxMTE4MjciIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGNpcmNsZSBjeD0iMTEiIGN5PSIxOCIgcj0iMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTExODI3IiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjIxIiBjeT0iMTgiIHI9IjMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzExMTgyNyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSIxNiIgeT0iMjMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iOSIgc2ZpbGw9IiMxMTE4MjciPk5SPC90ZXh0Pjwvc3ZnPg=="
+    <title>Bharat LawBot – Indian Legal Defence Assistant</title>
+    <meta
+      name="description"
+      content="Bharat LawBot is a defence-oriented Indian legal assistant that helps you understand Indian laws, FIRs, bail, matrimonial disputes, property issues and more, so you can speak clearly with your advocate."
     />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Fonts -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display&family=Merriweather:wght@300;400;700&display=swap"
       rel="stylesheet"
     />
 
@@ -30,20 +27,20 @@
 
     <style>
       /* =========================================
-         THEME TOKENS
+         THEME TOKENS (DEFAULT = DARK)
          ========================================= */
       :root {
-        --ny-bg: #0b0b12;
-        --ny-surface: rgba(18, 14, 28, 0.98);
-        --ny-surface-soft: rgba(24, 19, 30, 0.97);
-        --ny-border: rgba(148, 132, 96, 0.72);
-        --ny-border-soft: rgba(148, 132, 96, 0.3);
-        --ny-text-main: #f9fafb;
-        --ny-text-subtle: #d1d5db;
-        --ny-accent: #f5b342;
-        --ny-accent-soft: rgba(245, 179, 66, 0.2);
-        --ny-user-bubble: #145c8b;
-        --ny-bot-bubble: #15111f;
+        --bl-bg: #05060b;
+        --bl-surface: rgba(9, 11, 19, 0.98);
+        --bl-surface-soft: rgba(15, 18, 30, 0.98);
+        --bl-border-soft: rgba(209, 194, 158, 0.6);
+        --bl-text-main: #f9fafb;
+        --bl-text-subtle: #d1d5db;
+        --bl-accent-gold: #f5c15a;
+        --bl-accent-gold-soft: rgba(245, 193, 90, 0.16);
+        --bl-accent-deep: #b45309;
+        --bl-user-bubble: #145c8b;
+        --bl-bot-bubble: #13101e;
       }
 
       * {
@@ -59,71 +56,35 @@
 
       body {
         min-height: 100%;
+        display: flex;
+        flex-direction: column;
         font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
           "Segoe UI", sans-serif;
         background:
-          radial-gradient(circle at 0 0, rgba(245, 179, 66, 0.18), transparent 60%),
-          radial-gradient(
-            circle at 100% 100%,
-            rgba(56, 189, 248, 0.3),
-            transparent 60%
-          ),
-          var(--ny-bg);
-        color: var(--ny-text-main);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden; /* single-page feel on larger screens */
+          radial-gradient(circle at 0 0, rgba(245, 193, 90, 0.16), transparent 60%),
+          radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.2), transparent 60%),
+          var(--bl-bg);
+        color: var(--bl-text-main);
+        overflow: hidden;
       }
 
       .text-muted {
-        color: var(--ny-text-subtle) !important;
+        color: var(--bl-text-subtle) !important;
       }
 
       /* =========================================
-         NAVBAR
+         REUSABLE LOGO MARK
          ========================================= */
-      .ny-navbar {
+      .bl-logo-mark {
+        width: 44px;
+        height: 44px;
+        border-radius: 16px;
         background:
-          radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.04), transparent 70%),
-          rgba(17, 19, 31, 0.97);
-        border-bottom: 1px solid var(--ny-border-soft);
-        backdrop-filter: blur(18px);
-        flex-shrink: 0;
-      }
-
-      .ny-nav-inner {
-        max-width: 1240px;
-        margin: 0 auto;
-        padding: 0.55rem 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-      }
-
-      @media (max-width: 576px) {
-        .ny-nav-inner {
-          flex-direction: column;
-          align-items: flex-start;
-        }
-      }
-
-      .ny-brand {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-      }
-
-      .ny-logo-wrap {
-        width: 40px;
-        height: 40px;
-        border-radius: 35%;
-        background:
-          radial-gradient(circle at 25% 0%, #facc6b, #c0841a),
-          radial-gradient(circle at 80% 120%, #1f2933, #020617);
+          radial-gradient(circle at 30% 0, #facc6b, #b45309),
+          radial-gradient(circle at 130% 140%, #020617, #020617);
         box-shadow:
-          0 10px 20px rgba(15, 23, 42, 0.8),
-          inset 0 0 0 1px rgba(214, 189, 130, 0.9);
+          0 12px 24px rgba(15, 23, 42, 0.9),
+          inset 0 0 0 1px rgba(250, 204, 21, 0.75);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -131,123 +92,160 @@
         overflow: hidden;
       }
 
-      .ny-logo-scales {
+      .bl-logo-inner {
         position: relative;
-        width: 22px;
-        height: 22px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        width: 26px;
+        height: 26px;
       }
 
-      .ny-logo-scales::before,
-      .ny-logo-scales::after {
+      .bl-logo-pillar {
+        position: absolute;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 12px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.95);
+      }
+
+      .bl-logo-topbar {
+        position: absolute;
+        top: 8px;
+        left: 4px;
+        right: 4px;
+        height: 2px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.95);
+      }
+
+      .bl-logo-inner::before,
+      .bl-logo-inner::after {
         content: "";
         position: absolute;
-        bottom: 3px;
-        width: 7px;
-        height: 3.5px;
+        bottom: 4px;
+        width: 9px;
+        height: 5px;
         border-radius: 999px 999px 2px 2px;
+        background: rgba(249, 250, 251, 0.96);
         border: 1px solid rgba(15, 23, 42, 0.85);
-        background: rgba(248, 250, 252, 0.9);
       }
 
-      .ny-logo-scales::before {
+      .bl-logo-inner::before {
         left: 0;
       }
-
-      .ny-logo-scales::after {
+      .bl-logo-inner::after {
         right: 0;
       }
 
-      .ny-logo-bar {
+      .bl-logo-text {
         position: absolute;
-        top: 7px;
-        left: 5px;
-        right: 5px;
-        height: 2px;
-        background: rgba(15, 23, 42, 0.92);
-        border-radius: 999px;
-      }
-
-      .ny-logo-pillar {
-        position: absolute;
-        bottom: 3px;
+        bottom: 9px;
         left: 50%;
         transform: translateX(-50%);
-        width: 2.5px;
-        height: 11px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.9);
-      }
-
-      .ny-logo-balance {
-        font-size: 11px;
-        position: relative;
-        z-index: 1;
+        font-size: 7px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
         color: #111827;
-        font-weight: 600;
       }
 
-      .ny-brand-text {
-        display: flex;
-        flex-direction: column;
-        gap: 0.1rem;
+      /* =========================================
+         NAVBAR
+         ========================================= */
+      .bl-navbar {
+        background:
+          radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.08), transparent 65%),
+          rgba(8, 10, 20, 0.96);
+        border-bottom: 1px solid rgba(148, 132, 96, 0.55);
+        backdrop-filter: blur(18px);
+        flex-shrink: 0;
       }
 
-      .ny-brand-title {
-        font-size: 1rem;
-        font-weight: 600;
-        letter-spacing: 0.03em;
-      }
-
-      .ny-brand-subtitle {
-        font-size: 0.8rem;
-        color: var(--ny-text-subtle);
-      }
-
-      .ny-nav-right {
+      .bl-nav-inner {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 0.55rem 1rem;
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        justify-content: space-between;
+        gap: 0.9rem;
+      }
+
+      @media (max-width: 576px) {
+        .bl-nav-inner {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      .bl-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .bl-brand-text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.08rem;
+      }
+
+      .bl-brand-title {
+        font-family: "DM Serif Display", "Times New Roman", serif;
+        font-size: 1.15rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .bl-brand-subtitle {
+        font-size: 0.8rem;
+        color: var(--bl-text-subtle);
+      }
+
+      .bl-nav-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
         flex-wrap: wrap;
       }
 
-      .ny-online-pill {
+      .bl-online-pill {
         display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.35rem;
+        padding: 0.2rem 0.7rem;
         border-radius: 999px;
-        padding: 0.22rem 0.7rem;
-        background: rgba(22, 163, 74, 0.96);
+        border: 1px solid rgba(34, 197, 94, 0.5);
+        background: rgba(22, 163, 74, 0.92);
         color: #e5fbe4;
         font-size: 0.72rem;
-        border: 1px solid rgba(21, 128, 61, 0.9);
       }
 
-      .ny-dot {
+      .bl-dot {
         width: 7px;
         height: 7px;
-        border-radius: 50%;
+        border-radius: 999px;
         background-color: #bbf7d0;
         box-shadow: 0 0 6px rgba(34, 197, 94, 0.9);
       }
 
-      .ny-badge-soft {
+      .bl-badge-soft {
         font-size: 0.72rem;
         border-radius: 999px;
-        padding: 0.2rem 0.6rem;
-        border: 1px solid var(--ny-border-soft);
-        color: var(--ny-text-subtle);
+        padding: 0.24rem 0.7rem;
+        border: 1px solid rgba(148, 132, 96, 0.55);
+        color: var(--bl-text-subtle);
         background: rgba(18, 20, 32, 0.98);
       }
 
-      .ny-theme-toggle {
+      .bl-theme-toggle {
         border-radius: 999px;
-        border: 1px solid var(--ny-border-soft);
-        padding: 0.25rem 0.6rem;
+        border: 1px solid rgba(148, 132, 96, 0.55);
+        padding: 0.25rem 0.7rem;
         background: rgba(18, 20, 32, 0.98);
-        color: var(--ny-text-main);
+        color: var(--bl-text-main);
         font-size: 0.8rem;
         display: inline-flex;
         align-items: center;
@@ -255,30 +253,30 @@
         cursor: pointer;
       }
 
-      .ny-theme-toggle i {
+      .bl-theme-toggle i {
         font-size: 0.9rem;
       }
 
       /* =========================================
          MAIN LAYOUT
          ========================================= */
-      .ny-main {
+      .bl-main {
         flex: 1 1 auto;
         display: flex;
         padding: 0.75rem 0.85rem 0.85rem;
         overflow: hidden;
       }
 
-      .ny-main-inner {
+      .bl-main-inner {
         max-width: 1240px;
         margin: 0 auto;
         width: 100%;
         display: flex;
       }
 
-      .ny-grid {
+      .bl-grid {
         display: grid;
-        grid-template-columns: minmax(0, 0.9fr) minmax(0, 2.1fr);
+        grid-template-columns: minmax(0, 0.95fr) minmax(0, 2.05fr);
         gap: 1rem;
         width: 100%;
         height: 100%;
@@ -288,304 +286,342 @@
         body {
           overflow: auto;
         }
-        .ny-main {
+        .bl-main {
           overflow: visible;
           height: auto;
         }
-        .ny-main-inner {
+        .bl-main-inner {
           display: block;
         }
-        .ny-grid {
+        .bl-grid {
           grid-template-columns: minmax(0, 1fr);
           height: auto;
         }
       }
 
       /* =========================================
-         LEFT PANEL: INFO
+         LEFT PANEL – INFO
          ========================================= */
-      .ny-info-card {
+      .bl-info-card {
         border-radius: 18px;
-        border: 1px solid var(--ny-border);
+        border: 1px solid var(--bl-border-soft);
         background:
-          radial-gradient(circle at 0 0, rgba(249, 250, 251, 0.04), transparent 65%),
-          var(--ny-surface-soft);
+          radial-gradient(circle at 0 0, rgba(249, 250, 251, 0.05), transparent 65%),
+          var(--bl-surface-soft);
         padding: 1rem;
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
+        gap: 0.9rem;
         height: 100%;
         overflow-y: auto;
+        box-shadow: 0 16px 26px rgba(15, 23, 42, 0.85);
         scrollbar-width: thin;
       }
 
-      .ny-info-card::-webkit-scrollbar {
+      .bl-info-card::-webkit-scrollbar {
         width: 6px;
       }
-
-      .ny-info-card::-webkit-scrollbar-thumb {
-        background-color: rgba(148, 132, 96, 0.7);
+      .bl-info-card::-webkit-scrollbar-thumb {
+        background-color: rgba(148, 132, 96, 0.9);
         border-radius: 999px;
       }
 
-      .ny-info-header {
+      .bl-info-header {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
         gap: 0.75rem;
       }
 
-      .ny-info-main {
+      .bl-info-main {
         display: flex;
         align-items: center;
         gap: 0.75rem;
       }
 
-      .ny-info-avatar {
-        width: 42px;
-        height: 42px;
-        border-radius: 16px;
-        background:
-          radial-gradient(circle at 30% 0, #facc6b, #c0841a),
-          radial-gradient(circle at 120% 140%, #111827, #020617);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        color: #111827;
-        box-shadow:
-          0 10px 20px rgba(15, 23, 42, 0.85),
-          inset 0 0 0 1px rgba(214, 189, 130, 0.9);
-      }
-
-      .ny-info-titles {
+      .bl-info-titles {
         display: flex;
         flex-direction: column;
+        gap: 0.12rem;
       }
 
-      .ny-info-label {
+      .bl-info-label {
         font-size: 0.7rem;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: var(--ny-text-subtle);
+        letter-spacing: 0.09em;
+        color: var(--bl-text-subtle);
       }
 
-      .ny-info-title {
-        font-size: 0.95rem;
+      .bl-info-title {
+        font-size: 1rem;
         font-weight: 500;
       }
 
-      .ny-info-subtitle {
-        font-size: 0.82rem;
-        color: var(--ny-text-subtle);
+      .bl-info-subtitle {
+        font-size: 0.84rem;
+        color: var(--bl-text-subtle);
+        line-height: 1.6;
       }
 
-      .ny-info-chip {
-        font-size: 0.7rem;
+      .bl-defence-badge {
+        border-radius: 14px;
+        padding: 0.45rem 0.7rem;
+        background:
+          linear-gradient(
+            135deg,
+            rgba(15, 23, 42, 0.95),
+            rgba(30, 41, 59, 0.96)
+          );
+        border: 1px solid rgba(148, 132, 96, 0.6);
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.8rem;
+        color: var(--bl-text-main);
+      }
+
+      .bl-defence-icon {
+        width: 26px;
+        height: 26px;
         border-radius: 999px;
-        padding: 0.18rem 0.55rem;
-        border: 1px solid var(--ny-border);
-        color: var(--ny-text-subtle);
-        background: rgba(18, 20, 32, 0.96);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background:
+          radial-gradient(circle at 30% 0, #facc6b, #b45309),
+          radial-gradient(circle at 130% 140%, #020617, #020617);
+        color: #111827;
+        box-shadow:
+          0 8px 16px rgba(15, 23, 42, 0.8),
+          inset 0 0 0 1px rgba(250, 204, 21, 0.7);
       }
 
-      .ny-section-title {
+      .bl-defence-text-main {
+        font-weight: 500;
+      }
+
+      .bl-defence-text-sub {
+        display: block;
+        font-size: 0.78rem;
+        color: var(--bl-text-subtle);
+      }
+
+      .bl-section-title {
         font-size: 0.78rem;
         text-transform: uppercase;
         letter-spacing: 0.09em;
-        color: var(--ny-text-subtle);
+        color: var(--bl-text-subtle);
         font-weight: 600;
-        margin-bottom: 0.3rem;
+        margin-bottom: 0.25rem;
       }
 
-      .ny-pill-row {
+      .bl-pill-row {
         display: flex;
         flex-wrap: wrap;
         gap: 0.4rem;
       }
 
-      .ny-pill {
+      .bl-pill {
         display: inline-flex;
         align-items: center;
         gap: 0.3rem;
-        padding: 0.28rem 0.75rem;
+        padding: 0.3rem 0.75rem;
         border-radius: 999px;
-        border: 1px solid var(--ny-border-soft);
+        border: 1px solid var(--bl-border-soft);
         background: rgba(18, 20, 32, 0.98);
         font-size: 0.78rem;
-        color: var(--ny-text-main);
+        color: var(--bl-text-main);
       }
 
-      .ny-pill i {
+      .bl-pill i {
         font-size: 0.9rem;
       }
 
-      .ny-muted-list {
+      .bl-muted-list {
         margin: 0;
         padding-left: 1.05rem;
         font-size: 0.84rem;
-        color: var(--ny-text-subtle);
+        color: var(--bl-text-subtle);
       }
 
-      .ny-muted-list li + li {
+      .bl-muted-list li + li {
         margin-top: 0.12rem;
       }
 
-      .ny-note {
+      .bl-note {
         font-size: 0.78rem;
-        color: var(--ny-text-subtle);
+        color: var(--bl-text-subtle);
       }
 
-      .ny-warning {
+      .bl-warning {
         font-size: 0.78rem;
-        color: var(--ny-accent);
+        color: var(--bl-accent-gold);
       }
 
-      .ny-quick-questions {
+      .bl-quick-section {
+        border-radius: 14px;
+        border: 1px solid rgba(148, 132, 96, 0.38);
+        background:
+          linear-gradient(
+            135deg,
+            rgba(17, 24, 39, 0.98),
+            rgba(24, 29, 49, 0.98)
+          );
+        padding: 0.6rem 0.7rem 0.7rem;
+      }
+
+      .bl-quick-header {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-bottom: 0.35rem;
+      }
+
+      .bl-quick-header span:last-child {
+        font-size: 0.8rem;
+        color: var(--bl-text-subtle);
+      }
+
+      .bl-category-pill {
+        font-size: 0.74rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 132, 96, 0.8);
+        padding: 0.16rem 0.7rem;
+        color: var(--bl-text-main);
+        background: rgba(24, 24, 27, 0.95);
+      }
+
+      .bl-quick-chips {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.35rem;
-        margin-top: 0.25rem;
+        gap: 0.3rem;
+        margin-top: 0.15rem;
       }
 
-      .ny-chip-btn {
+      .bl-chip-btn {
         border-radius: 999px;
-        border: 1px solid var(--ny-border-soft);
+        border: 1px solid var(--bl-border-soft);
         background: rgba(18, 20, 32, 0.98);
-        color: var(--ny-text-main);
-        font-size: 0.8rem;
-        padding: 0.3rem 0.8rem;
+        color: var(--bl-text-main);
+        font-size: 0.78rem;
+        padding: 0.28rem 0.8rem;
         display: inline-flex;
         align-items: center;
         gap: 0.3rem;
+        cursor: pointer;
+        text-align: left;
       }
 
-      .ny-chip-btn:hover {
-        border-color: var(--ny-accent);
-        color: var(--ny-accent);
+      .bl-chip-btn i {
+        font-size: 0.85rem;
       }
 
-      .ny-case-card {
-        border-radius: 14px;
-        border: 1px dashed var(--ny-border-soft);
-        background: rgba(17, 19, 31, 0.97);
-        padding: 0.75rem;
-        font-size: 0.8rem;
-      }
-
-      .ny-case-card strong {
-        display: block;
-        margin-top: 0.1rem;
-        margin-bottom: 0.2rem;
+      .bl-chip-btn:hover {
+        border-color: var(--bl-accent-gold);
+        color: var(--bl-accent-gold);
       }
 
       /* =========================================
-         RIGHT PANEL: CHAT
+         RIGHT PANEL – CHAT
          ========================================= */
-      .ny-chat-card {
+      .bl-chat-card {
         border-radius: 18px;
-        border: 1px solid var(--ny-border);
+        border: 1px solid var(--bl-border-soft);
         background:
           radial-gradient(circle at 0 0, rgba(249, 250, 251, 0.04), transparent 60%),
-          var(--ny-surface);
+          var(--bl-surface);
         padding: 0.9rem;
         display: flex;
         flex-direction: column;
         height: 100%;
         min-height: 0;
+        box-shadow:
+          0 18px 30px rgba(15, 23, 42, 0.9),
+          0 0 0 0.5px rgba(148, 132, 96, 0.3) inset;
       }
 
-      .ny-chat-header {
+      .bl-chat-header {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
         gap: 0.75rem;
-        padding-bottom: 0.55rem;
-        border-bottom: 1px solid var(--ny-border-soft);
-        transition: opacity 0.2s ease, max-height 0.2s ease, padding-bottom 0.2s ease,
-          margin-bottom 0.2s ease;
+        padding-bottom: 0.6rem;
+        border-bottom: 1px solid rgba(148, 132, 96, 0.3);
+        transition:
+          opacity 0.2s ease,
+          max-height 0.2s ease,
+          padding-bottom 0.2s ease,
+          margin-bottom 0.2s ease,
+          border-bottom-color 0.2s ease;
       }
 
-      .ny-chat-header-collapsed {
+      .bl-chat-header-collapsed {
         opacity: 0;
         max-height: 0;
         padding-bottom: 0;
         margin-bottom: 0;
+        border-bottom-color: transparent;
         overflow: hidden;
-        border-bottom: none;
       }
 
-      .ny-chat-header-left {
+      .bl-chat-header-left {
         display: flex;
         align-items: flex-start;
-        gap: 0.7rem;
+        gap: 0.75rem;
       }
 
-      .ny-chat-avatar {
-        width: 42px;
-        height: 42px;
-        border-radius: 999px;
-        background:
-          radial-gradient(circle at 35% 0, #7c2d12, #b45309),
-          radial-gradient(circle at 130% 130%, #020617, #020617);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #fef3c7;
-        font-size: 1.2rem;
-        box-shadow:
-          0 12px 22px rgba(15, 23, 42, 0.92),
-          inset 0 0 0 1px rgba(250, 204, 21, 0.7);
+      .bl-chat-logo {
+        width: 44px;
+        height: 44px;
       }
 
-      .ny-chat-heading {
+      .bl-chat-heading {
         display: flex;
         flex-direction: column;
-        gap: 0.1rem;
+        gap: 0.15rem;
       }
 
-      .ny-chat-title {
-        font-size: 1rem;
-        font-weight: 600;
+      .bl-chat-title {
+        font-family: "DM Serif Display", "Times New Roman", serif;
+        font-size: 1.08rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
       }
 
-      .ny-chat-subtitle {
-        font-size: 0.85rem;
-        color: var(--ny-text-subtle);
-        max-width: 540px;
+      .bl-chat-subtitle {
+        font-size: 0.86rem;
+        color: var(--bl-text-subtle);
+        max-width: 520px;
         line-height: 1.6;
       }
 
-      .ny-chat-header-right {
+      .bl-chat-header-right {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
         gap: 0.18rem;
-      }
-
-      .ny-chat-meta {
         font-size: 0.72rem;
-        color: var(--ny-text-subtle);
+        color: var(--bl-text-subtle);
       }
 
       @media (max-width: 768px) {
-        .ny-chat-header {
+        .bl-chat-header {
           flex-direction: column;
         }
-        .ny-chat-header-right {
+        .bl-chat-header-right {
           align-items: flex-start;
         }
       }
 
-      .ny-chat-body {
+      .bl-chat-body {
         flex: 1;
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        margin-top: 0.4rem;
+        margin-top: 0.3rem;
       }
 
-      .ny-chat-window {
+      .bl-chat-window {
         flex: 1;
         overflow-y: auto;
         padding-right: 0.3rem;
@@ -593,134 +629,132 @@
         flex-direction: column;
         gap: 0.55rem;
         scrollbar-width: thin;
-        scrollbar-color: rgba(148, 132, 96, 0.8) transparent;
+        scrollbar-color: rgba(148, 132, 96, 0.9) transparent;
       }
 
-      .ny-chat-window::-webkit-scrollbar {
+      .bl-chat-window::-webkit-scrollbar {
         width: 6px;
       }
-
-      .ny-chat-window::-webkit-scrollbar-track {
-        background: transparent;
-      }
-
-      .ny-chat-window::-webkit-scrollbar-thumb {
+      .bl-chat-window::-webkit-scrollbar-thumb {
         background-color: rgba(148, 132, 96, 0.9);
         border-radius: 999px;
       }
 
-      .ny-chat-message {
+      .bl-chat-message {
         display: flex;
         flex-direction: column;
         max-width: 82%;
       }
 
-      .ny-chat-bot {
+      .bl-chat-bot {
         align-items: flex-start;
       }
 
-      .ny-chat-user {
+      .bl-chat-user {
         margin-left: auto;
         align-items: flex-end;
       }
 
-      .ny-bubble {
-        padding: 0.7rem 0.95rem;
-        font-size: 1rem;
-        line-height: 1.7;
+      .bl-bubble {
+        padding: 0.7rem 1rem;
+        font-size: 0.98rem;
+        line-height: 1.8;
       }
 
-      .ny-bubble-bot {
+      .bl-bubble-bot {
         background:
-          radial-gradient(circle at 0 0, rgba(148, 132, 96, 0.3), transparent 70%),
-          var(--ny-bot-bubble);
+          radial-gradient(circle at 0 0, rgba(148, 132, 96, 0.18), transparent 70%),
+          var(--bl-bot-bubble);
         border-radius: 14px;
         border-bottom-left-radius: 6px;
-        border: 1px solid rgba(148, 132, 96, 0.8);
+        border: 1px solid rgba(148, 132, 96, 0.9);
         font-family: "Merriweather", "Georgia", "Times New Roman", serif;
+        font-size: 0.96rem;
+        line-height: 1.9;
+        letter-spacing: 0.01em;
         box-shadow:
-          0 10px 18px rgba(15, 23, 42, 0.95),
-          inset 0 0 0 1px rgba(24, 24, 27, 0.9);
+          0 10px 18px rgba(15, 23, 42, 0.96),
+          inset 0 0 0 1px rgba(24, 24, 27, 0.92);
       }
 
-      .ny-bubble-user {
+      .bl-bubble-bot strong {
+        font-weight: 700;
+      }
+
+      .bl-bubble-user {
         background:
-          radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.5), transparent 70%),
-          var(--ny-user-bubble);
+          radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.5), transparent 72%),
+          var(--bl-user-bubble);
         border-radius: 18px;
         border-bottom-right-radius: 6px;
         color: #eaf4ff;
         font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
           "Segoe UI", sans-serif;
         box-shadow:
-          0 10px 18px rgba(15, 118, 178, 0.85),
-          inset 0 0 0 1px rgba(15, 23, 42, 0.9);
+          0 10px 18px rgba(15, 118, 178, 0.9),
+          inset 0 0 0 1px rgba(15, 23, 42, 0.95);
       }
 
-      .ny-timestamp {
+      .bl-timestamp {
         margin-top: 0.15rem;
         font-size: 0.72rem;
-        color: var(--ny-text-subtle);
+        color: var(--bl-text-subtle);
       }
 
-      .ny-suggest-row {
-        margin-top: 0.1rem;
-      }
-
-      .ny-bubble-suggest-wrap {
+      .bl-bubble-suggest-wrap {
         display: flex;
         flex-wrap: wrap;
         gap: 0.4rem;
-        margin-top: 0.25rem;
+        margin-top: 0.45rem;
       }
 
-      .ny-bubble-suggest {
+      .bl-bubble-suggest {
         border-radius: 999px;
-        border: 1px solid var(--ny-border-soft);
+        border: 1px solid var(--bl-border-soft);
         background: rgba(18, 20, 32, 0.98);
-        color: var(--ny-text-main);
+        color: var(--bl-text-main);
         font-size: 0.82rem;
-        padding: 0.32rem 0.8rem;
+        padding: 0.32rem 0.85rem;
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
         cursor: pointer;
       }
 
-      .ny-bubble-suggest i {
+      .bl-bubble-suggest i {
         font-size: 0.9rem;
       }
 
-      .ny-bubble-suggest:hover {
-        border-color: var(--ny-accent);
-        color: var(--ny-accent);
+      .bl-bubble-suggest:hover {
+        border-color: var(--bl-accent-gold);
+        color: var(--bl-accent-gold);
       }
 
       /* Typing indicator */
-      .ny-typing-indicator {
+      .bl-typing-indicator {
         display: inline-flex;
         align-items: center;
         gap: 4px;
       }
 
-      .ny-typing-dot {
+      .bl-typing-dot {
         width: 6px;
         height: 6px;
         border-radius: 999px;
         background-color: #e5e7eb;
         opacity: 0.4;
-        animation: ny-bounce 1s infinite;
+        animation: bl-bounce 1s infinite;
       }
 
-      .ny-typing-dot:nth-child(2) {
+      .bl-typing-dot:nth-child(2) {
         animation-delay: 0.15s;
       }
 
-      .ny-typing-dot:nth-child(3) {
+      .bl-typing-dot:nth-child(3) {
         animation-delay: 0.3s;
       }
 
-      @keyframes ny-bounce {
+      @keyframes bl-bounce {
         0%,
         80%,
         100% {
@@ -736,76 +770,76 @@
       /* =========================================
          INPUT AREA
          ========================================= */
-      .ny-chat-input {
-        border-top: 1px solid var(--ny-border-soft);
+      .bl-chat-input {
+        border-top: 1px solid rgba(148, 132, 96, 0.32);
         padding-top: 0.55rem;
-        margin-top: 0.4rem;
+        margin-top: 0.35rem;
         flex-shrink: 0;
       }
 
-      .ny-input-label {
+      .bl-input-label {
         font-size: 0.8rem;
-        color: var(--ny-text-subtle);
+        color: var(--bl-text-subtle);
         margin-bottom: 0.3rem;
       }
 
-      .ny-input-row {
+      .bl-input-row {
         display: flex;
         align-items: center;
         gap: 0.5rem;
       }
 
-      .ny-input-wrapper {
+      .bl-input-wrapper {
         flex: 1;
         display: flex;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.35rem;
         border-radius: 999px;
         padding: 0.1rem 0.4rem 0.1rem 0.1rem;
-        border: 1px solid var(--ny-border-soft);
-        background: rgba(18, 20, 32, 0.98);
+        border: 1px solid rgba(148, 132, 96, 0.7);
+        background: rgba(12, 14, 24, 0.98);
       }
 
-      .ny-input-icon {
+      .bl-input-icon {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 0.35rem 0.65rem;
+        padding: 0.38rem 0.65rem;
         border-radius: 999px;
         background: transparent;
-        color: var(--ny-text-subtle);
+        color: var(--bl-text-subtle);
       }
 
-      .ny-input-control {
+      .bl-input-control {
         flex: 1;
         border: none;
         background: transparent;
-        color: var(--ny-text-main);
+        color: var(--bl-text-main);
         font-size: 0.95rem;
         padding: 0.4rem 0.2rem;
         resize: none;
         max-height: 120px;
         outline: none;
-        line-height: 1.4;
+        line-height: 1.45;
       }
 
-      .ny-input-control::placeholder {
-        color: var(--ny-text-subtle);
+      .bl-input-control::placeholder {
+        color: var(--bl-text-subtle);
         font-size: 0.88rem;
       }
 
-      .ny-input-wrapper:focus-within {
-        border-color: var(--ny-accent);
+      .bl-input-wrapper:focus-within {
+        border-color: var(--bl-accent-gold);
         box-shadow:
-          0 0 0 1px var(--ny-accent-soft),
+          0 0 0 1px var(--bl-accent-gold-soft),
           0 0 0 1px rgba(15, 23, 42, 0.9);
       }
 
-      .ny-send-btn {
+      .bl-send-btn {
         border-radius: 999px;
         border: 0;
         padding: 0.55rem 1.15rem;
-        background-image: linear-gradient(135deg, #f5b342, #7c2d12);
+        background-image: linear-gradient(135deg, #f5c15a, #7c2d12);
         color: #111827;
         font-weight: 600;
         font-size: 0.86rem;
@@ -818,12 +852,12 @@
           inset 0 0 0 1px rgba(248, 250, 252, 0.2);
       }
 
-      .ny-send-btn:disabled {
+      .bl-send-btn:disabled {
         opacity: 0.7;
         cursor: wait;
       }
 
-      .ny-input-footer {
+      .bl-input-footer {
         margin-top: 0.35rem;
         display: flex;
         justify-content: space-between;
@@ -838,154 +872,180 @@
         font-size: 0.7rem;
         background: rgba(23, 23, 33, 0.98);
         border: 1px solid rgba(148, 163, 184, 0.7);
-        color: var(--ny-text-main);
+        color: var(--bl-text-main);
       }
 
       @media (max-width: 576px) {
-        .ny-chat-card {
+        .bl-chat-card {
           min-height: calc(100vh - 140px);
         }
-        .ny-chat-message {
+        .bl-chat-message {
           max-width: 90%;
         }
-        .ny-input-footer {
+        .bl-input-footer {
           flex-direction: column;
           align-items: flex-start;
         }
       }
 
       /* =========================================
-         LIGHT THEME OVERRIDES
+         LIGHT MODE
          ========================================= */
-      body.ny-light {
-        --ny-bg: #f5f2ea;
-        --ny-surface: #ffffff;
-        --ny-surface-soft: #fdfaf4;
-        --ny-border: rgba(148, 132, 96, 0.8);
-        --ny-border-soft: rgba(209, 194, 158, 0.6);
-        --ny-text-main: #1f2933;
-        --ny-text-subtle: #4b5563;
-        --ny-accent: #c0841a;
-        --ny-accent-soft: rgba(192, 132, 26, 0.18);
-        --ny-user-bubble: #145c8b;
-        --ny-bot-bubble: #ffffff;
+      body.bl-light {
+        --bl-bg: #f2ece3;
+        --bl-surface: #ffffff;
+        --bl-surface-soft: #fbf5ea;
+        --bl-border-soft: rgba(176, 148, 98, 0.85);
+        --bl-text-main: #111827;
+        --bl-text-subtle: #4b5563;
+        --bl-accent-gold: #b45309;
+        --bl-accent-gold-soft: rgba(180, 83, 9, 0.18);
+        --bl-accent-deep: #7c2d12;
+        --bl-user-bubble: #145c8b;
+        --bl-bot-bubble: #ffffff;
       }
 
-      body.ny-light {
+      body.bl-light {
         background:
-          radial-gradient(circle at 0 0, rgba(250, 250, 249, 0.9), transparent 60%),
-          radial-gradient(circle at 100% 100%, rgba(229, 231, 235, 0.9), transparent 60%),
-          var(--ny-bg);
+          radial-gradient(circle at 0 0, rgba(252, 252, 249, 0.96), transparent 60%),
+          radial-gradient(circle at 100% 100%, rgba(234, 231, 221, 0.95), transparent 60%),
+          var(--bl-bg);
       }
 
-      body.ny-light .ny-navbar {
+      body.bl-light .bl-navbar {
         background:
-          radial-gradient(circle at 0 0, rgba(229, 231, 235, 0.7), transparent 70%),
+          radial-gradient(circle at 0 0, rgba(249, 250, 251, 0.95), transparent 70%),
           #f9fafb;
-        border-bottom-color: rgba(209, 213, 219, 1);
+        border-bottom-color: #e5e7eb;
       }
 
-      body.ny-light .ny-theme-toggle {
+      body.bl-light .bl-badge-soft,
+      body.bl-light .bl-theme-toggle,
+      body.bl-light .bl-chip-btn,
+      body.bl-light .bl-bubble-suggest,
+      body.bl-light .bl-pill {
         background: #f9fafb;
-        color: #1f2933;
-        border-color: #d1d5db;
-      }
-
-      body.ny-light .ny-badge-soft {
-        background: #ffffff;
-        color: #374151;
-        border-color: #e5e7eb;
-      }
-
-      body.ny-light .ny-info-card {
-        background: #fdfaf4;
-      }
-
-      body.ny-light .ny-info-chip {
-        background: #ffffff;
-        color: #374151;
-        border-color: #e5e7eb;
-      }
-
-      body.ny-light .ny-pill,
-      body.ny-light .ny-chip-btn,
-      body.ny-light .ny-bubble-suggest {
-        background: #f9fafb;
-        color: #111827;
-        border-color: #e5e7eb;
-      }
-
-      body.ny-light .ny-chat-card {
-        background: #ffffff;
-      }
-
-      body.ny-light .ny-case-card {
-        background: #ffffff;
-      }
-
-      body.ny-light .ny-input-wrapper {
-        background: #f9fafb;
-        border-color: #e5e7eb;
-      }
-
-      body.ny-light .ny-input-icon {
-        color: #6b7280;
-      }
-
-      body.ny-light .ny-input-control {
+        border-color: #d1c3a1;
         color: #111827;
       }
 
-      body.ny-light kbd {
+      body.bl-light .bl-info-card {
+        background: #fbf5ea;
+        box-shadow:
+          0 10px 16px rgba(176, 148, 98, 0.25),
+          0 0 0 1px rgba(209, 194, 158, 0.7) inset;
+      }
+
+      body.bl-light .bl-chat-card {
+        background: #ffffff;
+        box-shadow:
+          0 12px 18px rgba(176, 148, 98, 0.25),
+          0 0 0 1px rgba(209, 194, 158, 0.8) inset;
+      }
+
+      body.bl-light .bl-input-wrapper {
+        background: #f9fafb;
+        border-color: #d1c3a1;
+      }
+
+      body.bl-light .bl-input-control {
+        color: #111827;
+      }
+
+      body.bl-light .bl-bubble-bot {
+        background:
+          radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.9), transparent 70%),
+          #fffdf7;
+        border-color: #d1c3a1;
+        box-shadow:
+          0 8px 16px rgba(176, 148, 98, 0.38),
+          inset 0 0 0 1px rgba(229, 231, 235, 0.9);
+      }
+
+      body.bl-light .bl-bubble-user {
+        box-shadow:
+          0 8px 16px rgba(37, 99, 235, 0.38),
+          inset 0 0 0 1px rgba(59, 130, 246, 0.8);
+      }
+
+      body.bl-light kbd {
         background: #f3f4f6;
         border-color: #d1d5db;
         color: #111827;
       }
 
-      body.ny-light .ny-bubble-bot {
-        box-shadow:
-          0 8px 16px rgba(148, 132, 96, 0.35),
-          inset 0 0 0 1px rgba(229, 231, 235, 0.8);
+      /* Light mode specific fixes for the request */
+
+      body.bl-light .bl-quick-section {
+        background: #fffaf2;
+        border-color: #d1c3a1;
       }
 
-      body.ny-light .ny-bubble-user {
+      body.bl-light .bl-quick-header span:last-child {
+        color: #4b5563;
+      }
+
+      body.bl-light .bl-category-pill {
+        background: #111827;
+        color: #f9fafb;
+        border-color: #b0894f;
+      }
+
+      body.bl-light .bl-defence-badge {
+        background: #fff7ea;
+        border-color: #d1c3a1;
+        color: #111827;
+        box-shadow: 0 6px 14px rgba(176, 148, 98, 0.25);
+      }
+
+      body.bl-light .bl-defence-text-sub {
+        color: #4b5563;
+      }
+
+      body.bl-light .bl-defence-icon {
+        background:
+          radial-gradient(circle at 30% 0, #fbbf24, #b45309),
+          radial-gradient(circle at 130% 140%, #fef3c7, #fef3c7);
+        color: #111827;
         box-shadow:
-          0 8px 16px rgba(37, 99, 235, 0.35),
-          inset 0 0 0 1px rgba(59, 130, 246, 0.7);
+          0 4px 10px rgba(176, 148, 98, 0.4),
+          inset 0 0 0 1px rgba(250, 204, 21, 0.8);
+      }
+
+      body.bl-light .bl-bubble-suggest {
+        background: #f9fafb;
+        border-color: #d1c3a1;
+        color: #111827;
       }
     </style>
   </head>
 
   <body>
-    <!-- =========================================
-         NAVBAR
-         ========================================= -->
-    <nav class="ny-navbar">
-      <div class="ny-nav-inner">
-        <div class="ny-brand">
-          <div class="ny-logo-wrap">
-            <div class="ny-logo-scales">
-              <div class="ny-logo-bar"></div>
-              <div class="ny-logo-pillar"></div>
-              <span class="ny-logo-balance">NR</span>
+    <!-- NAVBAR -->
+    <nav class="bl-navbar" aria-label="Main navigation">
+      <div class="bl-nav-inner">
+        <a href="/" class="bl-brand">
+          <div class="bl-logo-mark" aria-hidden="true">
+            <div class="bl-logo-inner">
+              <div class="bl-logo-topbar"></div>
+              <div class="bl-logo-pillar"></div>
+              <span class="bl-logo-text">BLB</span>
             </div>
           </div>
-          <div class="ny-brand-text">
-            <div class="ny-brand-title">Nyay Rakshak</div>
-            <div class="ny-brand-subtitle">
-              Indian Legal Defence Assistant · RAG-powered
-            </div>
+          <div class="bl-brand-text">
+            <div class="bl-brand-title">Bharat LawBot</div>
+            <div class="bl-brand-subtitle">Indian Legal Defence Assistant</div>
           </div>
-        </div>
-        <div class="ny-nav-right">
-          <span class="ny-online-pill">
-            <span class="ny-dot"></span> Live session
+        </a>
+        <div class="bl-nav-right">
+          <span class="bl-online-pill">
+            <span class="bl-dot"></span> Online legal insight
           </span>
-          <span class="ny-badge-soft">
+          <span class="bl-badge-soft">
             <i class="bi bi-shield-lock me-1"></i>
-            Educational · Not a substitute for a lawyer
+            Educational · Not legal advice
           </span>
-          <button id="themeToggle" type="button" class="ny-theme-toggle">
+          <button id="themeToggle" type="button" class="bl-theme-toggle">
             <i class="bi bi-moon-stars"></i>
             <span class="d-none d-sm-inline">Dark</span>
           </button>
@@ -993,342 +1053,408 @@
       </div>
     </nav>
 
-    <!-- =========================================
-         MAIN
-         ========================================= -->
-    <main class="ny-main">
-      <div class="ny-main-inner">
-        <div class="ny-grid">
+    <!-- MAIN CONTENT -->
+    <main class="bl-main">
+      <div class="bl-main-inner">
+        <div class="bl-grid">
           <!-- LEFT PANEL -->
-          <section class="ny-info-card">
-            <div class="ny-info-header">
-              <div class="ny-info-main">
-                <div class="ny-info-avatar">
-                  <i class="bi bi-balance-scale"></i>
+          <section class="bl-info-card" aria-label="About Bharat LawBot">
+            <header class="bl-info-header">
+              <div class="bl-info-main">
+                <div class="bl-logo-mark" aria-hidden="true">
+                  <div class="bl-logo-inner">
+                    <div class="bl-logo-topbar"></div>
+                    <div class="bl-logo-pillar"></div>
+                    <span class="bl-logo-text">BLB</span>
+                  </div>
                 </div>
-                <div class="ny-info-titles">
-                  <span class="ny-info-label">Client profile</span>
-                  <span class="ny-info-title">Guest user</span>
-                  <span class="ny-info-subtitle">
-                    Designed for individuals, professionals and families who want to
-                    understand where they stand legally before speaking with counsel.
+                <div class="bl-info-titles">
+                  <span class="bl-info-label">Client profile</span>
+                  <h1 class="bl-info-title mb-0">Guest user · India</h1>
+                  <p class="bl-info-subtitle mb-0">
+                    Bharat LawBot helps you understand
+                    <strong>Indian law from a defence perspective</strong> – how courts
+                    usually think about FIRs, bail, evidence, matrimonial disputes,
+                    property and financial cases – so you can talk more clearly with
+                    your advocate.
+                  </p>
+                </div>
+              </div>
+            </header>
+
+            <!-- Defence-oriented section -->
+            <section aria-label="Defence-oriented perspective">
+              <div class="bl-defence-badge mt-1">
+                <div class="bl-defence-icon">
+                  <i class="bi bi-shield-shaded"></i>
+                </div>
+                <div>
+                  <span class="bl-defence-text-main">
+                    Defence-oriented perspective
+                  </span>
+                  <span class="bl-defence-text-sub">
+                    Explores lawful defence themes, possible weaknesses in accusations
+                    and typical court thinking – without promising outcomes or giving
+                    personal legal advice.
                   </span>
                 </div>
               </div>
-              <span class="ny-info-chip">
-                <i class="bi bi-shield-check me-1"></i> Defence-focused view
-              </span>
-            </div>
+            </section>
 
-            <div>
-              <div class="ny-section-title">Key practice domains</div>
-              <div class="ny-pill-row">
-                <span class="ny-pill">
-                  <i class="bi bi-gavel"></i>
-                  Criminal law (IPC / BNS, CrPC / BNSS)
-                </span>
-                <span class="ny-pill">
+            <section aria-label="Practice domains">
+              <div class="bl-section-title mt-3">
+                Key practice domains (Indian law)
+              </div>
+              <div class="bl-pill-row">
+                <span class="bl-pill">
                   <i class="bi bi-heartbreak"></i>
-                  Matrimonial, DV, maintenance
+                  Matrimonial · Divorce · DV
                 </span>
-                <span class="ny-pill">
-                  <i class="bi bi-file-earmark-text"></i>
-                  Civil, contracts &amp; property disputes
+                <span class="bl-pill">
+                  <i class="bi bi-gavel"></i>
+                  Criminal law · FIR · Bail
                 </span>
-                <span class="ny-pill">
-                  <i class="bi bi-bank2"></i>
-                  Corporate / white-collar liability
+                <span class="bl-pill">
+                  <i class="bi bi-receipt"></i>
+                  Cheque bounce · Financial disputes
                 </span>
-                <span class="ny-pill">
+                <span class="bl-pill">
+                  <i class="bi bi-house-door"></i>
+                  Property &amp; civil litigation
+                </span>
+                <span class="bl-pill">
+                  <i class="bi bi-briefcase"></i>
+                  Employment &amp; workplace issues
+                </span>
+                <span class="bl-pill">
                   <i class="bi bi-globe2"></i>
-                  NRI &amp; cross-border issues
-                </span>
-                <span class="ny-pill">
-                  <i class="bi bi-currency-rupee"></i>
-                  Cheque bounce &amp; financial claims
+                  NRI &amp; cross-border questions
                 </span>
               </div>
-            </div>
+            </section>
 
-            <div>
-              <div class="ny-section-title">Before you ask</div>
-              <ul class="ny-muted-list">
-                <li>Write in simple English; chronological facts work best.</li>
+            <section aria-label="How to describe your case">
+              <div class="bl-section-title mt-3">How to describe your situation</div>
+              <ul class="bl-muted-list">
                 <li>
-                  Mention sections if you know them (498A, 406, 138 NI Act, 125 CrPC,
-                  DV Act, PMLA, IT Act etc.).
+                  Use simple English and share events in
+                  <strong>chronological order</strong> (who did what, when, where).
                 </li>
                 <li>
-                  State the current stage: notice only, FIR, investigation, charge
-                  sheet, trial, appeal, or execution.
+                  Mention <strong>sections</strong> if you know them
+                  (498A, 406, 138 NI Act, 125 CrPC, etc.), or share orders / notices.
                 </li>
                 <li>
-                  Ask about ingredients of the offence, likely legal issues, and
-                  defence-side patterns explored in practice.
+                  Tell the <strong>stage of the matter</strong>:
+                  notice, FIR, investigation, charge sheet, trial, appeal.
+                </li>
+                <li>
+                  Mention important <strong>documents or records</strong>:
+                  chats, emails, bank entries, agreements, CCTV, court orders.
                 </li>
               </ul>
-            </div>
+            </section>
 
-            <div>
-              <div class="ny-section-title">High-stakes situations</div>
-              <div class="ny-case-card">
-                <strong>Matrimonial / 498A / DV</strong>
-                <ul class="ny-muted-list">
-                  <li>Date of marriage, brief timeline of disputes.</li>
-                  <li>
-                    Existing cases: 498A / 406, DV Act, 125 CrPC, divorce, or
-                    maintenance.
-                  </li>
-                  <li>Any written communication, bank records, or neutral witnesses.</li>
-                </ul>
+            <!-- SUBJECT-ORIENTED QUICK PROMPTS -->
+            <section aria-label="Quick legal topics">
+              <div class="bl-section-title mt-3">Start with a topic</div>
 
-                <strong>Business / corporate disputes</strong>
-                <ul class="ny-muted-list">
-                  <li>
-                    Nature of entity: proprietorship, partnership, LLP, private
-                    limited.
-                  </li>
-                  <li>Key documents: agreements, board resolutions, emails.</li>
-                  <li>
-                    Whether there are notices from police, SFIO, ED, SEBI or other
-                    regulators.
-                  </li>
-                </ul>
-
-                <strong>Cheque bounce / financial default</strong>
-                <ul class="ny-muted-list">
-                  <li>Basic transaction background (loan / investment / business).</li>
-                  <li>Number, value and dates of cheques involved.</li>
-                  <li>
-                    Whether legal notice was sent and whether any payment was made
-                    later.
-                  </li>
-                </ul>
+              <div class="bl-quick-section mb-2">
+                <div class="bl-quick-header">
+                  <span class="bl-category-pill">
+                    <i class="bi bi-heartbreak me-1"></i>Matrimonial &amp; DV
+                  </span>
+                  <span>Separation, 498A, domestic violence and maintenance.</span>
+                </div>
+                <div class="bl-quick-chips">
+                  <button
+                    type="button"
+                    class="bl-chip-btn bl-quick"
+                    data-question="There is an FIR under Sections 498A and 406 IPC from my wife and in-laws. In general terms, what ingredients must be proved and what defence angles do lawyers sometimes explore?"
+                  >
+                    <i class="bi bi-heartbreak"></i>
+                    498A + 406 – defence themes
+                  </button>
+                  <button
+                    type="button"
+                    class="bl-chip-btn bl-quick"
+                    data-question="In general terms, how do Indian courts look at allegations of mental cruelty in matrimonial disputes, and what defence themes do lawyers sometimes rely on?"
+                  >
+                    <i class="bi bi-emoji-frown"></i>
+                    Mental cruelty – court view
+                  </button>
+                  <button
+                    type="button"
+                    class="bl-chip-btn bl-quick"
+                    data-question="Explain, in general terms, how Domestic Violence (DV) Act complaints are usually viewed by courts and what typical defence approaches may be discussed."
+                  >
+                    <i class="bi bi-house-heart"></i>
+                    DV Act – typical defence
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <div>
-              <div class="ny-section-title">Important note</div>
-              <p class="ny-note mb-1">
-                Nyay Rakshak explains law, typical judicial reasoning and broad
-                defence strategies based on available legal material.
+              <div class="bl-quick-section mb-2">
+                <div class="bl-quick-header">
+                  <span class="bl-category-pill">
+                    <i class="bi bi-gavel me-1"></i>Criminal law &amp; bail
+                  </span>
+                  <span>FIR, arrest, anticipatory bail and quashing.</span>
+                </div>
+                <div class="bl-quick-chips">
+                  <button
+                    type="button"
+                    class="bl-chip-btn bl-quick"
+                    data-question="Explain in simple language how Indian courts usually think about anticipatory bail, including common factors they consider (not case-specific advice)."
+                  >
+                    <i class="bi bi-shield-exclamation"></i>
+                    Anticipatory bail – overview
+                  </button>
+                  <button
+                    type="button"
+                    class="bl-chip-btn bl-quick"
+                    data-question="In general terms, how do courts approach a regular bail application in non-bailable offences, and what broad defence themes are often argued?"
+                  >
+                    <i class="bi bi-unlock"></i>
+                    Regular bail – court factors
+                  </button>
+                  <button
+                    type="button"
+                    class="bl-chip-btn bl-quick"
+                    data-question="In broad terms, how do Indian courts look at petitions for quashing of FIR or criminal proceedings under Section 482 CrPC?"
+                  >
+                    <i class="bi bi-x-octagon"></i>
+                    Quashing of FIR – overview
+                  </button>
+                </div>
+              </div>
+
+              <div class="bl-quick-section mb-2">
+                <div class="bl-quick-header">
+                  <span class="bl-category-pill">
+                    <i class="bi bi-wallet2 me-1"></i>Money, work &amp; evidence
+                  </span>
+                  <span>Cheque bounce, salary issues and evidence rules.</span>
+                </div>
+                <div class="bl-quick-chips">
+                  <button
+                    type="button"
+                    class="bl-chip-btn bl-quick"
+                    data-question="Summarise in clear points how cheque bounce cases under Indian law are generally viewed, and what kind of defence themes are commonly explored."
+                  >
+                    <i class="bi bi-receipt"></i>
+                    Cheque bounce – defence themes
+                  </button>
+                  <button
+                    type="button"
+                    class="bl-chip-btn bl-quick"
+                    data-question="My employer has not paid salary for three months. In general terms, what legal options and broad patterns under Indian law are discussed?"
+                  >
+                    <i class="bi bi-briefcase"></i>
+                    Unpaid salary – options
+                  </button>
+                  <button
+                    type="button"
+                    class="bl-chip-btn bl-quick"
+                    data-question="Please summarise the Indian Evidence Act in clear, numbered points for a non-lawyer reader."
+                  >
+                    <i class="bi bi-journal-text"></i>
+                    Evidence Act – summary
+                  </button>
+                </div>
+              </div>
+
+              <div class="bl-quick-section">
+                <div class="bl-quick-header">
+                  <span class="bl-category-pill">
+                    <i class="bi bi-house-door me-1"></i>Property &amp; NRI
+                  </span>
+                  <span>Land, flats, family property, NRI angles.</span>
+                </div>
+                <div class="bl-quick-chips">
+                  <button
+                    type="button"
+                    class="bl-chip-btn bl-quick"
+                    data-question="There is a boundary dispute with my neighbour about a small piece of land. In general, how do Indian courts look at such disputes and what typical documents are important?"
+                  >
+                    <i class="bi bi-diagram-3"></i>
+                    Boundary dispute – key points
+                  </button>
+                  <button
+                    type="button"
+                    class="bl-chip-btn bl-quick"
+                    data-question="I am an NRI and there is a dispute over property in India. In broad terms, what legal aspects and documents usually become important?"
+                  >
+                    <i class="bi bi-airplane"></i>
+                    NRI property dispute – overview
+                  </button>
+                  <button
+                    type="button"
+                    class="bl-chip-btn bl-quick"
+                    data-question="Explain in general terms how courts treat electronic evidence in civil and criminal cases under the Indian Evidence Act."
+                  >
+                    <i class="bi bi-cpu"></i>
+                    Electronic evidence – basics
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <section aria-label="Important disclaimer" class="mt-3">
+              <div class="bl-section-title">Important note</div>
+              <p class="bl-note mb-1">
+                Bharat LawBot explains
+                <strong>general legal principles and defence patterns</strong> based on
+                the legal material available. It helps you prepare better questions and
+                understand the overall landscape.
               </p>
-              <p class="ny-warning mb-0">
+              <p class="bl-warning mb-0">
                 It does <strong>not</strong> replace personalised advice from a
-                practising advocate and does <strong>not</strong> guarantee any
-                specific outcome.
+                practising advocate and does <strong>not</strong> guarantee any outcome
+                in court.
               </p>
-            </div>
-
-            <div>
-              <div class="ny-section-title">Quick prompts</div>
-              <div class="ny-quick-questions">
-                <button
-                  type="button"
-                  class="ny-chip-btn ny-quick"
-                  data-question="Please summarise the Indian Evidence Act in clear, numbered points for a non-lawyer reader."
-                >
-                  <i class="bi bi-lightbulb"></i>
-                  Evidence Act overview
-                </button>
-                <button
-                  type="button"
-                  class="ny-chip-btn ny-quick"
-                  data-question="There is an FIR under Sections 498A and 406 IPC from my wife and in-laws. In general terms, what ingredients must be proved and what possible defence patterns do lawyers sometimes examine?"
-                >
-                  <i class="bi bi-heartbreak"></i>
-                  498A + 406 patterns
-                </button>
-                <button
-                  type="button"
-                  class="ny-chip-btn ny-quick"
-                  data-question="Explain in simple language how Indian courts usually think about anticipatory bail, and what factors they commonly consider (not specific advice for my case)."
-                >
-                  <i class="bi bi-shield-exclamation"></i>
-                  Anticipatory bail basics
-                </button>
-                <button
-                  type="button"
-                  class="ny-chip-btn ny-quick"
-                  data-question="My employer has not paid salary for three months. In general, what kind of legal options and broad patterns under Indian law are discussed (labour complaint, civil suit, etc.)?"
-                >
-                  <i class="bi bi-briefcase"></i>
-                  Unpaid salary options
-                </button>
-                <button
-                  type="button"
-                  class="ny-chip-btn ny-quick"
-                  data-question="There is a boundary dispute with my neighbour about a small piece of land. In general, how do Indian courts look at property/boundary disputes and what typical documents are important?"
-                >
-                  <i class="bi bi-house-door"></i>
-                  Property boundary dispute
-                </button>
-                <button
-                  type="button"
-                  class="ny-chip-btn ny-quick"
-                  data-question="There is an allegation of online cheating and cyber fraud. In general, what legal issues and broad defence patterns do lawyers often look at?"
-                >
-                  <i class="bi bi-globe2"></i>
-                  Cyber fraud patterns
-                </button>
-                <button
-                  type="button"
-                  class="ny-chip-btn ny-quick"
-                  data-question="In general terms, how do Indian courts approach petitions for quashing of FIR or proceedings under Section 482 CrPC?"
-                >
-                  <i class="bi bi-x-octagon"></i>
-                  Quashing under 482 CrPC
-                </button>
-                <button
-                  type="button"
-                  class="ny-chip-btn ny-quick"
-                  data-question="I am an NRI and there is a dispute over property in India. In broad terms, what legal aspects and documents usually become important?"
-                >
-                  <i class="bi bi-airplane"></i>
-                  NRI property dispute
-                </button>
-              </div>
-            </div>
+            </section>
           </section>
 
-          <!-- RIGHT PANEL: CHAT -->
-          <section class="ny-chat-card">
-            <!-- Header (auto-collapses after first user question) -->
-            <div class="ny-chat-header" id="ny-chat-header">
-              <div class="ny-chat-header-left">
-                <div class="ny-chat-avatar">
-                  <i class="bi bi-chat-square-text"></i>
+          <!-- RIGHT PANEL – CHAT -->
+          <section class="bl-chat-card" aria-label="Chat with Bharat LawBot">
+            <header class="bl-chat-header" id="bl-chat-header">
+              <div class="bl-chat-header-left">
+                <div class="bl-logo-mark bl-chat-logo" aria-hidden="true">
+                  <div class="bl-logo-inner">
+                    <div class="bl-logo-topbar"></div>
+                    <div class="bl-logo-pillar"></div>
+                    <span class="bl-logo-text">BLB</span>
+                  </div>
                 </div>
-                <div class="ny-chat-heading">
-                  <span class="ny-chat-title">Nyay Rakshak</span>
-                  <span class="ny-chat-subtitle">
-                    A warm, defence-oriented Indian legal assistant. It helps you
-                    understand how law usually works, where accusations may be strong
-                    or weak in principle, and what to discuss with your lawyer in a
-                    focused way.
-                  </span>
+                <div class="bl-chat-heading">
+                  <h2 class="bl-chat-title mb-0">Bharat LawBot</h2>
+                  <p class="bl-chat-subtitle mb-0">
+                    A defence-oriented Indian legal assistant. It helps you understand
+                    how law usually works, where accusations may be strong or weak in
+                    principle, and what to discuss with your lawyer in a structured way.
+                  </p>
                 </div>
               </div>
-              <div class="ny-chat-header-right">
-                <span class="ny-chat-meta">
+              <div class="bl-chat-header-right">
+                <span>
                   <i class="bi bi-journal-text me-1"></i>
-                  RAG over curated legal sources
+                  RAG over curated legal content
                 </span>
-                <span class="ny-chat-meta">
+                <span>
                   <i class="bi bi-exclamation-triangle me-1"></i>
-                  For education · Not legal advice
+                  Educational only · Not legal advice
                 </span>
               </div>
-            </div>
+            </header>
 
-            <!-- Body -->
-            <div class="ny-chat-body">
-              <!-- Messages -->
-              <div id="chatWindow" class="ny-chat-window">
-                <!-- Initial bot message -->
-                <div class="ny-chat-message ny-chat-bot">
-                  <div class="ny-bubble ny-bubble-bot">
-                    Namaste. I am Nyay Rakshak, a defence-oriented Indian legal
-                    assistant.
+            <div class="bl-chat-body">
+              <div id="chatWindow" class="bl-chat-window">
+                <div class="bl-chat-message bl-chat-bot">
+                  <div class="bl-bubble bl-bubble-bot">
+                    Namaste. I am <strong>Bharat LawBot</strong>, a defence-oriented
+                    Indian legal assistant.
 
                     <br /><br />
                     I can help you:
                     <br />
-                    • understand what an offence legally requires,<br />
+                    • understand the legal ingredients of offences and claims,<br />
                     • see where allegations may be strong or weak in principle,<br />
-                    • understand typical court reasoning on bail, quashing, discharge,<br />
-                    • prepare better questions and points to discuss with your advocate.
+                    • understand how courts usually think about bail, quashing, discharge
+                    and trial,<br />
+                    • prepare clearer questions and points for your advocate.
 
                     <br /><br />
-                    I do not give personalised legal advice or guarantees of outcome.
-                    I explain the law, usual judicial reasoning, and defence-side
-                    patterns in general terms based on the material available.
+                    I do <strong>not</strong> give personalised legal advice or predict
+                    exact outcomes. I explain general legal principles and typical
+                    reasoning patterns based on the material available.
                   </div>
-                  <div class="ny-timestamp">now</div>
+                  <div class="bl-timestamp">now</div>
                 </div>
 
-                <!-- Bubble prompt suggestions inside chat -->
-                <div class="ny-chat-message ny-chat-bot ny-suggest-row">
-                  <div class="ny-bubble ny-bubble-bot">
-                    You can tap a prompt to get started:
-                    <div class="ny-bubble-suggest-wrap mt-2">
+                <div class="bl-chat-message bl-chat-bot">
+                  <div class="bl-bubble bl-bubble-bot">
+                    <span class="bl-category-pill mb-1 d-inline-block">
+                      <i class="bi bi-lightbulb me-1"></i>
+                      Try one of these to start
+                    </span>
+                    <div class="bl-bubble-suggest-wrap">
                       <button
                         type="button"
-                        class="ny-bubble-suggest ny-quick"
+                        class="bl-bubble-suggest bl-quick"
                         data-question="Please summarise the Indian Evidence Act in clear, numbered points for a non-lawyer reader."
                       >
-                        <i class="bi bi-lightbulb"></i>
+                        <i class="bi bi-journal-text"></i>
                         Summarise Evidence Act
                       </button>
                       <button
                         type="button"
-                        class="ny-bubble-suggest ny-quick"
-                        data-question="My wife has filed an FIR under Section 498A IPC and 406 IPC. In general terms, what ingredients must be proved and what defence angles do lawyers sometimes explore?"
+                        class="bl-bubble-suggest bl-quick"
+                        data-question="My wife has filed an FIR under Section 498A IPC and 406 IPC. In general terms, what ingredients must be proved and what defence themes do lawyers sometimes explore?"
                       >
                         <i class="bi bi-heartbreak"></i>
-                        498A defence angles
+                        498A + 406 – defence themes
                       </button>
                       <button
                         type="button"
-                        class="ny-bubble-suggest ny-quick"
+                        class="bl-bubble-suggest bl-quick"
                         data-question="Explain the usual approach of Indian courts to anticipatory bail, including typical factors they consider and broad patterns (not case-specific advice)."
                       >
                         <i class="bi bi-shield-exclamation"></i>
-                        Anticipatory bail flow
+                        Anticipatory bail overview
                       </button>
                       <button
                         type="button"
-                        class="ny-bubble-suggest ny-quick"
-                        data-question="There is an allegation of online cheating / cyber fraud. In general, what legal issues and broad defence patterns do lawyers often look at?"
+                        class="bl-bubble-suggest bl-quick"
+                        data-question="There is an allegation of online cheating or cyber fraud. In general, what legal issues and defence patterns do lawyers often examine?"
                       >
                         <i class="bi bi-globe2"></i>
-                        Cyber fraud patterns
+                        Cyber fraud – key issues
                       </button>
                     </div>
                   </div>
-                  <div class="ny-timestamp"></div>
+                  <div class="bl-timestamp"></div>
                 </div>
               </div>
 
-              <!-- Input -->
-              <div class="ny-chat-input">
-                <label class="ny-input-label" for="ny-input">
+              <div class="bl-chat-input">
+                <label class="bl-input-label" for="bl-input">
                   Type your question (Enter to send, Shift+Enter for new line)
                 </label>
-                <div class="ny-input-row">
-                  <div class="ny-input-wrapper">
-                    <span class="ny-input-icon d-none d-sm-inline-flex">
+                <div class="bl-input-row">
+                  <div class="bl-input-wrapper">
+                    <span class="bl-input-icon d-none d-sm-inline-flex">
                       <i class="bi bi-pencil-square"></i>
                     </span>
                     <textarea
-                      id="ny-input"
-                      class="ny-input-control"
+                      id="bl-input"
+                      class="bl-input-control"
                       rows="1"
-                      placeholder="Describe your legal question in simple words. Example: “There is an FIR under 498A and 406 IPC; what should I understand about the ingredients and general defence patterns?”"
+                      placeholder="Describe your situation in simple words. Example: “FIR under 498A and 406 IPC is registered; what are the basic ingredients and defence patterns courts usually consider?”"
                       autocomplete="off"
                       autocorrect="off"
                       autocapitalize="sentences"
                       spellcheck="false"
                     ></textarea>
                   </div>
-                  <button id="sendBtn" type="button" class="ny-send-btn">
+                  <button id="sendBtn" type="button" class="bl-send-btn">
                     <span class="d-none d-md-inline">
                       <i class="bi bi-send-fill me-1"></i>
-                      Ask
+                      Ask Bharat LawBot
                     </span>
                     <span class="d-inline d-md-none">
                       <i class="bi bi-send-fill"></i>
                     </span>
                   </button>
                 </div>
-                <div class="ny-input-footer">
+                <div class="bl-input-footer">
                   <small class="text-muted">
-                    Press <kbd>Enter</kbd> to send • <kbd>Shift + Enter</kbd> for a new
+                    Press <kbd>Enter</kbd> to send · <kbd>Shift + Enter</kbd> for a new
                     line
                   </small>
                   <small class="text-muted d-none d-sm-inline">
-                    For important decisions, always speak to a trusted practising
-                    advocate.
+                    For any critical decision, always consult a practising advocate with
+                    your full documents.
                   </small>
                 </div>
               </div>
@@ -1357,14 +1483,14 @@
 
         safeReady(function () {
           const chatWindow = document.getElementById("chatWindow");
-          const userInput = document.getElementById("ny-input");
+          const userInput = document.getElementById("bl-input");
           const sendBtn = document.getElementById("sendBtn");
-          const quickButtons = document.querySelectorAll(".ny-quick");
+          const quickButtons = document.querySelectorAll(".bl-quick");
           const themeToggle = document.getElementById("themeToggle");
-          const chatHeader = document.getElementById("ny-chat-header");
+          const chatHeader = document.getElementById("bl-chat-header");
 
           if (!chatWindow || !userInput || !sendBtn) {
-            console.warn("Nyay Rakshak chat UI elements not found.");
+            console.warn("Bharat LawBot UI elements not found.");
             return;
           }
 
@@ -1372,13 +1498,13 @@
           function applyTheme(theme) {
             const body = document.body;
             if (theme === "light") {
-              body.classList.add("ny-light");
+              body.classList.add("bl-light");
               if (themeToggle) {
                 themeToggle.innerHTML =
                   '<i class="bi bi-sun-fill"></i><span class="d-none d-sm-inline">Light</span>';
               }
             } else {
-              body.classList.remove("ny-light");
+              body.classList.remove("bl-light");
               if (themeToggle) {
                 themeToggle.innerHTML =
                   '<i class="bi bi-moon-stars"></i><span class="d-none d-sm-inline">Dark</span>';
@@ -1386,15 +1512,15 @@
             }
           }
 
-          const storedTheme = localStorage.getItem("ny-theme");
+          const storedTheme = localStorage.getItem("bl-theme");
           applyTheme(storedTheme === "light" ? "light" : "dark");
 
           if (themeToggle) {
             themeToggle.addEventListener("click", function () {
-              const isLight = document.body.classList.contains("ny-light");
+              const isLight = document.body.classList.contains("bl-light");
               const newTheme = isLight ? "dark" : "light";
               applyTheme(newTheme);
-              localStorage.setItem("ny-theme", newTheme);
+              localStorage.setItem("bl-theme", newTheme);
             });
           }
 
@@ -1415,28 +1541,28 @@
             if (!hasUserInteracted) {
               hasUserInteracted = true;
               if (chatHeader) {
-                chatHeader.classList.add("ny-chat-header-collapsed");
+                chatHeader.classList.add("bl-chat-header-collapsed");
               }
             }
           }
 
           function addMessage(text, sender, typing) {
             const msg = document.createElement("div");
-            msg.classList.add("ny-chat-message");
-            msg.classList.add(sender === "user" ? "ny-chat-user" : "ny-chat-bot");
+            msg.classList.add("bl-chat-message");
+            msg.classList.add(sender === "user" ? "bl-chat-user" : "bl-chat-bot");
 
             const bubble = document.createElement("div");
-            bubble.classList.add("ny-bubble");
+            bubble.classList.add("bl-bubble");
             bubble.classList.add(
-              sender === "user" ? "ny-bubble-user" : "ny-bubble-bot"
+              sender === "user" ? "bl-bubble-user" : "bl-bubble-bot"
             );
 
             if (typing) {
-              bubble.classList.add("ny-typing-indicator");
+              bubble.classList.add("bl-typing-indicator");
               bubble.innerHTML = `
-                <span class="ny-typing-dot"></span>
-                <span class="ny-typing-dot"></span>
-                <span class="ny-typing-dot"></span>
+                <span class="bl-typing-dot"></span>
+                <span class="bl-typing-dot"></span>
+                <span class="bl-typing-dot"></span>
               `;
             } else {
               const lines = String(text || "").split("\n");
@@ -1451,7 +1577,7 @@
             }
 
             const ts = document.createElement("div");
-            ts.classList.add("ny-timestamp");
+            ts.classList.add("bl-timestamp");
             if (!typing) {
               const now = new Date();
               try {
@@ -1476,10 +1602,8 @@
             const text = (raw || "").trim();
             if (!text || isWaiting) return;
 
-            // Collapse header on first real interaction for more chat space
             collapseHeaderOnce();
 
-            // User bubble
             addMessage(text, "user", false);
             if (!customText) {
               userInput.value = "";
@@ -1517,7 +1641,7 @@
                 chatWindow.removeChild(typingMsg);
               }
               addMessage(
-                "There was a technical issue reaching Nyay Rakshak. Please try again in a moment. For urgent matters, speak to a practising lawyer.",
+                "There was a technical issue reaching Bharat LawBot. Please try again in a moment. For urgent matters, please speak to a practising advocate.",
                 "bot",
                 false
               );
