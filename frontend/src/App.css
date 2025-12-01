@@ -403,4 +403,27 @@ body {
   .blb-chat-window {
     max-height: calc(100vh - 240px);
   }
+
+  .blb-markdown h1,
+  .blb-markdown h2,
+  .blb-markdown h3 {
+    margin: 0.2rem 0 0.3rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .blb-markdown p {
+    margin: 0.15rem 0;
+  }
+
+  .blb-markdown ul,
+  .blb-markdown ol {
+    margin: 0.15rem 0 0.25rem 1.1rem;
+    padding-left: 0.4rem;
+  }
+
+  .blb-markdown li {
+    margin: 0.05rem 0;
+  }
+
 }
