@@ -241,6 +241,7 @@ frontend/.parcel-cache/
 # Generic build output
 build/
 dist/
+data copy/
 
 # IDE/editor
 .vscode/
