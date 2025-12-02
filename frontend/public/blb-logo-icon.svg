@@ -1,0 +1,79 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background gradient -->
+    <radialGradient id="blb-bg" cx="30%" cy="0%" r="90%">
+      <stop offset="0%" stop-color="#facc15"/>
+      <stop offset="45%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#1f2937"/>
+    </radialGradient>
+
+    <!-- Stroke gradient for the scales -->
+    <linearGradient id="blb-metal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e5e7eb"/>
+      <stop offset="50%" stop-color="#cbd5f5"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer glow circle -->
+  <circle cx="32" cy="32" r="30" fill="url(#blb-bg)"/>
+
+  <!-- Pill highlight -->
+  <ellipse cx="26" cy="16" rx="18" ry="6" fill="rgba(255,255,255,0.18)"/>
+
+  <!-- Scales: stand -->
+  <line x1="32" y1="16" x2="32" y2="40"
+        stroke="url(#blb-metal)"
+        stroke-width="2.4"
+        stroke-linecap="round"/>
+
+  <!-- Top knob -->
+  <circle cx="32" cy="14" r="2.1" fill="#e5e7eb"/>
+
+  <!-- Crossbar -->
+  <line x1="18" y1="22" x2="46" y2="22"
+        stroke="url(#blb-metal)"
+        stroke-width="2.2"
+        stroke-linecap="round"/>
+
+  <!-- Left chain -->
+  <line x1="24" y1="22" x2="22" y2="30"
+        stroke="url(#blb-metal)"
+        stroke-width="1.4"
+        stroke-linecap="round"/>
+  <line x1="24" y1="22" x2="26" y2="30"
+        stroke="url(#blb-metal)"
+        stroke-width="1.4"
+        stroke-linecap="round"/>
+
+  <!-- Right chain -->
+  <line x1="40" y1="22" x2="38" y2="30"
+        stroke="url(#blb-metal)"
+        stroke-width="1.4"
+        stroke-linecap="round"/>
+  <line x1="40" y1="22" x2="42" y2="30"
+        stroke="url(#blb-metal)"
+        stroke-width="1.4"
+        stroke-linecap="round"/>
+
+  <!-- Left plate -->
+  <path d="M19 31 L29 31 L24 36 Z"
+        fill="rgba(15,23,42,0.95)"
+        stroke="url(#blb-metal)"
+        stroke-width="1.4"
+        stroke-linejoin="round"/>
+
+  <!-- Right plate -->
+  <path d="M35 31 L45 31 L40 36 Z"
+        fill="rgba(15,23,42,0.95)"
+        stroke="url(#blb-metal)"
+        stroke-width="1.4"
+        stroke-linejoin="round"/>
+
+  <!-- Base -->
+  <path d="M24 42 H40 Q43 42 43 44 Q43 46 40 46 H24 Q21 46 21 44 Q21 42 24 42 Z"
+        fill="rgba(15,23,42,0.9)"
+        stroke="url(#blb-metal)"
+        stroke-width="1.8"/>
+
+</svg>

@@ -13,6 +13,7 @@ setup(
         "jupyterlab",
         "jupyter",
         "flask==3.1.1",
+        "flask-cors",                 # 👈 added this
         "python-dotenv==1.1.0",
         "sentence-transformers==4.1.0",
         "pypdf==5.6.1",
