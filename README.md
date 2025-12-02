@@ -132,80 +132,6 @@ Then bring back `src/App.jsx`, `src/main.jsx`, `src/App.css`, etc. as per this p
 
 ### 2. Important frontend files
 
-#### `frontend/src/main.jsx`
-
-```jsx
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
-import "./App.css";
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
-```
-
-#### `frontend/src/App.jsx` (core pieces)
-
-- Copilot-style layout
-- Calls the Flask backend using `/api/chat` (POST JSON)
-
-Key snippet of the send logic:
-
-```jsx
-const handleSend = async (text) => {
-  const trimmed = (text ?? input).trim();
-  if (!trimmed || isLoading) return;
-
-  const userMsg = {
-    id: Date.now() + "-user",
-    role: "user",
-    text: trimmed,
-  };
-
-  setMessages((prev) => [...prev, userMsg]);
-  setInput("");
-  setIsLoading(true);
-
-  try {
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: trimmed }),
-    });
-
-    if (!res.ok) {
-      throw new Error(`HTTP error ${res.status}`);
-    }
-
-    const data = await res.json();
-
-    const botMsg = {
-      id: Date.now() + "-bot",
-      role: "assistant",
-      text:
-        data.response ||
-        "Sorry, I could not understand that. Please try again in a different way.",
-    };
-
-    setMessages((prev) => [...prev, botMsg]);
-  } catch (err) {
-    console.error("Error calling backend:", err);
-    const errorMsg = {
-      id: Date.now() + "-error",
-      role: "assistant",
-      text:
-        "I’m facing some technical issue right now. Please try again in a while or consult a qualified lawyer.",
-    };
-    setMessages((prev) => [...prev, errorMsg]);
-  } finally {
-    setIsLoading(false);
-  }
-};
-```
-
 #### `frontend/vite.config.js` (with dev proxy)
 
 For local development with the Flask server running on `http://localhost:8080`, use a proxy:
@@ -427,6 +353,12 @@ High-level steps:
    - `ECR_REPO`
    - `PINECONE_API_KEY`
    - `OPENAI_API_KEY`
+
+    For backend:
+    - `ECR_REPO_BACKEND (e.g. bharatlawbot-backend)`
+
+    For frontend:
+    - `ECR_REPO_FRONTEND (e.g. bharatlawbot-frontend)`
 
 8. The GitHub Actions workflow can:
    - Build Docker image
