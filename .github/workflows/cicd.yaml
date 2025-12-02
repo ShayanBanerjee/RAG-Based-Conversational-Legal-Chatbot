@@ -1,19 +1,12 @@
-name: Backend CI/CD - Bharat Law Bot
+name: CI/CD - Bharat Law Bot (Single Image)
 
 on:
   push:
     branches: [ main ]
-    paths:
-      - "app.py"
-      - "src/**"
-      - "requirements.txt"
-      - "setup.py"
-      - "Dockerfile"
-      - ".github/workflows/backend-cicd.yaml"
 
 jobs:
-  backend-ci:
-    name: Backend Continuous Integration
+  build-and-push:
+    name: Build & Push Docker Image to ECR
     runs-on: ubuntu-latest
 
     steps:
@@ -31,21 +24,22 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build, tag, and push backend image to Amazon ECR
-        id: build-backend-image
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPO_BACKEND }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}   # 680528876031.dkr.ecr.eu-north-1.amazonaws.com
+          ECR_REPOSITORY: ${{ secrets.ECR_REPO }}                 # should be: legalchatbot
           IMAGE_TAG: latest
         run: |
+          echo "Building image $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
           docker build -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" .
           docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
 
-  backend-cd:
-    name: Backend Continuous Deployment
-    needs: backend-ci
-    runs-on: self-hosted  # EC2 runner
+  deploy:
+    name: Deploy to EC2 (self-hosted runner)
+    needs: build-and-push
+    runs-on: self-hosted   # your EC2 GitHub runner
 
     steps:
       - name: Configure AWS credentials
@@ -59,26 +53,33 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Pull and run backend Docker image
+      - name: Pull and run Docker container
         shell: bash
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPO_BACKEND }}
-          IMAGE_TAG: backend-latest
+          ECR_REPOSITORY: ${{ secrets.ECR_REPO }}   # legalchatbot
+          IMAGE_TAG: latest
         run: |
-          # Pull latest backend image
-          docker pull "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          IMAGE="$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-          # Stop & remove existing backend container if present
-          docker stop bharatlawbot-backend || echo "No existing backend container to stop"
-          docker rm bharatlawbot-backend || echo "No existing backend container to remove"
+          echo "Pulling image $IMAGE"
+          docker pull "$IMAGE"
 
-          # Run new backend container
-          docker run -d --name bharatlawbot-backend \
+          echo "Stopping old container if running..."
+          docker stop bharatlawbot || echo "No existing container to stop"
+
+          echo "Removing old container if present..."
+          docker rm bharatlawbot || echo "No existing container to remove"
+
+          echo "Starting new container..."
+          docker run -d --name bharatlawbot \
             -e AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" \
             -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
             -e AWS_DEFAULT_REGION="${{ secrets.AWS_DEFAULT_REGION }}" \
             -e PINECONE_API_KEY="${{ secrets.PINECONE_API_KEY }}" \
             -e OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
-            -p 8080:8080 \
-            "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+            -e INDEX_NAME="${{ secrets.INDEX_NAME }}" \
+            -p 80:8080 \
+            "$IMAGE"
+
+          echo "Deployment complete."
