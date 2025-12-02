@@ -1,182 +1,374 @@
-# RAG-Based-Conversational-Legal-Chatbot
-Indian Law Chatbot containing all basic laws in India
+# ⚖️ Bharat Law Bot – RAG-Based Conversational Legal Chatbot (India)
 
+A **Retrieval-Augmented Generation (RAG)**–based chatbot that explains **Indian law** in simple language.
 
-# How to run?
-### Automate project setup directory
+It uses:
 
-```bash
-bash template.sh
+- **Flask** as the backend API (serving both the chatbot and the built frontend)
+- **React + Vite** as a modern Microsoft Copilot–style UI
+- **LangChain + Pinecone + OpenAI** for retrieval + answer generation
+- **Sentence Transformers** for embeddings
+
+---
+
+## 🧱 Architecture Overview
+
+```text
+.
+├── app.py                  # Flask app (serves API + built React)
+├── setup.py                # Python package config
+├── requirements.txt        # Uses "-e ." to install this package
+├── .env                    # Secrets (OpenAI, Pinecone, etc.)
+├── store_index.py          # Ingest PDF data to Pinecone
+├── data/                   # Your legal PDFs go here
+├── src/
+│   ├── helper.py           # Embedding, Pinecone, utility functions
+│   ├── prompt.py           # System prompt for Bharat Law Bot
+│   └── ...                 # Other Python modules
+└── frontend/
+    ├── index.html
+    ├── vite.config.js      # Vite dev server + proxy config
+    ├── package.json
+    └── src/
+        ├── main.jsx        # React entrypoint
+        ├── App.jsx         # Main chat UI
+        ├── App.css         # Copilot-style theming
+        └── components/
+            ├── ChatMessage.jsx
+            └── SuggestionChips.jsx
 ```
 
-Load your pdf data in ```data``` folder
+---
 
-### STEPS:
+## 🧩 Tech Stack
 
-Clone the repository
+- **Backend**: Flask, LangChain, Pinecone, OpenAI
+- **Frontend**: React + Vite
+- **Embeddings**: `sentence-transformers/all-MiniLM-L6-v2`
+- **Vector Store**: Pinecone index (`INDEX_NAME`)
+- **Deployment**: Can run locally or via Docker / AWS EC2 + ECR + GitHub Actions
+
+---
+
+## 🔧 Backend Setup (Flask + LangChain + Pinecone)
+
+### 1. Clone the repo
 
 ```bash
 git clone https://github.com/ShayanBanerjee/RAG-Based-Conversational-Legal-Chatbot.git
+cd RAG-Based-Conversational-Legal-Chatbot
 ```
-### STEP 01- Create python environment after opening the repository
+
+### 2. Create & activate a Python virtual environment
 
 ```bash
 python3 -m venv .venv
+source .venv/bin/activate      # Linux / macOS
+# .venv\Scripts\activate       # Windows (PowerShell/CMD)
 ```
 
-```bash
-source .venv/bin/activate
-```
+### 3. Install backend dependencies
 
+`requirements.txt` contains `-e .`, so it will use `setup.py`:
 
-### STEP 02- install the requirements
 ```bash
 pip install -r requirements.txt
 ```
 
+This installs:
 
-### Create a `.env` file in the root directory and add your Pinecone & openai credentials as follows:
+- `flask`, `flask-cors`
+- `langchain`, `langchain-pinecone`, `langchain-openai`, `langchain-community`
+- `sentence-transformers`, `pypdf`, `python-dotenv`
+- and the local package `rag_legal_chatbot` (from `src/`)
+
+### 4. Environment variables (`.env`)
+
+Create a `.env` file at the project root:
 
 ```ini
-PINECONE_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-OPENAI_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+PINECONE_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+INDEX_NAME=legal-chatbot       # or your actual Pinecone index name
 ```
 
-##### run the following command to store embeddings to pinecone
+The backend uses `load_dotenv()` in `app.py` to load these.
+
+### 5. Load your legal data & build the Pinecone index
+
+1. Put your PDFs inside the `data/` folder.
+2. Run the embedding/indexing script:
+
 ```bash
 python store_index.py
 ```
 
-##### Finally run the following command
+This will:
+
+- Read PDFs from `data/`
+- Create embeddings with `sentence-transformers/all-MiniLM-L6-v2`
+- Upload to the Pinecone index (`INDEX_NAME`)
+
+---
+
+## 🎨 Frontend Setup (React + Vite)
+
+### 1. Init / install frontend dependencies
+
+From the project root:
+
+```bash
+cd frontend
+npm install
+```
+
+If you haven’t created the Vite app earlier, it should already exist as part of this repo. If you ever need to recreate:
+
+```bash
+npm create vite@latest frontend -- --template react
+```
+
+Then bring back `src/App.jsx`, `src/main.jsx`, `src/App.css`, etc. as per this project.
+
+### 2. Important frontend files
+
+#### `frontend/vite.config.js` (with dev proxy)
+
+For local development with the Flask server running on `http://localhost:8080`, use a proxy:
+
+```js
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 5173,
+    proxy: {
+      "/api": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/get": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
+    },
+  },
+});
+```
+
+This means:
+
+- React dev server runs at `http://localhost:5173`
+- API calls to `/api/...` and `/get?...` are forwarded to Flask at `http://localhost:8080`
+
+---
+
+## ▶️ Running in Development (Two-Process Dev)
+
+1. **Start the Flask backend** in one terminal:
+
+   ```bash
+   cd RAG-Based-Conversational-Legal-Chatbot
+   source .venv/bin/activate
+   python app.py
+   ```
+
+   This serves:
+   - `http://localhost:8080/api/chat`
+   - `http://localhost:8080/get`
+
+2. **Start the React dev server** in another terminal:
+
+   ```bash
+   cd RAG-Based-Conversational-Legal-Chatbot/frontend
+   npm run dev
+   ```
+
+3. Open:
+
+   ```text
+   http://localhost:5173
+   ```
+
+The React app will show the Copilot-style **Bharat Law Bot** UI and talk to Flask via the `/api/chat` proxy.
+
+---
+
+## 🏗️ Building & Serving Frontend with Flask (Production-style)
+
+Once you are happy with the UI:
+
+### 1. Build the React app
+
+```bash
+cd frontend
+npm run build
+cd ..
+```
+
+This creates `frontend/dist/` with:
+
+- `index.html`
+- `assets/` (JS, CSS, etc.)
+
+### 2. Flask `app.py` serving the built frontend
+
+Your `app.py` is configured like:
+
+```python
+app = Flask(
+    __name__,
+    static_folder="frontend/dist/assets",
+    static_url_path="/assets",
+    template_folder="frontend/dist",
+)
+
+@app.route("/")
+def serve_react_index():
+    return render_template("index.html")
+```
+
+So when you run:
+
 ```bash
 python app.py
 ```
 
-Now,
-```bash
-open up localhost:
+You can directly open:
+
+```text
+http://localhost:8080
 ```
 
+Flask will:
 
-### Techstack Used:
+- Serve `frontend/dist/index.html` at `/`
+- Serve JS/CSS from `/assets/...`
+- Expose APIs under:
+  - `POST /api/chat`
+  - `GET  /get?msg=...`
 
-- Python
-- LangChain
-- Flask
-- GPT
-- Pinecone
+No dev proxy needed in production; everything is on port 8080.
 
+---
 
+## 💬 API Endpoints
 
-# AWS-CICD-Deployment-with-Github-Actions
+### `POST /api/chat`
 
-## 1. Login to AWS console.
+**Request body:**
 
-## 2. Create IAM user for deployment
-
-#### with specific access (https://console.aws.com)
-
-1. EC2 access : It is virtual machine
-
-2. ECR: Elastic Container registry to save your docker image in aws
-
-
-#### Description: About the deployment
-
-1. Build docker image of the source code
-
-2. Push your docker image to ECR
-
-3. Launch Your EC2 
-
-4. Pull Your image from ECR in EC2
-
-5. Lauch your docker image in EC2
-
-##### Policy:
-
-1. AmazonEC2ContainerRegistryFullAccess
-
-2. AmazonEC2FullAccess
-
-	
-## 3. Create ECR repo to store/save docker image
-*Save the URI:* 680528876031.dkr.ecr.eu-north-1.amazonaws.com/legalchatbot
-
-	
-## 4. Create EC2 machine (Ubuntu) 
-
-## 5. Open EC2 and Install docker in EC2 Machine:
-	
-	
-```bash
-#optinal
-
-sudo apt-get update -y
-
-sudo apt-get upgrade
-
-#required
-
-curl -fsSL https://get.docker.com -o get-docker.sh
-
-sudo sh get-docker.sh
-
-sudo usermod -aG docker ubuntu
-
-newgrp docker
-```
-	
-# 6. Configure EC2 as self-hosted runner:
-    Github repo (https://github.com/ShayanBanerjee/RAG-Based-Conversational-Legal-Chatbot.git) > setting > actions >runner >new self hosted runner > choose os (linux)> then run command one by one
-
-### Next instructions (on EC2)
-#### Create a folder
-```bash
-$ mkdir actions-runner && cd actions-runner
-```
-#### Download the latest runner package
-```bash
-$ curl -o actions-runner-linux-x64-2.329.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.329.0/actions-runner-linux-x64-2.329.0.tar.gz
-```
-#### Optional: Validate the hash
-```bash
-$ echo "194f1e1e4bd02f80b7e9633fc546084d8d4e19f3928a324d512ea53430102e1d  actions-runner-linux-x64-2.329.0.tar.gz" | shasum -a 256 -c
+```json
+{
+  "message": "What are my rights as a tenant in India?"
+}
 ```
 
-#### Extract the installer
-```bash
-$ tar xzf ./actions-runner-linux-x64-2.329.0.tar.gz
+**Response:**
+
+```json
+{
+  "response": "In general, tenants in India are protected under..."
+}
 ```
 
-### Configure
+### `GET /get?msg=...` (legacy)
 
-#### Create the runner and start the configuration experience
 ```bash
-./config.sh --url https://github.com/ShayanBanerjee/RAG-Based-Conversational-Legal-Chatbot --token AFBBXU42OKTMHRDO6PYCRIDJE4KQY
-```
-*Enter the name of runner: [press Enter for ip-172-31-32-105]* __self-hosted__
-
-Keep others default 
-#### Last step, run it!
-```bash
-./run.sh
+curl "http://localhost:8080/get?msg=What%20are%20my%20tenant%20rights"
 ```
 
-To add port 8080 as our app is running on it in ec2
-```bash
-i-0aaf1984be384003c (legal-machine) -> Security -> Security groups (sg-0d5d6e1da423e8ec8 - launch-wizard-2) -> Edit inbound rules -> Add rule -> In Custom TCP change port to 8080 and 0.0.0.0/0 -> Save rules
+Response:
+
+```json
+{ "response": "..." }
 ```
 
-Public IPv4 address of the instance with port:
-http://16.171.38.149:8080/
+---
 
-# 7. Setup github secrets:
+## 📘 System Prompt (Bharat Law Bot)
 
-*Github repo -> Settings -> Secrets and variables -> Actions -> New repository secret*
-   - AWS_ACCESS_KEY_ID
-   - AWS_SECRET_ACCESS_KEY
-   - AWS_DEFAULT_REGION
-   - ECR_REPO
-   - PINECONE_API_KEY
-   - OPENAI_API_KEY
+`src/prompt.py` contains a **detailed system prompt** that:
+
+- Sets the persona: *“Bharat Law Bot – India’s Legal Help Chatbot”*
+- Ensures:
+  - Clear headings & bullet-based structure
+  - Distinction between **general info** and **case-like / defence-oriented** analysis
+  - Strong **disclaimers**: this is general information, not personalised legal advice
+- Forces the model to rely on the retrieved `{context}` and avoid hallucination
+
+You can tweak `prompt.py` to adjust style and strictness.
+
+---
+
+## ⚠️ Legal Disclaimer
+
+Bharat Law Bot provides **general legal information for Indian law**, based on the ingested documents and model outputs.  
+
+It **does not**:
+
+- Replace a **qualified advocate**,
+- Provide **personalised legal advice**,
+- Predict or guarantee case outcomes.
+
+For specific cases, always consult a practising lawyer with all documents and facts.
+
+---
+
+## ☁️ AWS CI/CD Deployment with GitHub Actions (Optional)
+
+The repo can be deployed via **AWS EC2 + ECR + GitHub Actions**.
+
+High-level steps:
+
+1. **Login to AWS console**.
+2. **Create IAM user** with:
+   - `AmazonEC2FullAccess`
+   - `AmazonEC2ContainerRegistryFullAccess`
+3. **Create ECR repo** (e.g. `680528876031.dkr.ecr.eu-north-1.amazonaws.com/legalchatbot`).
+4. **Create EC2 (Ubuntu)** instance, install Docker:
+
+   ```bash
+   sudo apt-get update -y
+   sudo apt-get upgrade -y
+   curl -fsSL https://get.docker.com -o get-docker.sh
+   sudo sh get-docker.sh
+   sudo usermod -aG docker ubuntu
+   newgrp docker
+   ```
+
+5. **Configure EC2 as a self-hosted GitHub Actions runner**:
+   - Repo → Settings → Actions → Runners → New self-hosted runner (Linux)
+   - Follow GitHub’s commands (`config.sh`, `run.sh`).
+
+6. **Open port 8080** in the EC2 security group (Custom TCP 8080, source `0.0.0.0/0`).
+
+7. **GitHub Secrets** for CI/CD:
+
+   - `AWS_ACCESS_KEY_ID`
+   - `AWS_SECRET_ACCESS_KEY`
+   - `AWS_DEFAULT_REGION`
+   - `ECR_REPO`
+   - `PINECONE_API_KEY`
+   - `OPENAI_API_KEY`
+
+    For backend:
+    - `ECR_REPO_BACKEND (e.g. bharatlawbot-backend)`
+
+    For frontend:
+    - `ECR_REPO_FRONTEND (e.g. bharatlawbot-frontend)`
+
+8. The GitHub Actions workflow can:
+   - Build Docker image
+   - Push to ECR
+   - SSH / trigger pull + run on EC2
+
+---
+
+## 📄 License
+
+MIT License © 2025 Shayan Banerjee
+
+Feel free to fork, extend, and adapt for other jurisdictions and use-cases.

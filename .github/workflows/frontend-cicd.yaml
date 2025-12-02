@@ -1,0 +1,76 @@
+name: Frontend CI/CD - Bharat Law Bot
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend-cicd.yaml"
+
+jobs:
+  frontend-ci:
+    name: Frontend Continuous Integration
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push frontend image to Amazon ECR
+        id: build-frontend-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPO_FRONTEND }}
+          IMAGE_TAG: latest
+        run: |
+          # Build frontend Docker image (adjust Dockerfile path if needed)
+          docker build -f frontend/Dockerfile -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" ./frontend
+          docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+
+  frontend-cd:
+    name: Frontend Continuous Deployment
+    needs: frontend-ci
+    runs-on: self-hosted  # EC2 runner (same or different instance as backend)
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Pull and run frontend Docker image
+        shell: bash
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPO_FRONTEND }}
+          IMAGE_TAG: latest
+        run: |
+          # Pull latest frontend image
+          docker pull "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+          # Stop & remove existing frontend container if present
+          docker stop bharatlawbot-frontend || echo "No existing frontend container to stop"
+          docker rm bharatlawbot-frontend || echo "No existing frontend container to remove"
+
+          # Run new frontend container (serves static React build on port 80)
+          docker run -d --name bharatlawbot-frontend \
+            -p 80:80 \
+            "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
