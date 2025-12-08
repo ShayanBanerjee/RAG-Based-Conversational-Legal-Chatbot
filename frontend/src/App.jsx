@@ -1,197 +1,113 @@
-import React, { useState, useEffect, useRef } from "react";
-import ChatMessage from "./components/ChatMessage.jsx";
-import SuggestionChips from "./components/SuggestionChips.jsx";
-
-const SUGGESTIONS = [
-  "What are my rights if my landlord is not returning my security deposit?",
-  "How can I file an FIR for online fraud in India?",
-  "What is the basic process of divorce under Indian law?",
-  "What should I do if I receive a legal notice from my employer?",
-  "What are my rights if I am harassed at the workplace?"
-];
+import React, { useState, useEffect } from "react";
+import Chat from "./components/Chat";
+import AuthModal from "./components/AuthModal";
+import { AnimatePresence } from "framer-motion";
 
 export default function App() {
-  const [messages, setMessages] = useState([
-    {
-      id: "welcome",
-      role: "assistant",
-      text:
-        "Namaste 👋, I am Bharat Law Bot — your legal help assistant for Indian law. " +
-        "Ask me in simple language and I’ll help you understand your rights. " +
-        "This is for information only and does not replace a qualified lawyer."
-    }
-  ]);
-  const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [theme, setTheme] = useState("dark"); // "dark" | "light"
+  const [user, setUser] = useState(() => {
+    const raw = localStorage.getItem("lawbot_user");
+    return raw ? JSON.parse(raw) : null;
+  });
+  const [showAuth, setShowAuth] = useState(false);
 
-  const chatEndRef = useRef(null);
+  const handleAuthSuccess = (userObj) => {
+    localStorage.setItem("lawbot_user", JSON.stringify(userObj));
+    setUser(userObj);
+    setShowAuth(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("lawbot_user");
+    setUser(null);
+  };
 
   useEffect(() => {
-    document.title = "Bharat Law Bot – India’s Legal Help Chatbot";
+    const onStorage = (e) => {
+      if (e.key === "lawbot_user") {
+        const raw = e.newValue;
+        setUser(raw ? JSON.parse(raw) : null);
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
   }, []);
 
-  useEffect(() => {
-    if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages, isLoading]);
-
-  const handleSend = async (text) => {
-    const trimmed = (text ?? input).trim();
-    if (!trimmed || isLoading) return;
-
-    const userMsg = {
-      id: Date.now() + "-user",
-      role: "user",
-      text: trimmed,
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
-    setInput("");
-    setIsLoading(true);
-
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: trimmed }),
-      });
-
-      if (!res.ok) {
-        throw new Error(`HTTP error ${res.status}`);
-      }
-
-      const data = await res.json();
-
-      const botMsg = {
-        id: Date.now() + "-bot",
-        role: "assistant",
-        text:
-          data.response ||
-          "Sorry, I could not understand that. Please try again in a different way.",
-      };
-
-      setMessages((prev) => [...prev, botMsg]);
-    } catch (err) {
-      console.error("Error calling backend:", err);
-      const errorMsg = {
-        id: Date.now() + "-error",
-        role: "assistant",
-        text:
-          "I’m facing some technical issue right now. Please try again in a while or consult a qualified lawyer.",
-      };
-      setMessages((prev) => [...prev, errorMsg]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSuggestionClick = (suggestion) => {
-    handleSend(suggestion);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleSend();
-  };
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
-
-  const hasUserAsked = messages.some((m) => m.role === "user");
+  const displayName =
+    user?.name ||
+    (user?.email ? user.email.split("@")[0] : null) ||
+    "Guest";
 
   return (
-    <div className={`bharatlaw-root theme-${theme}`}>
-      <div className="blb-background" />
-
-      <header className="blb-header">
-        <div className="blb-logo">
-          <span className="blb-logo-icon">⚖️</span>
-          <div className="blb-logo-text">
-            <span className="blb-logo-title">Bharat Law Bot</span>
-            <span className="blb-logo-subtitle">India’s Legal Help Chatbot</span>
+    <div className="h-screen flex flex-col bg-gradient-to-b from-white via-[#f5f2fc] to-[#ebe4ff]">
+      {/* Top section – slimmer, no shadow, no icon */}
+      <header className="shrink-0 bg-gradient-to-r from-[#fef3ff] via-[#f5f2fc] to-[#e4f0ff] border-b border-white/60">
+        {/* Navbar */}
+        <nav className="max-w-6xl mx-auto px-4 py-2.5 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-xl md:text-2xl font-bold tracking-tight">
+              <span className="text-gray-900">Bharat</span>{" "}
+              <span className="bg-gradient-to-r from-accent to-purple-500 bg-clip-text text-transparent">
+                LawBot
+              </span>
+            </span>
           </div>
-        </div>
-
-        <div className="blb-header-right">
-          <button
-            className="blb-theme-toggle"
-            type="button"
-            onClick={toggleTheme}
-          >
-            {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
-          </button>
-        </div>
-      </header>
-
-      <main className="blb-main">
-        <section className="blb-chat-panel">
-          {!hasUserAsked && (
-            <div className="blb-hero">
-              <h1 className="blb-hero-title">
-                Get clear, simple answers on Indian law.
-              </h1>
-              <p className="blb-hero-subtitle">
-                Ask about your rights at work, home, online, and more. 
-                Bharat Law Bot explains laws in easy language.
-              </p>
-
-              <SuggestionChips
-                suggestions={SUGGESTIONS}
-                onClickSuggestion={handleSuggestionClick}
-              />
-            </div>
-          )}
-
-          <div className="blb-chat-window">
-            {messages.map((m) => (
-              <ChatMessage key={m.id} role={m.role} text={m.text} />
-            ))}
-
-            {isLoading && (
-              <div className="blb-typing-indicator">
-                <span className="dot" />
-                <span className="dot" />
-                <span className="dot" />
-              </div>
+          <div className="flex items-center gap-3 text-sm">
+            {user ? (
+              <>
+                <span className="hidden sm:inline text-gray-700">
+                  Hi, {displayName}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-1 rounded-full border border-accent text-accent hover:bg-accent hover:text-white transition"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => setShowAuth(true)}
+                className="px-3 py-1 rounded-full border border-accent text-accent hover:bg-accent hover:text-white transition text-sm"
+              >
+                Login / Signup / Guest
+              </button>
             )}
-
-            <div ref={chatEndRef} />
           </div>
+        </nav>
 
-          <form className="blb-input-bar" onSubmit={handleSubmit}>
-            <textarea
-              rows={1}
-              className="blb-input"
-              placeholder="Describe your situation or question about Indian law..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend();
-                }
-              }}
-            />
-            <button
-              type="submit"
-              className="blb-send-btn"
-              disabled={!input.trim() || isLoading}
-            >
-              {isLoading ? "Thinking..." : "Send"}
-            </button>
-          </form>
-
-          <p className="blb-disclaimer">
-            ⚠️ Bharat Law Bot provides general legal information based on Indian
-            law and is not a substitute for professional legal advice or representation.
+        {/* Hero text – compact, not “shadowing” main content */}
+        <section className="max-w-6xl mx-auto px-4 pb-2 pt-1">
+          <h1 className="text-lg md:text-2xl font-semibold text-gray-900 leading-snug max-w-3xl">
+            A calm, friendly assistant for{" "}
+            <span className="text-accent">Indian law</span>.
+          </h1>
+          <p className="mt-1 text-xs md:text-sm text-gray-600 max-w-2xl">
+            Ask about sections, clauses, case law or contracts. Bharat LawBot
+            uses Retrieval-Augmented Generation to explain things in simple
+            English while keeping legal context intact.
           </p>
         </section>
+      </header>
+
+      {/* Main SPA content – fills remaining height, no page scroll; inner areas scroll */}
+      <main className="flex-1 overflow-hidden flex justify-center px-2 md:px-4 py-3">
+        <div className="w-full max-w-6xl h-full">
+          <Chat user={user} />
+        </div>
       </main>
+
+      <footer className="shrink-0 py-2 text-center text-[11px] text-gray-500">
+        © 2025 Bharat LawBot. All rights reserved.
+      </footer>
+
+      <AnimatePresence>
+        {showAuth && (
+          <AuthModal
+            onSuccess={handleAuthSuccess}
+            onClose={() => setShowAuth(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
