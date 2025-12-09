@@ -59,7 +59,7 @@ export default function App() {
                 </span>
                 <button
                   onClick={handleLogout}
-                  className="px-3 py-1 rounded-full border border-accent text-accent hover:bg-accent hover:text-white transition"
+                  className="px-3 py-1 rounded-full border border-accent/40 text-accent hover:bg-accent hover:text-white transition"
                 >
                   Logout
                 </button>
@@ -67,7 +67,7 @@ export default function App() {
             ) : (
               <button
                 onClick={() => setShowAuth(true)}
-                className="px-3 py-1 rounded-full border border-accent text-accent hover:bg-accent hover:text-white transition text-sm"
+                className="px-3 py-1 rounded-full border border-accent/40 text-accent hover:bg-accent hover:text-white transition text-sm"
               >
                 Login / Signup / Guest
               </button>

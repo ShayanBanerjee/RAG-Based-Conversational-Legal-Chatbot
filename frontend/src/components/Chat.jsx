@@ -8,6 +8,8 @@ import {
   ListChecks,
   FileText,
   Scale,
+  Download,
+  Trash2,        
 } from "lucide-react";
 import MessageBubble from "./MessageBubble";
 
@@ -173,6 +175,75 @@ export default function Chat({ user }) {
 
   const usePrompt = (p) => {
     if (!busy) sendQuery(p);
+  };
+
+  // --- Clear chat for this user/email and restore welcome bubble ---
+  const handleClearChat = () => {
+    const confirmed = window.confirm(
+      "Clear the current conversation? This cannot be undone."
+    );
+    if (!confirmed) return;
+
+    try {
+      localStorage.removeItem(storageKey);
+    } catch (err) {
+      console.warn("Failed to clear stored chat history:", err);
+    }
+
+    // restore just the initial welcome message
+    setMessages([
+      {
+        id: "welcome",
+        role: "assistant",
+        content:
+          `👋 Namaste! I’m **Bharat LawBot**, your AI assistant for Indian law.\n\n` +
+          `You can ask me about:\n\n` +
+          `Contracts, employment & labour, property, criminal procedure\n` +
+          `Notices, replies, basic compliance checks\n` +
+          `“What does Section X of Y Act mean in simple words?”\n\n` +
+          `> **Disclaimer:** I provide general legal information only and do **not** replace a qualified advocate.`,
+      },
+    ]);
+  };
+
+  // --- Export current chat as a Markdown file (keeps formatting) ---
+  const handleExportChat = () => {
+    if (!messages || messages.length === 0) {
+      window.alert("No messages to export yet.");
+      return;
+    }
+
+    const lines = messages.map((m) => {
+      const who = m.role === "user" ? "User" : "Bharat LawBot";
+      return `### ${who}\n\n${m.content}`;
+    });
+
+    const content =
+      `# Bharat LawBot – Chat Export\n\n` +
+      `Exported on: ${new Date().toLocaleString()}\n\n` +
+      lines.join("\n\n---\n\n");
+
+    const blob = new Blob([content], {
+      type: "text/markdown;charset=utf-8;",
+    });
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const safeName =
+      (emailKey || displayName || "guest").toString().replace(
+        /[^a-z0-9\-_.@]/gi,
+        "_"
+      ) || "guest";
+
+    a.href = url;
+    a.download = `bharat-lawbot-chat-${safeName}-${new Date()
+      .toISOString()
+      .slice(0, 19)
+      .replace(/[:T]/g, "-")}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   };
 
   const getLastContext = () => {
@@ -359,9 +430,27 @@ export default function Chat({ user }) {
                 Copilot-style, RAG-enhanced legal assistant for Indian law.
               </p>
             </div>
-            <p className="hidden sm:block text-[11px] text-gray-400">
-              Chats are saved locally for this profile.
-            </p>
+            <div className="flex items-center gap-2">
+              <p className="hidden sm:block text-[11px] text-gray-400">
+                Chats are saved locally for this profile.
+              </p>
+              <button
+                type="button"
+                onClick={handleExportChat}
+                className="inline-flex items-center gap-1.5 rounded-full border border-softbg px-2.5 py-1 text-[11px] text-gray-700 hover:bg-softbg hover:text-gray-900 transition"
+              >
+                <Download size={12} />
+                Export
+              </button>
+              <button
+                type="button"
+                onClick={handleClearChat}
+                className="inline-flex items-center gap-1.5 rounded-full border border-red-100 px-2.5 py-1 text-[11px] text-red-600 hover:bg-red-50 hover:text-red-700 transition"
+              >
+                <Trash2 size={12} />
+                Clear
+              </button>
+            </div>
           </div>
 
           {/* Messages area */}
