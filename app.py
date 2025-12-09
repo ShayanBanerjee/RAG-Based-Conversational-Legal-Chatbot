@@ -162,6 +162,159 @@ Your task:
    *_This is an AI-generated checklist for information only and is not a substitute for professional legal advice._*
 """
 
+DOCUMENT_REVIEW_PROMPT = """
+You are **Bharat LawBot – Document Review Agent**, helping users critically review contracts, notices, pleadings and other legal documents (India-focused).
+
+You operate on top of a RAG-based legal research system. The retrieved legal context (statutes, templates, case law) is:
+
+{context}
+
+The user has described or pasted a document / situation as:
+
+{question}
+
+Here is the latest legal analysis you (or another assistant) already produced in the chat:
+
+{existing_answer}
+
+Your task:
+
+1. Give a concise overall assessment of the document / situation.
+2. List the key **strengths / protections** for the user.
+3. List specific **risks / red flags** (clause-by-clause where possible).
+4. Call out **missing or unusual clauses** the user should be aware of.
+5. Suggest concrete **drafting improvements or negotiation points**.
+
+Format your answer in Markdown with these sections:
+
+## Quick snapshot
+- 2–4 bullets summarising your overall view.
+
+## Strengths for the user
+- ...
+
+## Risks / red flags
+- ...
+
+## Missing / unusual points
+- ...
+
+## Suggested changes / negotiation points
+- ...
+
+End with the standard disclaimer:
+*_This is an AI-generated document review for information only and is not a substitute for professional legal advice._*
+"""
+
+CASE_COMPARISON_PROMPT = """
+You are **Bharat LawBot – Case Comparison Agent**, helping users understand how their situation compares with similar Indian cases.
+
+Retrieved context (extracts from case law, precedents, commentary):
+
+{context}
+
+User's situation or question:
+
+{question}
+
+Latest analysis already given in the chat:
+
+{existing_answer}
+
+Your task:
+
+1. Identify up to **3–5 relevant cases** from the context (if available).
+2. For each case, briefly summarise:
+   - Facts
+   - Court and year (only if visible from the text/metadata; DO NOT invent)
+   - Key legal finding
+   - Outcome
+3. Compare each case with the user's situation, highlighting **similarities and differences**.
+4. End with a short **“What this may mean for you (high-level)”** section, in simple English, without pretending to give legal advice.
+
+Output Markdown in this structure:
+
+## Key comparable cases
+
+### Case 1: <case name> – <court, year if known>
+- Facts: ...
+- Decision: ...
+- Outcome: ...
+
+### Case 2: ...
+- ...
+
+## How these compare to your situation
+- Similarities: ...
+- Differences: ...
+
+## What this may mean (high-level)
+- ...
+
+Add the disclaimer at the end:
+*_This is a high-level case comparison only and not professional legal advice._*
+"""
+
+ARGUMENTATIVE_LAWYER_PROMPT = """
+You are **Bharat LawBot – Senior Trial Lawyer Agent**, an experienced Indian trial lawyer who can think like both a strong prosecutor/complainant's counsel AND a sharp defence counsel.
+
+You sit on top of a RAG-based legal research system. Use the retrieved context, but NEVER invent case names, courts or years that are not clearly present.
+
+Retrieved legal context:
+
+{context}
+
+User's situation or question:
+
+{question}
+
+Latest analysis already given in the chat:
+
+{existing_answer}
+
+Your job is to build clear, structured arguments that a human lawyer could refine and use.
+
+Please:
+
+1. Identify the **core legal issues** in dispute.
+2. Build **prosecution / complainant arguments**:
+   - Focus on elements of the offence / cause of action.
+   - Use any relevant statutes or cases from the context (only if actually visible).
+   - Suggest what evidence would strengthen this side.
+3. Build **defence / respondent arguments**:
+   - Challenge facts, ingredients of the offence / cause of action, or procedure.
+   - Use any supporting principles from the context.
+   - Suggest evidence or strategies that weaken the other side.
+4. Briefly flag any **procedural or limitation issues** that appear from the context (only if clearly indicated).
+
+Format your answer in Markdown exactly like this:
+
+## Core issues
+- ...
+
+## If you argue as complainant / prosecution
+### Key themes
+- ...
+### Possible arguments
+- ...
+### Helpful evidence to collect
+- ...
+
+## If you argue as defence / respondent
+### Key themes
+- ...
+### Possible arguments
+- ...
+### Helpful evidence to collect
+- ...
+
+## Things to keep in mind
+- ...
+
+End with this disclaimer in italics:
+*_This is an AI-generated strategic outline, not a substitute for advice from a qualified advocate or legal representative._*
+"""
+
 # ---------------------------------------------------------
 # Shared helpers
 # ---------------------------------------------------------
@@ -205,6 +358,39 @@ def build_checklist_prompt(question: str, docs, existing_answer: str) -> str:
         existing_answer=ea,
     )
 
+
+def build_document_review_prompt(question: str, docs, existing_answer: str) -> str:
+    context_text = build_context_from_docs(docs)
+    ea = existing_answer or "No prior answer was provided; rely on the retrieved context."
+    return DOCUMENT_REVIEW_PROMPT.format(
+        context=context_text,
+        question=question,
+        existing_answer=ea,
+    )
+
+
+def build_case_comparison_prompt(question: str, docs, existing_answer: str) -> str:
+    context_text = build_context_from_docs(docs)
+    ea = existing_answer or "No prior answer was provided; rely on the retrieved context."
+    return CASE_COMPARISON_PROMPT.format(
+        context=context_text,
+        question=question,
+        existing_answer=ea,
+    )
+
+
+def build_argumentative_lawyer_prompt(question: str, docs, existing_answer: str) -> str:
+    context_text = build_context_from_docs(docs)
+    ea = existing_answer or "No prior written analysis was provided; rely on the retrieved context and user's description."
+    return ARGUMENTATIVE_LAWYER_PROMPT.format(
+        context=context_text,
+        question=question,
+        existing_answer=ea,
+    )
+
+# ---------------------------------------------------------
+# Retrieval logging helper
+# ---------------------------------------------------------
 
 def retrieve_and_log(user_query: str):
     """
@@ -380,6 +566,154 @@ def api_checklist():
         safe_msg = (
             "Bharat LawBot\n\n"
             "I wasn't able to generate the checklist due to an internal error. "
+            "Please try again after a moment or slightly rephrase your request."
+        )
+        return jsonify({"answer": safe_msg})
+
+
+@app.route("/api/document_review", methods=["POST"])
+def api_document_review():
+    """
+    Agentic flow 3: review a document / situation using retrieved law + latest analysis.
+    """
+    data = request.get_json(silent=True) or {}
+    question = (data.get("query") or "").strip()
+    existing_answer = (data.get("existing_answer") or "").strip()
+    user_id = data.get("user_id") or "anonymous"
+    user_name = data.get("user_name") or "User"
+
+    print(f"\n📨 /api/document_review called by user_id={user_id}, user_name={user_name}")
+    print(f"   Question: {question!r}")
+
+    if not question and not existing_answer:
+        return jsonify(
+            {
+                "answer": "I need at least a document description or some existing analysis to review."
+            }
+        ), 400
+
+    try:
+        # If question is empty, fall back to existing answer text for retrieval
+        retrieval_query = question or existing_answer[:2000]
+        docs = retrieve_and_log(retrieval_query)
+
+        prompt = build_document_review_prompt(
+            question=question or "Use the analysis above to review the document or situation.",
+            docs=docs,
+            existing_answer=existing_answer,
+        )
+
+        res = llm.invoke(prompt)
+        answer = getattr(res, "content", str(res))
+
+        print("✅ Document review generated successfully.\n")
+        return jsonify({"answer": answer})
+
+    except Exception:
+        print("❌ ERROR in /api/document_review:")
+        traceback.print_exc()
+        safe_msg = (
+            "Bharat LawBot\n\n"
+            "I wasn't able to complete the document review due to an internal error. "
+            "Please try again after a moment or slightly rephrase your request."
+        )
+        return jsonify({"answer": safe_msg})
+
+
+@app.route("/api/case_comparison", methods=["POST"])
+def api_case_comparison():
+    """
+    Agentic flow 4: compare the user's situation with similar cases from the retrieved context.
+    """
+    data = request.get_json(silent=True) or {}
+    question = (data.get("query") or "").strip()
+    existing_answer = (data.get("existing_answer") or "").strip()
+    user_id = data.get("user_id") or "anonymous"
+    user_name = data.get("user_name") or "User"
+
+    print(f"\n📨 /api/case_comparison called by user_id={user_id}, user_name={user_name}")
+    print(f"   Question: {question!r}")
+
+    if not question and not existing_answer:
+        return jsonify(
+            {
+                "answer": "I need at least a description of your situation or some existing analysis to compare with cases."
+            }
+        ), 400
+
+    try:
+        retrieval_query = question or existing_answer[:2000]
+        docs = retrieve_and_log(retrieval_query)
+
+        prompt = build_case_comparison_prompt(
+            question=question or "Use the analysis above to compare with similar cases.",
+            docs=docs,
+            existing_answer=existing_answer,
+        )
+
+        res = llm.invoke(prompt)
+        answer = getattr(res, "content", str(res))
+
+        print("✅ Case comparison generated successfully.\n")
+        return jsonify({"answer": answer})
+
+    except Exception:
+        print("❌ ERROR in /api/case_comparison:")
+        traceback.print_exc()
+        safe_msg = (
+            "Bharat LawBot\n\n"
+            "I wasn't able to complete the case comparison due to an internal error. "
+            "Please try again after a moment or slightly rephrase your request."
+        )
+        return jsonify({"answer": safe_msg})
+
+
+@app.route("/api/argumentative_lawyer", methods=["POST"])
+def api_argumentative_lawyer():
+    """
+    Agentic flow 5: build strong prosecution & defence style arguments.
+    """
+    data = request.get_json(silent=True) or {}
+    question = (data.get("query") or "").strip()
+    existing_answer = (data.get("existing_answer") or "").strip()
+    user_id = data.get("user_id") or "anonymous"
+    user_name = data.get("user_name") or "User"
+
+    print(f"\n📨 /api/argumentative_lawyer called by user_id={user_id}, user_name={user_name}")
+    print(f"   Question: {question!r}")
+
+    if not question and not existing_answer:
+        return jsonify(
+            {
+                "answer": (
+                    "I need at least your question or the last analysis to build arguments. "
+                    "Please ask about your situation first, then run this agent."
+                )
+            }
+        ), 400
+
+    try:
+        retrieval_query = question or existing_answer[:2000]
+        docs = retrieve_and_log(retrieval_query)
+
+        prompt = build_argumentative_lawyer_prompt(
+            question=question or "Use the analysis above and build prosecution and defence style arguments.",
+            docs=docs,
+            existing_answer=existing_answer,
+        )
+
+        res = llm.invoke(prompt)
+        answer = getattr(res, "content", str(res))
+
+        print("✅ Argumentative lawyer outline generated successfully.\n")
+        return jsonify({"answer": answer})
+
+    except Exception:
+        print("❌ ERROR in /api/argumentative_lawyer:")
+        traceback.print_exc()
+        safe_msg = (
+            "Bharat LawBot\n\n"
+            "I wasn't able to complete the argument outline due to an internal error. "
             "Please try again after a moment or slightly rephrase your request."
         )
         return jsonify({"answer": safe_msg})
