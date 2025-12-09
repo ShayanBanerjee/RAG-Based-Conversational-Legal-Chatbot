@@ -27,8 +27,8 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}   # 680528876031.dkr.ecr.eu-north-1.amazonaws.com
-          ECR_REPOSITORY: ${{ secrets.ECR_REPO }}                 # should be: legalchatbot
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPO }}
           IMAGE_TAG: latest
         run: |
           echo "Building image $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
@@ -39,7 +39,7 @@ jobs:
   deploy:
     name: Deploy to EC2 (self-hosted runner)
     needs: build-and-push
-    runs-on: self-hosted   # your EC2 GitHub runner
+    runs-on: self-hosted
 
     steps:
       - name: Configure AWS credentials
@@ -57,7 +57,7 @@ jobs:
         shell: bash
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPO }}   # legalchatbot
+          ECR_REPOSITORY: ${{ secrets.ECR_REPO }}
           IMAGE_TAG: latest
         run: |
           IMAGE="$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
@@ -79,7 +79,7 @@ jobs:
             -e PINECONE_API_KEY="${{ secrets.PINECONE_API_KEY }}" \
             -e OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
             -e INDEX_NAME="${{ secrets.INDEX_NAME }}" \
-            -p 80:8080 \
+            -p 8080:8080 \
             "$IMAGE"
 
           echo "Deployment complete."
